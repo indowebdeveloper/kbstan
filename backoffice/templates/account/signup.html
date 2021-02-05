@@ -1,0 +1,46 @@
+{% extends "customer-base.html" %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class='container'>
+    <div class='section customer-signup'>
+
+        <div class='row'>
+            <div class='text-left col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3'>
+                <div class='product bg-white p-4 text-left'>
+                    <h3 class='brand-text'>Create User Account</h3>
+                    <hr>
+                    <p>If you have already have an account
+                    <a href="/accounts/login" class='active-link'>sign in</a> instead.</p>
+
+                    <!-- ################ -->
+
+                    <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                        {% csrf_token %}
+                        {{form|crispy}}
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                        
+                        <label for="terms_accepted" class='pl-0 mt-2 mb-4'>
+                            <input type="checkbox" name="terms_accepted" value="accepted" required id="terms_accepted">
+                                <span class='font-weight-normal clickable'>
+                                    I've read and accept the <a href="{% url 'terms-of-use' %}">terms & conditions</a> and the <a href="{% url 'privacy-policy' %}">privacy policy</a>
+                                <span>
+                            </input>
+                        </label>
+
+                        <button class="brand-btn w-100" type="submit"><i class="fa fa-user-plus"></i> Register</button>
+                    </form>
+
+                    <!-- ################ -->
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

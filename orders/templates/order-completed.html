@@ -1,0 +1,81 @@
+{% extends "customer-base.html" %} 
+{% load i18n %}
+{% load account socialaccount %}
+{% load humanize %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class='container'>
+    <div class='section customer-signup'>
+
+        <div class='row'>
+            <div class='text-left col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3'>
+                <div class='product bg-white p-4 text-left'>
+                    <h3 class='brand-text'>Order Successful!</h3>
+                    <hr>
+                    
+                    <p class='mb-0'>
+                        Thank you for shopping with us.
+                    </p>
+                    <p>
+                        Your order has been successfully sent.
+                    </p>
+
+                    <div class='text-center'>
+                        <button class="add-to-cart-btn product-add-button mt-3">
+                            <i class="fa fa-shopping-cart"></i> Continue Shopping   
+                            <a href="{% url 'home' %}" class="stretched-link"></a>
+                        </button>
+                    </div>
+
+                    <h3 class='font-weight-bold border-bottom mt-5'>
+                        Order Summary
+                    </h3>
+
+                    <table class='table m-0 p-0 table-bordered table-sm'>
+                        <tbody>
+                            {% for item in orderItems %}
+                                <tr>
+                                    <td>
+                                        <span class='font-weight-bold'>{{item.quantity}}x</span> 
+                                    </td>
+                                    <td>
+                                        {{item.product.name}}
+                                    </td>
+                                    <td>
+                                        {% if item.discountedPrice > 0 %}
+                                            <b class='font-weight-bold'>
+                                                {% include "sub/currency.html" %}{{item.discountedPrice|intcomma}}
+                                            </b>
+                                            <br>
+                                            <strike>
+                                                {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                            </strike>
+                                        {% else %}
+                                            <b class='font-weight-bold'>
+                                                {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                            </b>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class='w-auto p-0 text-right mt-2'>
+                        <strong class="order-total font-weight-bold">
+                            Cart Total: <span class=' brand-text'>{% include "sub/currency.html" %} {{cart_total|intcomma}} </span>
+                        </strong>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

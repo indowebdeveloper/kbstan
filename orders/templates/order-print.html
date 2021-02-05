@@ -1,0 +1,300 @@
+{% load static %}
+{% load humanize %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Order Details for #{{order.pk}}</title>
+
+<!-- START --><!-- START --><!-- START --><!-- START -->
+<!-- MDB icon -->
+{% comment %} <link rel="icon" href="{% static "mdb-favicon.ico" %}" type="image/x-icon"> {% endcomment %}
+
+<link rel="apple-touch-icon" sizes="180x180" href="{% static "mdbootstrap/img/favicons/apple-touch-icon.png" %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static "mdbootstrap/img/favicons/favicon-32x32.png" %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static "mdbootstrap/img/favicons/favicon-16x16.png" %}">
+<link rel="manifest" href="{% static "mdbootstrap/img/favicons/site.webmanifest" %}">
+<link rel="mask-icon" href="{% static "mdbootstrap/img/favicons/safari-pinned-tab.svg" %}" color="#f5374a">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+<!-- Google Fonts Roboto -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="{% static "mdbootstrap/css/bootstrap.min.css" %}">
+<!-- Material Design Bootstrap -->
+{% comment %} <link rel="stylesheet" href="{% static "mdbootstrap/css/mdb.min.css" %}"> {% endcomment %}
+
+
+<!-- Your custom styles (optional) -->
+<link rel="stylesheet" href="{% static "mdbootstrap/css/style.css" %}">
+
+<!-- All Semantic UI CSS -->
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/icon.min.css" %}">
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/input.min.css" %}">
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/item.min.css" %}">
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/label.min.css" %}">
+
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/semantic-ui-transition.min.css" %}">
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/semantic-ui-dropdown.min.css" %}">
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/semantic-ui-calendar.min.css" %}">
+<!-- END --><!-- END --><!-- END --><!-- END --><!-- END -->
+
+</head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <body>
+        <div class='col-12'>
+
+
+            <div class='mb-5 pb-0'>
+                <div class=' pl-4'>
+
+                    <h1 class="font-weight-bold mb-0 card-title">
+                        Order Details for #{{order.pk}}
+
+                        <!-- =================================== -->
+
+                        <h5 class='font-weight-bold'>
+                            Order Status: <span class='text-underline'>{{order.status}}</span>
+                        </h5>
+
+                        <p onclick='window.print()' class='d-print-none btn btn-sm btn-primary ml-0 d-inline-block clickable'>
+                            <i class="fas fa-print"></i> Print Order
+                        </p>
+
+                    </h1>
+                </div>
+
+
+                <hr class='my-4'>
+
+
+                <div class=' p-0 pl-4'>
+
+                    <div class='row'>
+                        <div class='col-12'>
+
+                            <p class='text-muted mb-0'>
+                                <span class='font-weight-bold'>Date Created:</span> {{order.dateCreated}}
+                            </p>
+                            <p class='text-muted mb-0'>
+                                <span class='font-weight-bold'>Date Edited:</span> {{order.dateEdited}}
+                            </p>
+
+                        </div>
+
+                        <div class='col-12 col-md-6 py-2'>
+
+                            <!-- ================= -->
+                            <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                                Customer
+                            </h6>
+                            <p class='p-0 m-0 mb-3'>
+                                {% comment %} <i class="fas fa-info-circle"></i> {% endcomment %}
+                                {{order.customer.user.first_name}} {{order.customer.user.last_name}}
+                                <br>
+                                {{order.customer.user.email}}
+                            </p>
+
+                            <!-- ================= -->
+                            <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                                Order Owner
+                            </h6>
+                            <p class='p-0 m-0 mb-3'>
+                                {% if order.staff %}
+                                    {{order.staff.first_name}} {{order.staff.last_name}}
+
+                                    {% else %}
+                                    ---
+                                {% endif %}
+                            </p>
+
+                            <!-- ================= -->
+                            <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                                Shipping Address
+                            </h6>
+                            <p class='p-0 m-0 mb-3'>
+                                {% if order.shippingAddress %}
+                                    <p class='p-0 mb-0 position-relative'>
+                                        {{order.shippingAddress.houseNumber}} {{order.shippingAddress.street}}
+                                    </p>
+                                    <p class='p-0 mb-0'>
+                                        {{order.shippingAddress.zipCode}}, {{order.shippingAddress.city}}
+                                    </p>
+                                    <p class='p-0 mb-0'>
+                                        {{order.shippingAddress.state}}
+                                    </p>
+                                {% else %}
+                                    None
+                                {% endif %}
+                            </p>
+
+                            <!-- ================= -->
+                            <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                                Coupon Code Used
+                            </h6>
+                            <p class='p-0 m-0 mb-3'>
+                                {% if order.coupon.code %}
+                                    {{order.coupon.code}}
+
+                                    {% else %}
+                                    No coupon used
+
+                                {% endif %}
+                            </p>
+
+                            <!-- ================= -->
+                            <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                                Order Notes
+                            </h6>
+                            <p class='p-0 m-0 mb-3'>
+                                {{order.notes}}
+                            </p>
+
+                        </div>
+
+                        <div class='col-12 col-md-6 px-4 py-2'>
+
+                            <!-- ================= -->
+                            <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                                Order Channel
+                            </h6>
+                            <p class='p-0 m-0 mb-3'>
+                                {{order.orderChannel}}
+                            </p>
+
+                            <!-- ================= -->
+                            <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                                Store
+                            </h6>
+                            <p class='p-0 m-0 mb-3'>
+                                {% if order.store %}
+                                    {{order.store}}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </p>
+
+                            <!-- ================= -->
+                            <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                                Payment Option
+                            </h6>
+                            <p class='p-0 m-0 mb-3'>
+                                {{order.paymentOption}}
+                            </p>
+
+                            <!-- ================= -->
+                            <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                                Installment Period
+                            </h6>
+                            <p class='p-0 m-0 mb-3'>
+                                {% if order.installmentPeriod %}
+                                    {{order.installmentPeriod}}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </p>
+
+                            <!-- ================= -->
+                            <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                                Shipping Cost
+                            </h6>
+                            <p class='p-0 m-0 mb-3'>
+                                {% if order.shippingCost %}
+                                    {% include "sub/currency.html" %}{{order.shippingCost}}
+                                {% else %}
+                                    ---
+                                {% endif %}
+                            </p>
+
+                        </div>
+
+                        <hr>
+
+                        <div class='col-12 pl-3'>
+
+                            <table class='table table-striped w-100'>
+                                <thead>
+                                    <tr>
+                                        <th class='align-baseline' scope="col"></th>
+                                        <th class='align-baseline' scope="col">Quantity</th>
+                                        <th class='align-baseline' scope="col">Product</th>
+                                        <th class='align-baseline' scope="col">Item Price</th>
+                                        <th class='align-baseline' scope="col">Item Total Price</th>
+                                        <th class='align-baseline' scope="col">Item Profit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in order.orderitem_set.all %}
+                                        <tr>
+                                            <td>
+                                                {% if item.product.slug %}
+                                                    <img src='{{item.product.featured_image.url}}' height='30px' width='auto' />
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {{item.quantity}}
+                                            </td>
+                                            <td>
+                                                {% if item.product.slug %} 
+                                                    {{item.product.name}}
+                                                {% else %}
+                                                    <span class='text-danger'>
+                                                        Deleted Product
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if item.discountedPrice > 0 %}
+                                                        {% include "sub/currency.html" %}{{item.discountedPrice|intcomma}}
+                                                        <br>
+                                                        (Full Price: {% include "sub/currency.html" %}{{item.price|intcomma}})
+                                                {% else %}
+                                                        {% include "sub/currency.html" %}{{item.price|intcomma}}
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {{item.get_total}}
+                                            </td>
+                                            <td>
+                                                {{item.profit}}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+
+    <script>
+        (function() {
+            window.print();
+        })();
+    </script>
+</html>

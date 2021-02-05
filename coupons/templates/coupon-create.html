@@ -1,0 +1,54 @@
+
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class='col-12'>
+
+
+    <div class='card mb-5'>
+        <div class='card-header'>
+            <div class='mb-3'>
+                <a href="{% url 'coupon-list' %}"  onclick='event.preventDefault();window.history.back()' class='text-muted font-weight-bold fx fx-link'>
+                    <i class="fas fa-angle-left text-muted"></i>
+                    Back
+                </a>
+            </div>
+
+            <h3 class="mb-0 mt-1 font-weight-bold">Create new coupon</h3>
+        </div>
+        <div class='card-body'>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{coupon_form|crispy}}
+
+                <button class='w-100 btn btn-success mx-0' type="submit" value="Save">
+                    Save
+                </button>
+            </form>
+        </div>
+</div>
+
+</div>
+
+{% endblock content %}
+
+
+{% block customJS %}
+
+    <!-- includes the semantic UI functions -->
+    <script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-transition.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-dropdown.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-calendar.min.js" %}"></script>
+
+
+    <script type="text/javascript" src="{% static "mdbootstrap/js/custom/backoffice/apply-semanticUI.js" %}"></script>
+
+    <script type="text/javascript">
+        $('#id_dateStart').calendar({
+            type: 'time'
+        });
+    </script>
+
+{% endblock customJS %}

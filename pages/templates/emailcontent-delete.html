@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='col-12'>
+
+
+    <div class='card'>
+        <div class='card-header'>
+
+            <a href="{% url 'productbrand-list' %}"  onclick='event.preventDefault();window.history.back()' class='text-muted font-weight-bold fx fx-link'>
+                <i class="fas fa-angle-left text-muted"></i>
+                Back
+            </a>
+
+            <h3 class="font-weight-bold mb-0 card-title">Delete Email Content</h3>
+        </div>
+        <div class='card-body'>
+            <form action="" method="post">
+                {% csrf_token %}
+                <p class='font-weight-bold'>Are you sure you want to delete <span class='text-danger'>{{object.name}}</span>?</p>
+                
+                <button class='w-100 btn btn-danger mx-0' id='delete' type="submit" value="Delete">
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+{% endblock content %}

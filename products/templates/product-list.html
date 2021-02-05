@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class='col-12'>
+
+<div class='card mb-5 pb-0'><!-- CARD -->
+    <div class='card-header pb-0'><!-- CARD-HEADER -->
+        <div class='row'>
+            <div class='col-12'>
+                <h3 class='card-title font-weight-bold'>Products List</h3>
+            </div>
+        </div>
+        {% comment %} {% include "sub/search_filter.html" %} {% endcomment %}
+
+
+        <!-- PRODUCTS FILTER -->
+    <div class=''>
+
+        <form id='products-filter' action='' method='GET'>
+
+            <div class="form-group">
+                <div class='input-group border border-light'>
+                    <input type="text" class="form-control border-bottom-0" id="search" name="q" placeholder="Search...">
+                    {% comment %} <div class='input-group-append'>
+                        <button type="submit" class="bg-primary px-5">
+                            <i class='fa fa-search text-white'></i>
+                        </button>
+                    </div> {% endcomment %}
+                </div>
+            </div>
+            
+            <!-- =============================== -->
+            <!-- =============================== -->
+
+            <div class='form-group m-0'>
+                <h6 class='text-underline font-weight-bold'>
+                    Categories
+                </h6>
+                {% for cat in categories %}
+                    <div class='d-inline mr-3'>
+                        <input type="checkbox" id="{{cat}}" name="categories" value="{{cat}}">
+                        <label for="{{cat}}">{{cat}}</label>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- =============================== -->
+            <!-- =============================== -->
+
+            <div class='form-group m-0'>
+                <h6 class='text-underline font-weight-bold'>
+                    Brands
+                </h6>
+                {% for brand in carBrands %}
+                    <div class='d-inline mr-3'>
+                        <input type="checkbox" id="{{brand}}" name="brands" value="{{brand}}">
+                        <label for="{{brand}}">{{brand}}</label>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- =============================== -->
+            <!-- =============================== -->
+
+            <!-- HIDDEN SEARCH FIELD!!! -->
+            <input type="text" class="d-none" id="hidden_search" placeholder="">
+            <!-- =============================== -->
+            <!-- =============================== -->
+
+            <div class='form-group m-0'>
+                <h6 class='text-underline font-weight-bold'>
+                    Price
+                </h6>
+                <label for="price_min">Lowest Price</label>
+                <input type="number" id="price_min" name="price_min">
+                -
+                <input type="number" id="price_max" name="price_max">
+                <label for="price_max">Highest Price</label>
+            </div>
+
+            <!-- =============================== -->
+            <!-- =============================== -->
+
+            <button type='submit' class='btn btn-sm btn-primary m-0 my-3'>
+                <i class="fas fa-filter"></i> Filter Products
+            </button>
+            <button class='btn btn-danger btn-sm' data-reset-target='#products-filter' onclick='resetFiltersForm(this)'>
+                <i class="fas fa-times-circle"></i> Reset Filters
+            </button>
+        </form>
+
+    </div>
+    <!-- .//PRODUCTS FILTER -->
+
+
+    </div><!-- ./CARD-HEADER -->
+
+
+    <div class='card-body p-0'><!-- CARD-BODY -->
+        <div class='row m-0' id='PRODUCT-LIST_list'>
+                <div class='col-12 pt-3 pb-3 mb-0'>
+                    <!-- <button class='btn btn-lg btn-success font-weight-bold m-0 mb-3 w-100'>Create new product</button>
+                    <a href="{% url 'product-create' %}" class='stretched-link'></a> -->
+                    <a href="{% url 'product-create' %}" class='w-50 px-0 py-3 btn btn-success btn-large m-0 mb-4'>
+                        <h5 class='font-weight-bold mb-0'>
+                            <i class="fas fa-plus-circle"></i> New Product
+                        </h5>
+                    </a>
+
+
+                    <!-- PAGINATION -->
+                    <div class='mt-3'>
+                        <span class="step-links">
+                            {% if products.has_previous %}
+                                <a href="?page=1">First</a>
+                                <a href="?page={{ products.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                                    <i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+                                </a>
+                            {% endif %}
+
+                            <span class="current">
+                                Page {{ products.number }} of {{ products.paginator.num_pages }}
+                            </span>
+
+                            {% if products.has_next %}
+                                <a href="?page={{ products.next_page_number }}" class='mr-3 ml-2'>
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                                <a href="?page={{ products.paginator.num_pages }}">Last</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <!-- ./PAGINATION -->
+
+
+
+                </div>
+                {% for product in products %}
+                <div class='col-12'>
+                    <div class='card mb-3'>
+                        <div class='card-body'>
+                            <div class='row'>
+
+                                <!-- LEFT SIDE -->
+                                <div class='col-6 border-right'>
+                                    <div class='row'>
+                                        <div class='col-12'>
+                                            <div class='my-link-container position-relative'>
+                                                <a href="{% url 'product-details' product.slug %}" class='stretched-link'></a>
+
+                                                <div style="background-image:url('{{product.featured_image.url}}')" class='my-img-square-100 rounded float-left img-fluid img-thumbnail mr-4'></div>
+
+                                                <h5 class='card-title'>
+                                                    <span class='text-muted'> {{product.pk}} </span> | {{product.name}}
+                                                </h5>
+                                                <h6 class='text-muted'>
+                                                    Price: <span class='text-success font-weight-bold'>{% include "sub/currency.html" %}{{product.price|intcomma}}</span>&nbsp;&nbsp; | &nbsp;&nbsp;Quantity: <span class='font-weight-bold text-primary'>{{product.quantity}}</span>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col-12'>
+                                            <div class='interactions mt-4 fx'>
+                                                <a href="{% url 'product-edit' product.slug %}" class='card-link text-muted d-inline-block clickable clickable-large'>
+                                                    <i class="fas fa-pencil-alt"></i> Edit
+                                                </a>
+                                                <a href="{% url 'product-adjust-stock' product.slug %}" class='card-link text-muted d-inline-block clickable clickable-large'>
+                                                    <i class="fas fa-cubes"></i> Adjust Stock
+                                                </a>
+                                                <a href="{% url 'product-delete' product.slug %}" class='card-link text-danger d-inline-block clickable clickable-large'>
+                                                    <i class="fas fa-trash-alt"></i> Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ./LEFT SIDE -->
+
+                                <!-- RIGHT SIDE -->
+                                <div class='col-6 border-right'>
+                                    <h5 class='border-bottom font-weight-bold'>
+                                        Attributes
+                                    </h5>
+                                    <ul class='pl-0 overflow-y-scroll' style='height:110px'>
+                                        <a style='' class=' d-inline-block clickable clickable-large badge badge-pill badge-success text-white text-nowrap font-weight-bold z-index-on-top px-2 py-1 ml-0 mb-1' href="{% url 'product-attribute-create' product.pk %}">
+                                            <i class="fas fa-plus"></i> Add Attribute
+                                        </a>
+                                        {% for attr in product.productattribute_set.all %}
+                                            <li class='list-unstyled'>
+                                                <a href="{% url 'product-attribute-edit' attr.id %}" class=' d-inline-block clickable clickable-large  text-muted'>
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </a>
+                                                <a href="{% url 'product-attribute-delete' attr.id %}" class=' d-inline-block clickable clickable-large  text-danger'>
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                                <b>{{attr.attribute}}:</b> {{attr.values}}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <!-- ./RIGHT SIDE -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+
+                <div class='col-12 mt-1 mb-3'>
+                    <span class="step-links">
+                        {% if products.has_previous %}
+                            <a href="?page=1">First</a>
+                            <a href="?page={{ products.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                                <i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+                            </a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ products.number }} of {{ products.paginator.num_pages }}
+                        </span>
+
+                        {% if products.has_next %}
+                            <a href="?page={{ products.next_page_number }}" class='mr-3 ml-2'>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                            <a href="?page={{ products.paginator.num_pages }}">Last</a>
+                        {% endif %}
+                    </span>
+                </div>
+        </div>
+    </div><!-- ./CARD-BODY -->
+</div><!-- ./CARD -->
+
+
+</div>
+{% endblock content %}
+
+{% block customJS %}
+
+    <script type="text/javascript" src="{% static "mdbootstrap/js/custom/backoffice/product-list-filter.js" %}"></script>
+
+{% endblock customJS %}

@@ -1,0 +1,31 @@
+{% extends "customer-base.html" %}
+
+{% load i18n %}
+{% load account %}
+
+{% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
+
+{% block content %}
+
+    <div class='section customer-signup'>
+
+        <div class='row'>
+            <div class='text-left col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3'>
+                <div class='product bg-white p-4 text-left'>
+                    <h3 class='brand-text'>
+                        {% trans "Verify Your E-mail Address" %}
+                    </h3>
+                    <hr>
+
+                    <p>
+                        We have sent you a verification e-mail. Please follow the link in the email to verify and finalize the purchase.
+                        <br>
+                        <br>
+                        Should you encounter any issue, please contact us at <a class='brand-text' href="mailto:sales@kiosban.com"></i>sales@kiosban.com</a>.
+                    </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

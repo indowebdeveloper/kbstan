@@ -1,0 +1,130 @@
+{% load static %}
+
+<div class='product product-red-border bg-white px-4 pt-4 text-left mb-0 mb-md-3 mt-0'>
+    <h3 class="brand-text text-uppercase">
+        Find the tire that's best for your car
+    </h3>
+
+    <div class='row'>
+        
+        <!-- TIRE IMAGE! -->
+        <div class='col-10 col-md-3 ml-2 ml-md-0'>
+            <div class='h-100'>
+                <div class='bg-image-contain w-100 h-100 position-absolute border-left border-bottom' style='left: -9px; background-position: left bottom; background-image:url("{% static "media/tires/tire_all-min.png" %}");'></div>
+                <div id='width' class='bg-image-contain w-100 h-100 position-absolute' style='display:none; background-position: left bottom; left: -9px; background-image:url("{% static "media/tires/tire_width-min.png" %}");'></div>
+                <div id='height' class='bg-image-contain w-100 h-100 position-absolute' style='display:none; background-position: left bottom; left: -9px;  background-image:url("{% static "media/tires/tire_height-min.png" %}");'></div>
+                <div id='radius' class='bg-image-contain w-100 h-100 position-absolute' style='display:none; background-position: left bottom; left: -9px; background-image:url("{% static "media/tires/tire_radius-min.png" %}");'></div>
+            </div>
+        </div>
+        <!-- ./TIRE IMAGE! -->
+
+        <!-- EMPTY CONTAINER -->
+        <div class='col-1 d-md-none pb-4 ' style='height:200px'>
+            <!-- empty container to FORCE a minmum width for the tire_widget -->
+        </div>
+        <!-- ./EMPTY CONTAINER -->
+
+        <div class='col-12 col-md-9 pl-md-0 mt-3 mt-md-0'>
+            <!-- TIRE FORM -->
+            <form method='get' action='{% url 'products' %}'>
+                <!--
+                <div class='row mb-2'>
+                    <div class='form-group col-12 col-md-6'>
+                        <label for='car_type'>Car Type</label>
+                        <br>
+                        <select name='car_type' class='w-100 form-control'>
+                            <option value='Type 1'>
+                                Type 1
+                            </option>
+                            <option value='Type 2'>
+                                Type 2
+                            </option>
+                            <option value='Type 3'>
+                                Type 3
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class='form-group col-12 col-md-6'>
+                        <label for='tire_type'>Tire Type</label>
+                        <br>
+                        <select name='tire_type' class='w-100 form-control'>
+                            <option value='Type 1'>
+                                Type 1
+                            </option>
+                            <option value='Type 2'>
+                                Type 2
+                            </option>
+                            <option value='Type 3'>
+                                Type 3
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                    ===================== -->
+
+                <div class='row mb-0 my-3'>
+                    <div class='form-group col-12 col-md-4'>
+                        <label class='text-dark' for='width'>Width</label> <i data-toggle="tooltip" data-placement="top" title="The width is the width of the tires in millimeters (1/10 of a centimeter)." class="fas fa-info-circle clickable" data-hover-target='#width' onmouseenter="showTireInfo(this, true)" onmouseleave="showTireInfo(this, false)"></i>
+                        
+                        <select name='tire_width' class='w-100 form-control'>
+                            <option value=''>
+                                Select Width 
+                            </option>
+                            {% for attr in product_attributes_width %}
+                                <option value='{{attr}}'>
+                                    {{attr}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    
+                    </div>
+
+                    <!-- ===================== -->
+
+                    <div class='form-group col-12 col-md-4'>
+                        <label class='text-dark' for='height'>Height</label> <i data-toggle="tooltip" data-placement="top" title="The height is a ratio of the height of the tire over the width of the tire." class="fas fa-info-circle clickable" data-hover-target='#height' onmouseenter="showTireInfo(this, true)" onmouseleave="showTireInfo(this, false)"></i>
+                        <select name='tire_height' class='w-100 form-control'>
+                            <option value=''>
+                                Select Height 
+                            </option>
+                            {% for attr in product_attributes_height %}
+                                <option value='{{attr}}'>
+                                    {{attr}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- ===================== -->
+
+                    <div class='form-group col-12 col-md-4'>
+                        <label class='text-dark' for='diameter'>Diameter</label> <i data-toggle="tooltip" data-placement="top" title="This is the diameter of the tire in inches. It is also called radius." data-toggle="tooltip" data-placement="top" title="The height is a ratio of the height of the tire over the width of the tire." class="fas fa-info-circle clickable" data-hover-target='#radius' onmouseenter="showTireInfo(this, true)" onmouseleave="showTireInfo(this, false)"></i>
+                        <select name='tire_diameter' class='w-100 form-control'>
+                            <option value=''>
+                                Select Diameter
+                            </option>
+                            {% for attr in product_attributes_diameter %}
+                                <option value='{{attr}}'>
+                                    {{attr}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- ===================== -->
+                </div>
+                <div class='text-right w-100 mb-3'>
+                    <button class="brand-btn btn-sm mt-0" type="submit"><i class="fa fa-search"></i> Search Tires</button>
+                </div>
+            </form>
+            <!-- ./TIRE FORM -->
+        </div>
+    </div>
+
+    
+</div>
+</div>
+
+
+<script type="text/javascript" src="{% static "mdbootstrap/js/customer_facing/tire_widget.js" %}"></script>

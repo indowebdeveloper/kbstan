@@ -1,0 +1,357 @@
+{% extends "customer-base.html" %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+		{% comment %} <!-- BREADCRUMB -->
+		<div id="breadcrumb" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="breadcrumb-header">Checkout</h3>
+						<ul class="breadcrumb-tree">
+							<li><a href="#">Home</a></li>
+							<li class="active">Checkout</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /BREADCRUMB --> {% endcomment %}
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<form action='{% url 'checkout' %}{{request.get_full_path|cut:request.path}}' method='POST' >
+					{% csrf_token %}
+
+
+					{% comment %} {% if not request.user.is_authenticated %}
+						<p class='mt-3 w-100 border-top'>Please <b>register</b> or <a class='text-underline font-weight-bold' href="/accounts/login/?next=/checkout/">login</a> to submit the enquiry:</p>
+						<div class='register-form'>
+							{{customerCreateForm}}
+						</div>
+					{% endif %} {% endcomment %}
+
+					<!-- row -->
+					<div class="row">
+
+						<div class="col-lg-7 p-0 px-0 px-lg-3">
+							<!-- Billing Details -->
+							<div class="billing-details">
+								{% comment %} BILLING-DETAILS {% endcomment %}
+								{% comment %} BILLING-DETAILS {% endcomment %}
+								{% comment %} BILLING-DETAILS {% endcomment %}
+
+								{% if not request.user.is_authenticated %}
+
+
+
+
+
+									<div class='product mt-0 bg-white p-4 text-left'>
+										<h5 class=''>
+											Please <a class='brand-text text-underline font-weight-bold' href="{% url 'account_signup' %}">register</a> or <a class='brand-text text-underline font-weight-bold' href="{% url 'account_login' %}?next={% url 'checkout' %}">login</a> to complete your order.
+										</h5>
+										
+
+										{% comment %}  {% endcomment %}
+										{% comment %}  {% endcomment %}
+										{% comment %}  {% endcomment %}
+
+									</div>
+
+
+
+
+
+
+
+
+									{% else %}
+
+										<div class="section-title mt-0">
+											<h3 class="title">Shipping Method</h3>
+										</div>
+
+										<ul class="nav nav-tabs mt-0" id="myShippingTab" role="tablist">
+											<li class="nav-item">
+												<input checked onclick='selectShippingRadio(this)' data-click-target='#shipping_form_tab' data-make-required='#shipping_form' data-make-not-required='#store_pickup_form' class='clickable opacity-0 position-absolute w-100 h-100' type="radio" id="shipping" name="product_collection_choice" value="shipping">
+												<a class="nav-link active" id="shipping_form_tab" data-toggle="tab" href="#shipping_form" role="tab" aria-controls="shipping_form" aria-selected="true">
+													Shipping Delivery
+												</a>
+											</li>
+											
+											<li class="nav-item">
+												<input onclick='selectShippingRadio(this)' data-click-target='#store_pickup_form_tab' data-make-required='#store_pickup_form' data-make-not-required='#shipping_form' class='clickable opacity-0 position-absolute w-100 h-100' type="radio" id="store-pickup" name="product_collection_choice" value="store-pickup">
+												<a class="nav-link" id="store_pickup_form_tab" data-toggle="tab" href="#store_pickup_form" role="tab" aria-controls="store_pickup_form" aria-selected="false">
+													Pickup in Store
+												</a>
+											</li>
+										</ul>
+
+										<div class="tab-content border py-2 pt-4 px-4" id="myShippingTabContent">
+											<!-- ========================= -->
+											<!-- ========================= -->
+											<!-- ========================= -->
+											<!-- SHIPPING TAB! -->
+											<div class="tab-pane fade show active" id="shipping_form" role="tabpanel" aria-labelledby="shipping_form_tab">
+												<p class='font-weight-bold m-0 mb-2 p-0'>
+													Select your shipping address
+												</p>
+
+												{% for address in user.customer.address_set.all %}
+												<div class='custom-radio'>
+													
+													<label class='d-block font-weight-normal text-dark position-relative ml-5 mb-3 clickable clickable-no-scale' for='{{address.pk}}'>
+														<input onclick='showNewAddressForm(false)' type='radio' value='{{address.pk}}' name='addressSelected' id='{{address.pk}}' class='clickable position-absolute' style='left: -50px; top: 50%;'>	
+														
+														<p class='font-weight-bold m-0 p-0'>
+															{{address.type}}
+														</p>
+														{% if  address.type == "home" %}
+															<i class="fas fa-home position-absolute text-muted" style='left: -22px;top: 2px;'></i>
+														{% elif  address.type == "work" %}
+															<i class="fas fa-building position-absolute text-muted" style='left: -22px;top: 2px;'></i>
+														{% else %}
+															<i class="fas fa-map-marker-alt position-absolute text-muted" style='left: -22px;top: 2px;'></i>
+														{% endif %}
+														<p class='m-0 p-0'>
+															{{address.houseNumber}} {{address.street}}
+														</p>
+														<p class='p-0 mb-0'>
+															{{address.zipCode}}, {{address.city}}
+														</p>
+														<p class='p-0 mb-0'>
+															{{address.state}}
+														</p>
+													</label>
+												</div>
+												{% endfor %}
+
+
+												{% comment %} IF THE USER IS LOGGED OUT, WE ONLY DISPLAY THE NEW ADDRESS FIELD {% endcomment %}
+												{% comment %} ELSE, WE JUST DISPLAY THE NORMAL OPTIONS OF ADDING AN ADDRESS {% endcomment %}
+												
+												{% if not request.user.is_authenticated %}
+												{% comment %} User logged OUT {% endcomment %}
+													<h4 class='border-bottom mt-5'>
+														Add Address
+													</h4>
+													<div id='newAddressForm'>
+														{{CustomerFaceAddressCreateForm|crispy}}
+													</div>
+												{% else %}
+												{% comment %} User logged IN {% endcomment %}
+													<div class='text-success' onclick='showNewAddressForm(true)'>
+														<div class='addAddress'>
+															<div class='custom-radio custom-radio-button'>
+																<label for="id_addressSelected_0">
+																	<input type="radio" name="addressSelected" value="-1" required id="id_addressSelected_0" {% if user.customer.address_set.all.count == 0 %} checked {% endif %}>
+																		Add new address
+																</label>
+															</div>
+														</div>
+													</div>
+
+													<div id='newAddressForm' data-new-address-required="{% if user.customer.address_set.all.count == 0 %}true{% else %}false{% endif %}">
+														{{CustomerFaceAddressCreateForm|crispy}}
+													</div>
+												{% endif %}
+
+											</div>
+											<!-- ========================= -->
+											<!-- ========================= -->
+											<!-- ========================= -->
+											<!-- STORES TAB! -->
+											<div class="tab-pane fade" id="store_pickup_form" role="tabpanel" aria-labelledby="store_pickup_form_tab">
+												<div class='custom-radio'>
+													<p class='font-weight-bold m-0 mb-2 p-0'>
+														Select the store you want to pick up from:
+													</p>
+													{{PaymentStoreSelectForm}}
+												</div>
+											</div>
+											<!-- ./STORES TAB! -->
+										</div>
+
+								{% endif %} {% comment %} this is the %endif% for when a user is NOT logged in {% endcomment %}
+								
+							</div>
+							{% comment %} BILLING-DETAILS {% endcomment %}
+							{% comment %} BILLING-DETAILS {% endcomment %}
+							{% comment %} BILLING-DETAILS {% endcomment %}
+							<!-- /Billing Details -->
+						</div>
+
+						<!-- Order Details -->
+						<div class="col-lg-5 p-0 mt-5 mt-lg-0 ">
+							<div class='bg-white order-details'>
+
+								<div class="section-title text-center">
+									<h3 class="title">Your Order</h3>
+								</div>
+								<div class="order-summary">
+									<div class="order-col">
+										<div><strong class='font-weight-bold'>PRODUCT</strong></div>
+										<div><strong class='font-weight-bold'>TOTAL</strong></div>
+									</div>
+
+									<div class="order-products">
+										{% for item in orderItems %}
+											
+											{% comment %} {{item.product.name}} | {{item.product.price}} |  {{item.quantity}} | item total: {{item.get_total}} {% 
+											{% endcomment %}
+											
+											<div class="order-col">
+												<div>
+													<span class='font-weight-bold text-muted'>{{item.quantity}}x</span> {{item.product.name}}
+												</div>
+												<div>
+													{% include "sub/currency.html" %}{{item.get_total|intcomma}}
+												</div>
+											</div>
+										{% endfor %}
+
+									</div> 
+									
+									<div class="order-col border-top pt-2">
+										{% comment %} <div>Shipping</div>
+										<div><strong class='font-weight-bold'>FREE</strong></div> {% endcomment %}
+									</div>
+
+									<!-- =================== -->
+									<div class="order-col p-0">
+										<div class='d-inline'>
+											<strong class='font-weight-bold'>Price excluding GST</strong>
+										</div>
+										<div class='p-1'>
+											{% include "sub/currency.html" %}
+											{% widthratio cart_total 10 1 as exc_gst_pre %} <!-- divide by 10 -->
+											{% widthratio exc_gst_pre 1 9 as exc_gst %} <!-- multiply by 9 -->
+											{{exc_gst|intcomma}} <!-- calculate the overall price, excluding GST -->
+										</div>
+									</div>
+
+									<!-- =================== -->
+
+									<div class="order-col p-0">
+										<div class='d-inline'>
+											<strong class='font-weight-bold'>GST (10%)</strong>
+										</div>
+										<div class='p-1'>
+											{% comment %} {% include "sub/currency.html" %}{{cart_total|intcomma}} {% endcomment %}
+											{% include "sub/currency.html" %}
+											{% widthratio cart_total 10 1 as gst %}
+											{{gst|intcomma}}
+										</div>
+									</div>
+									
+									<!-- =================== -->
+
+									<div class="order-col pb-2">
+										<div class='d-inline'>
+											<strong class='font-weight-bold'>TOTAL</strong>
+										</div>
+										<div class='w-auto p-0'>
+											<strong class="order-total font-weight-bold">
+												{% include "sub/currency.html" %}{{cart_total|intcomma}}
+											</strong>
+										</div>
+									</div>
+
+									<h5 class='mt-0 mb-3 pt-4 border-top text-center text-dark'>
+										Payment Methods
+									</h5>
+									<div class="payment-method m-0"> 
+										<div class="custom-radio">
+											{{CheckoutPaymentMethodsForm|crispy}}
+											<p id='indodana_disclaimer'>
+												You will be redirected to <span class='brand-text'>indodana.com</span>.
+												<br />
+												Please login and confirm the payment to complete the order.
+											</p>
+
+											
+											<!-- ==================== -->
+											{% comment %} {{CheckoutPaymentMethodsForm.payment_method}}
+											<div id='installment-period-container' class='installment-period ml-4 pl-3 border-left' style='display:none'>
+												<p class='p-0 m-0'>
+													Select your installment options
+												</p>
+												{{CheckoutPaymentMethodsForm.installment_period}}
+											</div> {% endcomment %}
+											<!-- ==================== -->
+
+											{% if indodata_error_message %}
+												<p class='font-weight-bold brand-text mb-0'>
+													<i class="fas fa-exclamation-circle"></i> {{indodata_error_message}}
+												</p>
+											{% endif %}
+
+										</div>
+									</div>
+									<br>
+
+								</div>
+
+
+								<div class="">
+									{% comment %} <input type="checkbox" id="terms"> {% endcomment %}
+									
+									
+									
+									<label for="terms_accepted" class='pl-0'>
+										<input type="checkbox" name="terms_accepted" value="accepted" required id="terms_accepted">
+											<span class='font-weight-normal clickable'>
+												I've read and accept the <a href="{% url 'terms-of-use' %}">terms & conditions</a>
+											<span>
+										</input>
+									</label>
+
+
+								</div>
+
+								{% if not request.user.is_authenticated %} {% comment %} If the user is not logged in, the "Place Order"-button should be disabled {% endcomment %}
+										
+										<button disabled type='submit' class="disabled primary-btn order-submit">Place order</button>
+
+									{% else %}
+
+										<button type='submit' class="primary-btn order-submit">Place order</button>
+
+								{% endif %}
+
+
+
+
+
+							</div>
+
+
+						</div>
+						<!-- /Order Details -->
+					</div>
+					<!-- /row -->
+				</form>
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+
+
+{% endblock content %}
+
+{% block customJS %}
+	<script type="text/javascript" src="{% static "mdbootstrap/js/custom/utilities.js" %}"></script>
+	<script type="text/javascript" src="{% static "mdbootstrap/js/customer_facing/checkout.js" %}"></script>
+{% endblock customJS %}

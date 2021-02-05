@@ -1,0 +1,335 @@
+<div class='sidebar pl-4 pt-4 bg-white'>
+    <table class='table text-muted table-borderless navigation table-hover'>
+        <!-- ============================== -->
+        {% if perms.backoffice.view_dashboard %}
+            {% url 'dashboard' as dashURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            <tr class="clickable {% if dashURL == request.path %} active {% endif %}">
+                <td width='25px' class='p-0'>
+                    <a href="{% url 'dashboard' %}" class="text-muted font-weight-medium">
+                        <h5>
+                            <i class="fas fa-home pt-1"></i>
+                        </h5>
+                    </a>
+                </td>
+                <td class='p-0 pt-1'>
+                    <a href="{% url 'dashboard' %}" class='text-muted d-block'>
+                        <h5 class='ml-3'>
+                            <small class='font-weight-medium'>
+                                Dashboard
+                            </small>
+                        </h5>
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+        
+        
+        
+        {% if perms.pages.view_pagecontent %}
+        <!-- ============================== -->
+            {% url 'productbrand-list' as proURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            {% url 'pagecontent-edit' 1 as pceURL1 %} <!-- setting up the URL variable to check whether it is the current variable -->
+            {% url 'pagecontent-edit' 2 as pceURL2 %} <!-- setting up the URL variable to check whether it is the current variable -->
+            {% url 'pagecontent-edit' 3 as pceURL3 %} <!-- setting up the URL variable to check whether it is the current variable -->
+            {% url 'productsection-list' as psURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            {% url 'emailcontent-list' as ecURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            <tr class="clickable {% if proURL == request.path or pceURL1 == request.path or pceURL2 == request.path or pceURL3 == request.path or psURL == request.path or ecURL == request.path %} active {% endif %}">
+                <td width='25px' class='p-0'>
+                    {% comment %} <a href="{% url 'product-list' %}" class='text-muted font-weight-medium '> {% endcomment %}
+                        <h5>
+                            <i class="fas fa-newspaper pt-1"></i>
+                        </h5>
+                    {% comment %} </a> {% endcomment %}
+                </td>
+                <td class='p-0 pt-1'>
+                    {% comment %} <a href="{% url 'product-list' %}" class='text-muted d-block'> {% endcomment %}
+                        <h5 class='ml-3'>
+                            <small class='font-weight-medium'>
+                                Website Content
+                            </small>
+                        </h5>
+                    {% comment %} </a> {% endcomment %}
+
+                    <div class='wrapper ml-3' id='products-sub'>
+                        <table class='table table-sm m-0 p-0'>
+                            <tbody class=' m-0 p-0'>
+                                {% if perms.pages.view_productbrand %}
+                                    <tr class=' m-0 p-0 clickable'>
+                                        <td class=' m-0 p-0'>
+                                            <a href="{% url 'productbrand-list' %}" class='text-muted font-weight-medium d-block'>
+                                                <i class="fas fa-caret-right pt-1 text-muted"></i>
+                                                Product Brands
+                                            </a>
+                                        </td>
+                                    </tr>
+
+
+
+
+                                {% endif %}
+                                <!-- ================== -->
+                                <!-- ================== -->
+                                <!-- ================== -->
+                                <tr class=' m-0 p-0 clickable'>
+                                    <td class=' m-0 p-0'>
+                                        <a href="{% url 'pagecontent-edit' 1 %}" class='text-muted font-weight-medium d-block'>
+                                            <i class="fas fa-caret-right pt-1 text-muted"></i>
+                                            About
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- ================== -->
+                                <tr class=' m-0 p-0 clickable'>
+                                    <td class=' m-0 p-0'>
+                                        <a href="{% url 'pagecontent-edit' 2 %}" class='text-muted font-weight-medium d-block'>
+                                            <i class="fas fa-caret-right pt-1 text-muted"></i>
+                                            T&C
+                                        </a>    
+                                    </td>
+                                </tr>
+                                <!-- ================== -->
+                                <tr class=' m-0 p-0 clickable'>
+                                    <td class=' m-0 p-0'>
+                                        <a href="{% url 'pagecontent-edit' 3 %}" class='text-muted font-weight-medium d-block'>
+                                            <i class="fas fa-caret-right pt-1 text-muted"></i>
+                                            Privacy
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- ================== -->
+                                <tr class=' m-0 p-0 clickable'>
+                                    <td class=' m-0 p-0'>
+                                        <a href="{% url 'productsection-list' %}" class='text-muted font-weight-medium d-block'>
+                                            <i class="fas fa-caret-right pt-1 text-muted"></i>
+                                            Product Sections
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- ================== -->
+                                <tr class=' m-0 p-0 clickable'>
+                                    <td class=' m-0 p-0'>
+                                        <a href="{% url 'emailcontent-list' %}" class='text-muted font-weight-medium d-block'>
+                                            <i class="fas fa-caret-right pt-1 text-muted"></i>
+                                            Email Content
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- ================== -->
+                                <!-- ================== -->
+                                <!-- ================== -->
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+
+
+        <!-- ============================== -->
+        {% if perms.products.view_product %}
+            {% url 'product-list' as proURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            {% url 'attributes' as attrURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            {% url 'categories' as catURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            {% url 'product-details' as proDetURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            {% url 'product-edit' as proEditURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            <tr class="clickable {% if proURL == request.path or attrURL == request.path or catURL == request.path or proDetURL == request.path or proEditURL == request.path %} active {% endif %}">
+                <td width='25px' class='p-0'>
+                    <a href="{% url 'product-list' %}" class='text-muted font-weight-medium '>
+                        <h5>
+                            <i class="fas fa-cubes pt-1"></i>
+                        </h5>
+                    </a>
+                </td>
+                <td class='p-0 pt-1'>
+                    <a href="{% url 'product-list' %}" class='text-muted d-block'>
+                        <h5 class='ml-3'>
+                            <small class='font-weight-medium'>
+                                Products
+                            </small>
+                        </h5>
+                    </a>
+                    <div class='wrapper ml-3' id='products-sub'>
+                        <table class='table table-sm m-0 p-0'>
+                            <tbody class=' m-0 p-0'>
+                                <tr class=' m-0 p-0 clickable'>
+                                    <td class=' m-0 p-0'>
+                                        <a href="{% url 'attributes' %}" class='text-muted font-weight-medium d-block'>
+                                            <i class="fas fa-caret-right pt-1 text-muted"></i>
+                                            Attributes
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr class=' m-0 p-0 clickable'>
+                                    <td class=' m-0 p-0'>
+                                        <a href="{% url 'categories' %}" class='text-muted font-weight-medium d-block'>
+                                            <i class="fas fa-caret-right pt-1 text-muted"></i>
+                                            Categories
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+
+        <!-- ============================== -->
+        {% if perms.orders.view_order %}
+            {% url 'order-list' as orderURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            <tr class="clickable {% if orderURL == request.path %} active {% endif %}">
+                <td width='25px' class='p-0'>
+                    <a href="{% url 'order-list' %}" class='text-muted font-weight-medium d-block'>
+                        <h5>
+                            <i class="fas fa-clipboard-list pt-1"></i>
+                        </h5>
+                    </a>
+                </td>
+                <td class='p-0 pt-1'>
+                    <a href="{% url 'order-list' %}" class='text-muted d-block'>
+                        <h5 class='ml-3'>
+                            <small class='font-weight-medium'>
+                                Orders
+                            </small>
+                        </h5>
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+        <!-- ============================== -->
+        {% if perms.customers.view_customer %}
+            {% url 'customer-list' as customerURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            <tr class="clickable {% if customerURL == request.path %} active {% endif %}">
+                <td width='25px' class='p-0'>
+                    <a href="{% url 'customer-list' %}" class='text-muted font-weight-medium d-block'>
+                        <h5>
+                            <i class="fas fa-user-friends pt-1"></i>
+                        </h5>
+                    </a>
+                </td>
+                <td class='p-0 pt-1'>
+                    <a href="{% url 'customer-list' %}" class='text-muted d-block'>
+                        <h5 class='ml-3'>
+                            <small class='font-weight-medium'>
+                                Customers
+                            </small>
+                        </h5>
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+        <!-- ============================== -->
+        {% if perms.cars.view_carbrand %}
+            {% url 'cars' as carsURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            <tr class="clickable {% if carsURL == request.path %} active {% endif %}">
+                <td width='25px' class='p-0'>
+                    <a href="{% url 'cars' %}" class='text-muted font-weight-medium d-block'>
+                        <h5 class=''>
+                            <i class="fas fa-car pt-1"></i>
+                        </h5>
+                    </a>
+                </td>
+                <td class='p-0 pt-1'>
+                    <a href="{% url 'cars' %}" class='text-muted ' class='d-block'>
+                        <h5 class='ml-3'>
+                            <small class='font-weight-medium'>
+                                Cars
+                            </small>
+                        </h5>
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+        <!-- ============================== -->
+        {% if perms.staff.view_staff %}
+            {% url 'staff-list' as staffURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            <tr class="clickable {% if staffURL == request.path %} active {% endif %}">
+                <td width='25px' class='p-0'>
+                    <a href="{% url 'staff-list' %}" class='text-muted font-weight-medium d-block'>
+                        <h5 class=''>
+                            <i class="fas fa-address-book pt-1"></i>
+                        </h5>
+                    </a>
+                </td>
+                <td class='p-0 pt-1'>
+                    <a href="{% url 'staff-list' %}" class='text-muted d-block'>
+                        <h5 class='ml-3'>
+                            <small class=' font-weight-medium'>
+                                Staff
+                            </small>
+                        </h5>
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+        <!-- ============================== -->
+        {% if perms.stores.view_store %}
+            {% url 'stores-list' as storesURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            <tr class="clickable {% if storesURL == request.path %} active {% endif %}">
+                <td width='25px' class='p-0'>
+                    <a href="{% url 'stores-list' %}" class='text-muted font-weight-medium d-block'>
+                        <h5 class=''>
+                            <i class="fas fa-store pt-1"></i>
+                        </h5>
+                    </a>
+                </td>
+                <td class='p-0 pt-1'>
+                    <a href="{% url 'stores-list' %}" class='text-muted ' class='d-block'>
+                        <h5 class='ml-3'>
+                            <small class='font-weight-medium'>
+                                Stores
+                            </small>
+                        </h5>
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+        <!-- ============================== -->
+        {% if perms.coupons.view_coupon %}
+            {% url 'coupon-list' as couponURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            <tr class="clickable {% if couponURL == request.path %} active {% endif %}">
+                <td width='25px' class='p-0'>
+                    <a href="{% url 'coupon-list' %}" class='text-muted font-weight-medium d-block'>
+                        <h5 class=''>
+                            <i class="fas fa-tag pt-1"></i>
+                        </h5>
+                    </a>
+                </td>
+                <td class='p-0 pt-1'>
+                    <a href="{% url 'coupon-list' %}" class='text-muted ' class='d-block'>
+                        <h5 class='ml-3'>
+                            <small class='font-weight-medium'>
+                                Coupons
+                            </small>
+                        </h5>
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+        <!-- ============================== -->
+        <!-- ============================== -->
+        {% if perms.promotions.view_promotion %}
+            {% url 'promotion-list' as promoURL %} <!-- setting up the URL variable to check whether it is the current variable -->
+            <tr class="clickable {% if promoURL == request.path %} active {% endif %}">
+                <td width='25px' class='p-0'>
+                    <a href="{% url 'promotion-list' %}" class='text-muted font-weight-medium d-block'>
+                        <h5 class=''>
+                            <i class="fas fa-percent pt-1"></i>
+                        </h5>
+                    </a>
+                </td>
+                <td class='p-0 pt-1'>
+                    <a href="{% url 'promotion-list' %}" class='text-muted ' class='d-block'>
+                        <h5 class='ml-3'>
+                            <small class='font-weight-medium'>
+                                Promotions
+                            </small>
+                        </h5>
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+        <!-- ============================== -->
+    </table>
+
+</div>

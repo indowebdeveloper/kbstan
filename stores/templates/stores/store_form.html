@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}  
+
+{% block content %}
+
+<div class='col-12 col-lg-10 col-xl-7'>
+
+
+    <div class='card mb-5'>
+        <div class='card-header'>
+            <div class='mb-3'>
+                <a href="{% url 'stores-list' %}"  onclick='event.preventDefault();window.history.back()' class='text-muted font-weight-bold fx fx-link'>
+                    <i class="fas fa-angle-left text-muted"></i>
+                    Back
+                </a>
+            </div>
+
+            <h3 class="mb-0 mt-1 font-weight-bold">Edit New Store</h3>
+        </div>
+        <div class='card-body'>
+            <form method='POST' action='{{ action_url }}' enctype='multipart/form-data'>
+                {% csrf_token %}
+                {{form|crispy}}
+                <p>
+                    To add in the Google Maps preview, please follow <a href='' class='' data-toggle="modal" data-target="#exampleModal"> these instructions</a>.
+                </p>
+                <button class='w-100 btn btn-success mx-0' id='edit' type="submit" value="Save">
+                    <i class="fas fa-check"></i> Save
+                </button>
+            </form>
+        </div>
+</div>
+
+</div>
+
+
+<!-- MODAL -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">How to add a Google Map code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ol>
+            <li class='mb-3'>
+                Go to <a href='https://www.google.com/maps'>maps.google.com</a>
+            </li>
+            <li class='mb-3'>
+                Search for the address of your store on the top left search field
+            </li>
+            <li class='mb-3'>
+                Click on the <i>Share</i> button
+                <img class='img-fluid mb-4' src="/media/map_embedding_code_instructions/step_3.png" />
+            </li>
+            <li class='mb-3'>
+                Click on the <i>Embed a Map</i> button
+                <img class='img-fluid mb-4' src="/media/map_embedding_code_instructions/step_4.png" />
+            </li>
+            <li class='mb-3'>
+                Click on the <i>Copy HTML</i> button
+                <img class='img-fluid mb-4' src="/media/map_embedding_code_instructions/step_5.png" />
+            </li>
+            <li class='mb-3'>
+                Paste the copied text into the <i>Map embedding code</i> field in the backoffice
+                <img class='img-fluid mb-4' src="/media/map_embedding_code_instructions/step_6.png" />
+            </li>
+        </ol>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ./MODAL -->
+
+
+{% endblock content %}

@@ -1,0 +1,109 @@
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}
+{% load static %}
+{% load humanize %}
+
+
+{% block content %}
+{% comment %} <a href="{% url 'order-list' %}">Back to orders list</a> <br> {% endcomment %}
+
+<div class='col-12 col-lg-10 col-xl-8'>
+
+
+<div class='card mb-5'>
+    <div class='card-header p-0'>
+
+        <div class='mb-0 ml-3 mt-3'>
+            <a href="{% url 'order-list' %}" {% comment %}onclick='event.preventDefault();window.history.back()'{% endcomment %}  class='text-muted font-weight-bold fx fx-link'>
+                <i class="fas fa-angle-left text-muted"></i>
+                Back
+            </a>
+        </div>
+
+        <h3 class="font-weight-bold mb-0 card-title ml-3 mt-0 mb-1">Edit Order Item</h3>
+        {% comment %} XXXXXXXXXXXXX {% endcomment %}
+            {% comment %} XXXXXXXXXXXXX {% endcomment %}
+            {% comment %} XXXXXXXXXXXXX {% endcomment %}
+            <div class='bg-light w-100'>
+                <div class='w-100 px-2 py-3 text-dark border-bottom mb-0'>
+                    <div class="carddd">
+                        <div class="row no-gutters">
+                            <div class="col-auto align-self-center">
+                                {% if orderitem.product.slug %}
+                                    <a class='' href="{% url 'product-details' orderitem.product.slug %}">
+                                        <div style="background-image:url('{{orderitem.product.featured_image.url}}'); height:100px;width:100px;" class='clickable clickable-large display-inline bg-image-cover img-thumbnail'></div>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <div class="card-blockkk px-2">
+                                    {% comment %} <h4 class='text-uppercase font-weight-bold m-0 p-0 border-bottom'>
+                                        Product:
+                                    </h4> {% endcomment %}
+                                    <h5 class='font-weight-bold m-0 p-0'>
+                                        {{orderitem.quantity}} x 
+                                        {% if orderitem.product.slug %}
+                                            <a class='' href="{% url 'product-details' orderitem.product.slug %}">
+                                                {{orderitem.product.name}}
+                                            </a>
+                                        {% else %}
+                                            <span class='text-danger'>
+                                                Deleted Product
+                                            </span>
+                                        {% endif %}
+                                    </h5>
+                                    <p class='m-0 p-0'>
+                                        <b>Price:</b>
+                                        {% if orderitem.discount_price > 0 %}
+                                                {% include "sub/currency.html" %}{{orderitem.discount_price|intcomma}}
+                                                <br>
+                                                (Full Price: {% include "sub/currency.html" %}{{orderitem.price|intcomma}})
+                                            {% else %}
+                                                {% include "sub/currency.html" %}{{orderitem.price|intcomma}}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% comment %} XXXXXXXXXXXXX {% endcomment %}
+            {% comment %} XXXXXXXXXXXXX {% endcomment %}
+            {% comment %} XXXXXXXXXXXXX {% endcomment %}
+    </div>
+    <div class='card-body'>
+        <!-- this form MUST stay inside -->
+        <div class=''>
+
+            
+
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form|crispy}}
+                
+                
+                <button class='w-100 btn btn-success mx-0' id='edit' type="submit" value="Save">
+                    <i class="fas fa-check"></i> Save
+                </button>
+            </form>
+             <!-- this form MUST stay inside -->
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+{% endblock content %}
+
+
+{% block customJS %}
+<script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-transition.min.js" %}"></script>
+<script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-dropdown.min.js" %}"></script>
+
+<script>
+    $('select').addClass('search');
+    $('select').dropdown();
+</script>
+{% endblock customJS %}

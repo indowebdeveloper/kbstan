@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class='col-12'>
+
+    <div class='card'>
+        <div class='card-header'>
+            <h3 class='card-title mb-0 font-weight-bold'>Cars Database</h3>
+        </div>
+        <div class='card-body'>
+            <div class='row'>
+            <!-- LEFT COLUMN -->
+                <div class='col-12'>
+                    <div class='card'>
+                        <div class='card-header pl-0 pr-0 pb-0'>
+                            <h5 class='card-title mb-0 text-uppercase text-center'>Brands</h5>
+
+                            <div class='row m-0 mt-2'>
+                                <div id='newBrandWrapper' class='input-group col-12 p-0'>
+
+
+                                    <button type='' id='showNewBrandButton' onclick="toggleTargetHideSelf(this, '#newBrand')" class='fx btn btn-success m-0 rounded-0 py-2 w-100' data-toggle-target='#newBrandForm'>
+                                        <i class="fas fa-plus-circle"></i> &nbsp;Add Brand
+                                    </button>
+                                    <form id='newBrandForm' class='w-100 d-none' action='' onfocusout="fieldReset('#newBrandForm', '#showNewBrandButton')">
+                                        <div class='input-group'>
+                                            <input type='text' id='newBrand' name='newBrand' data-disable-target='#addNewBrandButton' oninput='fieldUpdated(this)' onblur='' class='fx form-control rounded-0' />
+                                            
+                                            <div class='input-group-append' id='appendGroupBrand'>
+                                                <button type='submit' data-toggle-target='#showNewBrandButton' disabled onclick="newBrandFieldToggler(window.event, this)" class='fx btn btn-success m-0 rounded-0 p-0 px-3 input-group-text' id='addNewBrandButton'>
+                                                    <i class="fas fa-plus-circle"></i> &nbsp;Add
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class='card-body p-0 overflow-y-scroll'>
+                            <table id='brandsTable' class='table table-striped table-hover mb-0 overflow-hidden'>
+                                <tbody class=''>
+                                    {% for car_brand in car_brands %}
+                                    <tr onclick='newCarSelected(this)' class='' data-brand='{{car_brand.brand}}' data-id='{{car_brand.id}}'>
+                                        <td>
+                                            <span class='brandName'>{{car_brand.brand}}</span>
+                                            <input type='text' class="brandName-input form-control w-100 d-none">
+                                            <div class='row mt-2 buttonsRow'>
+                                                <div class='col-12 text-right allButtons'>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <small class=' d-inline-block clickable clickable-large text-muted clickable' data-fn='editBrand' onclick='editBrandButton(this)'>
+                                                        <i class="fas fa-pencil-alt"></i> Edit
+                                                    </small>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <small class='text-danger  d-inline-block clickable clickable-large ' onclick='deleteBrandButton(this)'>
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </small>
+                                                </div>
+                                                <div class='col-12 editDoneButton d-none'>
+                                                    <div class="btn-group w-100" role="group" aria-label="">
+                                                        <button class='btn btn-grey btn-sm' data-fn='cancelEditBrand' onclick='editBrandButton(this)'>
+                                                            <i class="fas fa-times"></i> Cancel
+                                                        </button>
+                                                        <button class='btn btn-primary btn-sm' data-fn='saveChangesBrand' onclick='editBrandButton(this)'>
+                                                            <i class="fas fa-pencil-alt"></i> Save Changes
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    <!-- ///////////////////// -->
+                                    <!-- ///////////////////// -->
+                                    <!-- ///////////////////// -->
+                                    <!-- HIDDEN TEMPLATE ELEMENT. THIS ELEMENT IS SO THAT NEW LIST ITEMS CAN EASILY BE ADDED DYNAMICALLY -->
+                                    <tr onclick='newCarSelected(this)' id='TEMPLATE_brand_table_ELEMENT' class='d-none' data-brand='' data-id=''>
+                                        <td>
+                                            <span class='brandName'>{{car_brand.brand}}</span>
+                                            <input type='text' class="brandName-input form-control w-100 d-none">
+                                            <div class='row mt-2 buttonsRow'>
+                                                <div class='col-12 text-right allButtons'>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <small class='text-muted  d-inline-block clickable clickable-large ' data-fn='editBrand' onclick='editBrandButton(this)'>
+                                                        <i class="fas fa-pencil-alt"></i> Edit
+                                                    </small>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <small class='text-danger  d-inline-block clickable clickable-large ' onclick='deleteBrandButton(this)'>
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </small>
+                                                </div>
+                                                <div class='col-12 editDoneButton d-none'>
+                                                    <div class="btn-group w-100" role="group" aria-label="">
+                                                        <button class='btn btn-grey btn-sm' data-fn='cancelEditBrand' onclick='editBrandButton(this)'>
+                                                            <i class="fas fa-times"></i> Cancel
+                                                        </button>
+                                                        <button class='btn btn-primary btn-sm' data-fn='saveChangesBrand' onclick='editBrandButton(this)'>
+                                                            <i class="fas fa-pencil-alt"></i> Save Changes
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- ./HIDDEN TEMPLATE ELEMENT. -->
+                                    <!-- ///////////////////// -->
+                                    <!-- ///////////////////// -->
+                                    <!-- ///////////////////// -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            <!-- ./LEFT COLUMN -->
+            <!-- RIGHT COLUMN HIDDEN, as models are now different-->
+            
+
+
+
+
+        {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+        {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+        {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+        {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+        {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+        {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+
+            
+            {% comment %}
+            <div class='col-6'>
+                <div class='card'>
+                    <div class='card-header pl-0 pr-0 pb-0'>
+                        <h5 class='card-title mb-0 text-uppercase text-center'><strong class='receiveSelectedBrandUpdates'></strong> Models</h5>
+
+                        <div class='row m-0 mt-2'>
+                            <div id='newModelWrapper' class='input-group col-12 p-0'>
+
+                                <form id='newModel' class='w-100' action=''>
+
+                                    <!-- INPUT FIELDS -->
+                                    <input type="text" oninput="fieldUpdated(this)" data-disable-target="#showNewModelButton" placeholder="Model name" name="modelName" required class="fx form-control rounded-0 d-none" />
+                                    <input type='number' min='1900' placeholder='Build year' max='2040' name='modelYear' class='fx form-control rounded-0 d-none' />
+                                    <input type='text' name='modelDetails' placeholder='Details' class='fx form-control rounded-0 d-none' />
+                                    <!-- ./INPUT FIELDS -->
+                                    
+                                    <button disabled onclick='newModelFieldToggler(window.event)' class='fx btn btn-success m-0 rounded-0 py-2 w-100' id='showNewModelButton'>
+                                        <i class="fas fa-plus-circle"></i> &nbsp;Add&nbsp;<span class='' id='model-hidden'>Model</span>
+                                    </button>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class='card-body p-0 overflow-y-scroll max-height-400px'>
+                        <table id='modelsTable' class='table table-striped table-hover mb-0 overflow-hidden'>
+                            <!-- //////////////////// -->
+                            <!-- //////////////////// -->
+                            <!-- MODEL TABLE TEMPLATE - this is needed because when we create a new brand (which happens locally), we also need to create a new, empty models-table for it -->
+                            <!-- //////////////////// -->
+                            <!-- //////////////////// -->
+                            <tbody id='TEMPLATE_models_table' class='receiveModelListUpdates max-height-400px d-none' data-brand='NULL' data-id='NULL'>
+                                    <tr id='TEMPLATE_model_table_ELEMENT' data-model='NULL' data-model-id='NULL'>
+                                        <td class='py-2'>
+                                            <div class='row py-0'>
+                                                <div class='col-12 py-0'>
+                                                    <span class='modelName'></span>
+                                                    <input class='modelName-input w-100 form-control mb-0 d-none'>
+                                                    <br>
+                                                    <small class='text-muted'>Model Year: 
+                                                        <span class='modelBuildYear'></span>
+                                                        <input class='modelBuildYear-input w-100 form-control d-none'>
+                                                    </small>
+                                                    <span class='d-none modelDetailsText'></span>
+                                                    <textarea class='modelDetailsText-input w-100 form-control mt-3 d-none'></textarea>
+                                                </div>
+                                            </div>
+                                            <div class='row mt-2 buttonsRow'>
+                                                <div class='col-12 text-right allButtons'>
+                                                    <small class='text-muted clickable' onclick='displayModelDetailModal(this)'>
+                                                        <i class="fas fa-info-circle"></i> Details
+                                                    </small>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <small class='text-muted clickable' data-fn='editModel' onclick='editModelButton(this)'>
+                                                        <i class="fas fa-pencil-alt"></i> Edit
+                                                    </small>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <small class='text-danger clickable' onclick='deleteModelButton(this)'>
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </small>
+                                                </div>
+                                                <div class='col-12 editDoneButton d-none'>
+                                                    <div class="btn-group w-100" role="group" aria-label="">
+                                                        <button class='btn btn-grey btn-sm' data-fn='cancelEditModel' onclick='editModelButton(this)'>
+                                                            <i class="fas fa-times"></i> Cancel
+                                                        </button>
+                                                        <button class='btn btn-primary btn-sm' data-fn='saveChangesModel' onclick='editModelButton(this)'>
+                                                            <i class="fas fa-pencil-alt"></i> Save Changes
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                            </tbody>
+                            <!-- //////////////////// -->
+                            <!-- //////////////////// -->
+
+                            <!-- //////////////////// -->
+                            <!-- //////////////////// -->
+
+                            {% for car_brand in car_brands %}
+                                <tbody class='receiveModelListUpdates max-height-400px d-none' data-brand='{{car_brand.brand}}' data-id='{{car_brand.id}}'>
+                                    {% for car_type in car_brand.carmodel_set.all %}
+                                        <tr data-model='{{car_type.type}}' data-model-id='{{car_type.id}}'> 
+                                            <td class='py-2'>
+                                                <div class='row py-0'>
+                                                    <div class='col-12 py-0'>
+                                                        <span class='modelName'>{{car_type.type}}</span>
+                                                        <input class='modelName-input w-100 form-control mb-0 d-none'>
+                                                        <br>
+                                                        <small class='text-muted'>Model Year: 
+                                                            <span class='modelBuildYear'>{{car_type.buildYear}}</span>
+                                                            <input class='modelBuildYear-input w-100 form-control d-none'>
+                                                        </small>
+                                                        <span class='d-none modelDetailsText'>{{car_type.details}}</span>
+                                                        <textarea class='modelDetailsText-input w-100 form-control mt-3 d-none'></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class='row mt-2 buttonsRow'>
+                                                    <div class='col-12 text-right allButtons'>
+                                                        <small class='text-muted clickable' onclick='displayModelDetailModal(this)'>
+                                                            <i class="fas fa-info-circle"></i> Details
+                                                        </small>
+                                                        &nbsp;&nbsp;&nbsp;
+                                                        <small class='text-muted clickable' data-fn='editModel' onclick='editModelButton(this)'>
+                                                            <i class="fas fa-pencil-alt"></i> Edit
+                                                        </small>
+                                                        &nbsp;&nbsp;&nbsp;
+                                                        <small class='text-danger clickable' onclick='deleteModelButton(this)'>
+                                                            <i class="fas fa-trash"></i> Delete
+                                                        </small>
+                                                    </div>
+                                                    <div class='col-12 editDoneButton d-none'>
+                                                        <div class="btn-group w-100" role="group" aria-label="">
+                                                            <button class='btn btn-grey btn-sm' data-fn='cancelEditModel' onclick='editModelButton(this)'>
+                                                                <i class="fas fa-times"></i> Cancel
+                                                            </button>
+                                                            <button class='btn btn-primary btn-sm' data-fn='saveChangesModel' onclick='editModelButton(this)'>
+                                                                <i class="fas fa-pencil-alt"></i> Save Changes
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            {% endfor %}
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+            {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+            {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+            {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+            {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+            {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+            {% comment %} HIDDEN HIDDEN HIDDEN HIDDEN HIDDEN  {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+        <!-- ./RIGHT COLUMN -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGINATION -->
+        <div class='my-2 ml-2'>
+            <span class="step-links">
+                {% if car_brands.has_previous %}
+                    <a href="?page=1">First</a>
+                    <a href="?page={{ car_brands.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                        <i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+                    </a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ car_brands.number }} of {{ car_brands.paginator.num_pages }}
+                </span>
+
+                {% if car_brands.has_next %}
+                    <a href="?page={{ car_brands.next_page_number }}" class='mr-3 ml-2'>
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                    <a href="?page={{ car_brands.paginator.num_pages }}">Last</a>
+                {% endif %}
+            </span>
+        </div>
+    <!-- ./PAGINATION -->
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modelDetailsModal" tabindex="-1" role="dialog" aria-labelledby="modelDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modelDetailsModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          === EMPTY ===
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

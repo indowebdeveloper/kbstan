@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class='col-12'>
+
+<div class='card mb-5 pb-0'><!-- CARD -->
+    <div class='card-header pb-0'><!-- CARD-HEADER -->
+        <div class='row'>
+            <div class='col-12'>
+                <h3 class='card-title font-weight-bold'>Service List</h3>
+            </div>
+        </div>
+        {% comment %} {% include "sub/search_filter.html" %} {% endcomment %}
+
+
+        <!-- serviceS FILTER -->
+    {% comment %} <div class=''>
+
+        <form id='services-filter' action='' method='GET'>
+            
+            <!-- =============================== -->
+            <!-- =============================== -->
+
+            <div class='form-group m-0'>
+                <h6 class='text-underline font-weight-bold'>
+                    Categories
+                </h6>
+                {% for cat in categories %}
+                    <div class='d-inline mr-3'>
+                        <input type="checkbox" id="{{cat}}" name="categories" value="{{cat}}">
+                        <label for="{{cat}}">{{cat}}</label>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- =============================== -->
+            <!-- =============================== -->
+
+            <div class='form-group m-0'>
+                <h6 class='text-underline font-weight-bold'>
+                    Brands
+                </h6>
+                {% for brand in carBrands %}
+                    <div class='d-inline mr-3'>
+                        <input type="checkbox" id="{{brand}}" name="brands" value="{{brand}}">
+                        <label for="{{brand}}">{{brand}}</label>
+                    </div>
+                {% endfor %}
+            </div>
+            
+
+            <!-- =============================== -->
+            <!-- =============================== -->
+
+            <div class='form-group m-0'>
+                <h6 class='text-underline font-weight-bold'>
+                    Price
+                </h6>
+                <label for="price_min">Lowest Price</label>
+                <input type="number" id="price_min" name="price_min">
+                -
+                <input type="number" id="price_max" name="price_max">
+                <label for="price_max">Highest Price</label>
+            </div>
+
+            <!-- =============================== -->
+            <!-- =============================== -->
+
+            <button type='submit' class='btn btn-sm btn-primary m-0 my-3'>
+                <i class="fas fa-filter"></i> Filter services
+            </button>
+            <button class='btn btn-danger btn-sm' data-reset-target='#services-filter' onclick='resetFiltersForm(this)'>
+                Reset Filters
+            </button>
+        </form>
+
+    </div> {% endcomment %}
+    <!-- .//serviceS FILTER -->
+
+
+    </div><!-- ./CARD-HEADER -->
+
+
+    <div class='card-body p-0'><!-- CARD-BODY -->
+        <div class='row m-0' id='service-LIST_list'>
+                <div class='col-12 pt-3 pb-3 mb-0'>
+                    <!-- <button class='btn btn-lg btn-success font-weight-bold m-0 mb-3 w-100'>Create new service</button>
+                    <a href="{% url 'service-create' %}" class='stretched-link'></a> -->
+                    <a href="{% url 'service-create' %}" class='w-25 px-0 btn btn-success btn-large m-0'>
+                        <i class="fas fa-plus-circle"></i> New Service
+                    </a>
+
+
+                    <!-- PAGINATION -->
+                    <div class='mt-3'>
+                        <span class="step-links">
+                            {% if services.has_previous %}
+                                <a href="?page=1">First</a>
+                                <a href="?page={{ services.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                                    <i class="fas fa-angle-left" class='clickable clickable-large'></i>
+                                </a>
+                            {% endif %}
+
+                            <span class="current">
+                                Page {{ services.number }} of {{ services.paginator.num_pages }}
+                            </span>
+
+                            {% if services.has_next %}
+                                <a href="?page={{ services.next_page_number }}" class='mr-3 ml-2'>
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                                <a href="?page={{ services.paginator.num_pages }}">Last</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <!-- ./PAGINATION -->
+
+
+
+                </div>
+                {% for service in services %}
+                <div class='col-12'>
+                    <div class='card mb-3'>
+                        <div class='card-body'>
+                            <div class='row'>
+
+                                <!-- LEFT SIDE -->
+                                <div class='col-6 border-right'>
+                                    <div class='row'>
+                                        <div class='col-12'>
+                                            <div class='my-link-container position-relative'>
+                                                <a href="{% url 'service-details' service.slug %}" class='stretched-link'></a>
+
+                                                {% comment %} <div style="background-image:url('{{service.featured_image.url}}')" class='my-img-square-100 rounded float-left img-fluid img-thumbnail mr-4'></div> {% endcomment %}
+
+                                                <h5 class='card-title text-muted font-weight-bold'>
+                                                    {{service.name}}
+                                                </h5>
+                                                <h6 class='text-muted'>
+                                                    Price: <span class='text-success font-weight-bold'>{% include "sub/currency.html" %}{{service.price}}</span>&nbsp;&nbsp;
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col-12'>
+                                            <div class='interactions mt-0 border-top pt-2'>
+                                                <a href="{% url 'service-edit' service.slug %}" class='fx clickable card-link text-muted'>
+                                                    <i class="fas fa-pencil-alt"></i> Edit
+                                                </a>
+                                                <a href="{% url 'service-delete' service.slug %}" class='fx clickable card-link text-danger'>
+                                                    <i class="fas fa-trash-alt"></i> Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ./LEFT SIDE -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+
+                <div class='col-12 mt-1 mb-3'>
+                    <span class="step-links">
+                        {% if services.has_previous %}
+                            <a href="?page=1">First</a>
+                            <a href="?page={{ services.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                                <i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+                            </a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ services.number }} of {{ services.paginator.num_pages }}
+                        </span>
+
+                        {% if services.has_next %}
+                            <a href="?page={{ services.next_page_number }}" class='mr-3 ml-2'>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                            <a href="?page={{ services.paginator.num_pages }}">Last</a>
+                        {% endif %}
+                    </span>
+                </div>
+        </div>
+    </div><!-- ./CARD-BODY -->
+</div><!-- ./CARD -->
+
+
+</div>
+{% endblock content %}
+
+{% block customJS %}
+
+    <script type="text/javascript" src="{% static "mdbootstrap/js/custom/backoffice/service-list-filter.js" %}"></script>
+
+{% endblock customJS %}

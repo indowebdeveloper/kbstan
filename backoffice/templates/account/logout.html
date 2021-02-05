@@ -1,0 +1,54 @@
+{% extends "customer-base.html" %} 
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class='container'>
+    <div class='section customer-signup'>
+
+        <div class='row'>
+            <div class='text-left col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3'>
+                <div class='product bg-white p-4 text-left'>
+                    <h3 class='brand-text'>Confirm Sign Out</h3>
+                    <hr>
+                    
+                    <p>{% trans 'Are you sure you want to sign out?' %}</p>
+
+                    <form method="post" action="{% url 'account_logout' %}">
+                        {% csrf_token %}
+                        {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                        {% endif %}
+                        <button class="brand-btn w-100 mb-3" type="submit">
+                            <i class="fa fa-sign-in-alt"></i> Sign Out
+                        </button>
+                    </form>
+
+                    {% comment %} <form class="login" method="POST" action="{% url 'account_login' %}">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                        <button class="brand-btn w-100 mb-3" type="submit">
+                            <i class="fa fa-sign-in-alt"></i> Sign In
+                        </button>
+                        <div class='text-right'>
+                            <a class="button secondaryAction active-link" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+                        </div>
+                    </form> {% endcomment %}
+                    {% comment %}  {% endcomment %}
+                    {% comment %}  {% endcomment %}
+                    {% comment %}  {% endcomment %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

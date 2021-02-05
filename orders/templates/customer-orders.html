@@ -1,0 +1,401 @@
+{% extends "customer-base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+
+<div class='container'>
+    <div class='section customer-signup'>
+
+            <div class='row'>
+
+                <!-- ASIDE -->
+                <div id="aside" class="pt-3 col-lg-3">
+                    <!-- aside Widget -->
+                    <h6 class='text-uppercase position-relative'>Manage My Account</h6>
+                    <hr>
+                    <div class="aside">
+                        <h6 class="text-capitalize mb-3">
+                            <a href="{% url 'customer-profile' %}">
+                                View My Account
+                            </a>
+                        </h6>
+                        <h6 class="text-capitalize mb-3">
+                            <a href="{% url 'customer-profile-edit' %}">
+                                Edit My Acount
+                            </a>
+                        </h6>
+                    </div>
+                    <!-- /aside Widget -->
+
+                    <!-- aside Widget -->
+                    <h6 class='text-uppercase position-relative mt-5'>My Orders</h6>
+                    <hr>
+                    <div class="aside">
+                        <h6 class="text-capitalize mb-3">
+                            <a href="{% url 'customer-orders' %}" class='active-link'>
+                                My Orders
+                            </a>
+                        </h6>
+                    </div>
+                    <!-- /aside Widget -->
+                </div>
+                <!-- /ASIDE -->
+
+                <div class='text-left col-12 col-lg-8'>
+                    <div class='product product-red-border bg-white p-3 text-left'>
+
+                        <ul class="nav nav-tabs mt-0" id="myOrdersTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="all-orders-tab" data-toggle="tab" href="#all-orders" role="tab" aria-controls="all-orders" aria-selected="true">All Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="current-orders-tab" data-toggle="tab" href="#current-orders" role="tab" aria-controls="current-orders" aria-selected="false">Current Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="past-orders-tab" data-toggle="tab" href="#past-orders" role="tab" aria-controls="past-orders" aria-selected="false">Past Orders</a>
+                            </li>
+                        </ul> 
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="all-orders" role="tabpanel" aria-labelledby="all-orders-tab">
+                                        <table class='table table-striped'>
+                                            <thead class='thead-dark'>
+                                                <th style='width:120px'>
+                                                    Date
+                                                </th>
+                                                <th class='text-left' style='width:140px'>
+                                                    Total Order Price
+                                                </th>
+                                                <th style='width:auto'>
+                                                </th>
+                                                <th>
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                                {% for order in orders reversed %}
+                                                    <tr>
+                                                        <!-- =========== -->
+                                                        <td class='align-middle'>
+                                                            <small>
+                                                                <span class='font-weight-normal text-uppercase'>{{order.dateCreated}}</span>
+                                                            </small>
+                                                        </td>
+                                                        <!-- =========== -->
+                                                        <td class='align-middle text-center'>
+                                                            {% include "sub/currency.html" %}{{order.get_cart_total|intcomma}}
+                                                        </td>
+                                                        <!-- =========== -->
+                                                        <td class='p-0 py-2 align-middle text-right'>
+                                                            <div class=''>
+                                                                <button type="button" class="add-to-cart-btn btn btn-sm product-add-button" data-toggle="modal" data-target="#order-{{order.pk}}-modal">
+                                                                    <i class="fas fa-cubes"></i> See Items
+                                                                </button>
+                                                            </div>
+                                                            {% comment %} <div class='order-items-table-wrapper overflow-scroll d-none d-md-block'>
+                                                                <!-- TABLE => ITEMS BOUGHT -->
+                                                                    <table class='table m-0 p-0 table-bordered table-sm'>
+                                                                        <tbody>
+                                                                            {% for item in order.orderitem_set.all %}
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <span class='font-weight-bold'>{{item.quantity}}x</span> 
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{item.product.name}}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {% if item.discount_price > 0 %}
+                                                                                            {% include "sub/currency.html" %}{{item.discount_price|intcomma}}
+                                                                                            <br>
+                                                                                            <strike>
+                                                                                                {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                                                                            </strike>
+                                                                                        {% else %}
+                                                                                            {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                                                                        {% endif %}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            {% endfor %}
+                                                                        </tbody>
+                                                                    </table>
+                                                                <!-- TABLE => ITEMS BOUGHT -->
+                                                            </div> {% endcomment %}
+                                                        </td>
+                                                        <td class='align-middle border-left py-0 px-1 m-0' style='width:120px!important;'>
+                                                            <small>
+                                                                <span style='width:120px!important;' class='font-weight-bold text-dark'>{{order.status}}</span>
+                                                            </small>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            <tbody>
+                                        </table>
+                            </div>
+                            <div class="tab-pane fade" id="current-orders" role="tabpanel" aria-labelledby="current-orders-tab">
+                                        <table class='table table-striped'>
+                                            <thead class='thead-dark'>
+                                                <th style='width:120px'>
+                                                    Date
+                                                </th>
+                                                <th class='text-left' style='width:140px'>
+                                                    Total Order Price
+                                                </th>
+                                                <th style='width:auto'>
+                                                </th>
+                                                <th>
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                                {% for order in user.customer.order_set.all reversed %}
+                                                    {% if order.status == "Enquiry" or order.status == "Awaiting Bank Transfer" or order.status == "Awaiting payment in store" or order.status == "Awaiting payment on delivery" or order.status == "Awaiting Indodana confirmation" or order.status == "Pending" or order.status == "Enquiry" or order.status == "Reserved" or order.status == "Paid on website" or order.status == "Shipped" or order.status == "Refund in process" %}
+                                                                <tr>
+                                                                    <!-- =========== -->
+                                                                    <td class='align-middle'>
+                                                                        <small>
+                                                                            <span class='font-weight-normal text-uppercase'>{{order.dateCreated}}</span>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!-- =========== -->
+                                                                    <td class='align-middle text-center'>
+                                                                        {% include "sub/currency.html" %}{{order.get_cart_total|intcomma}}
+                                                                    </td>
+                                                                    <!-- =========== -->
+                                                                    <td class='p-0 py-2 align-middle text-right'>
+                                                                        <div class=''>
+                                                                            <button type="button" class="add-to-cart-btn btn btn-sm product-add-button" data-toggle="modal" data-target="#order-{{order.pk}}-modal">
+                                                                                <i class="fas fa-cubes"></i> See Items
+                                                                            </button>
+                                                                        </div>
+                                                                        {% comment %} <div class='order-items-table-wrapper overflow-scroll d-none d-md-block'>
+                                                                            <!-- TABLE => ITEMS BOUGHT -->
+                                                                                <table class='table m-0 p-0 table-bordered table-sm'>
+                                                                                    <tbody>
+                                                                                        {% for item in order.orderitem_set.all %}
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    <span class='font-weight-bold'>{{item.quantity}}x</span> 
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    {{item.product.name}}
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    {% if item.discount_price > 0 %}
+                                                                                                        {% include "sub/currency.html" %}{{item.discount_price|intcomma}}
+                                                                                                        <br>
+                                                                                                        <strike>
+                                                                                                            {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                                                                                        </strike>
+                                                                                                    {% else %}
+                                                                                                        {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                                                                                    {% endif %}
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        {% endfor %}
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            <!-- TABLE => ITEMS BOUGHT -->
+                                                                        </div> {% endcomment %}
+                                                                    </td>
+                                                                    <td class='align-middle border-left py-0 px-1 m-0' style='width:120px!important;'>
+                                                                        <small>
+                                                                            <span style='width:120px!important;' class='font-weight-bold text-dark'>{{order.status}}</span>
+                                                                        </small>
+                                                                    </td>
+                                                                </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            <tbody>
+                                        </table>
+                            </div>
+
+
+                            <!-- =============================================== -->
+                            <!-- =============================================== -->
+                            <!-- =============================================== -->
+
+
+                            <div class="tab-pane fade" id="past-orders" role="tabpanel" aria-labelledby="past-orders-tab">
+                                        <table class='table table-striped'>
+                                            <thead class='thead-dark'>
+                                                <th style='width:120px'>
+                                                    Date
+                                                </th>
+                                                <th class='text-left' style='width:140px'>
+                                                    Total Order Price
+                                                </th>
+                                                <th style='width:auto'>
+                                                </th>
+                                                <th>
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                                {% for order in user.customer.order_set.all reversed %}
+                                                    {% if order.status == "Delivered" or order.status == "Cancelled" or order.status == "Refunded" %}
+                                                                <tr>
+                                                                    <!-- =========== -->
+                                                                    <td class='align-middle'>
+                                                                        <small>
+                                                                            <span class='font-weight-normal text-uppercase'>{{order.dateCreated}}</span>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!-- =========== -->
+                                                                    <td class='align-middle text-center'>
+                                                                        {% include "sub/currency.html" %}{{order.get_cart_total|intcomma}}
+                                                                    </td>
+                                                                    <!-- =========== -->
+                                                                    <td class='p-0 py-2 align-middle text-right'>
+                                                                        <div class=''>
+                                                                            <button type="button" class="add-to-cart-btn btn btn-sm product-add-button" data-toggle="modal" data-target="#order-{{order.pk}}-modal">
+                                                                                <i class="fas fa-cubes"></i> See Items
+                                                                            </button>
+                                                                        </div>
+                                                                        {% comment %} <div class='order-items-table-wrapper overflow-scroll d-none d-md-block'>
+                                                                            <!-- TABLE => ITEMS BOUGHT -->
+                                                                                <table class='table m-0 p-0 table-bordered table-sm'>
+                                                                                    <tbody>
+                                                                                        {% for item in order.orderitem_set.all %}
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    <span class='font-weight-bold'>{{item.quantity}}x</span> 
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    {{item.product.name}}
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    {% if item.discount_price > 0 %}
+                                                                                                        {% include "sub/currency.html" %}{{item.discount_price|intcomma}}
+                                                                                                        <br>
+                                                                                                        <strike>
+                                                                                                            {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                                                                                        </strike>
+                                                                                                    {% else %}
+                                                                                                        {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                                                                                    {% endif %}
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        {% endfor %}
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            <!-- TABLE => ITEMS BOUGHT -->
+                                                                        </div> {% endcomment %}
+                                                                    </td>
+                                                                    <td class='align-middle border-left py-0 px-1 m-0' style='width:120px!important;'>
+                                                                        <small>
+                                                                            <span style='width:120px!important;' class='font-weight-bold text-dark'>{{order.status}}</span>
+                                                                        </small>
+                                                                    </td>
+                                                                </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            <tbody>
+                                        </table>
+                            </div>
+
+
+
+
+
+
+
+
+
+                        {% comment %} ///////////////// {% endcomment %}
+                        {% comment %} ///////////////// {% endcomment %}
+                        {% comment %} ///////////////// {% endcomment %}
+                        {% comment %} ///////////////// {% endcomment %}
+                        {% comment %} ///////////////// {% endcomment %}
+                        {% comment %} ///////////////// {% endcomment %}
+                        {% comment %} ///////////////// {% endcomment %}
+                        {% comment %} ///////////////// {% endcomment %}
+                        {% comment %} ///////////////// {% endcomment %}
+                        {% comment %} ///////////////// {% endcomment %}
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
+    {% for order in orders reversed %}
+        <div class="modal fade" id="order-{{order.pk}}-modal" tabindex="-1" role="dialog" aria-labelledby="order-{{order.pk}}-modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="order-{{order.pk}}-modalLabel">
+                        Ordered Items
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- TABLE => ITEMS BOUGHT -->
+                        <table class='table m-0 p-0 table-bordered table-sm'>
+                            <tbody>
+                                {% for item in order.orderitem_set.all %}
+                                    <tr>
+                                        <td>
+                                            <span class='font-weight-bold'>{{item.quantity}}x</span> 
+                                        </td>
+                                        <td>
+                                            {{item.product.name}}
+                                        </td>
+                                        <td>
+                                            {% if item.discountedPrice > 0 %}
+                                                <b class='font-weight-bold'>
+                                                    {% include "sub/currency.html" %}{{item.discountedPrice|intcomma}}
+                                                </b>
+                                                <br>
+                                                <strike>
+                                                    {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                                </strike>
+                                            {% else %}
+                                                <b class='font-weight-bold'>
+                                                    {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                                </b>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    <!-- TABLE => ITEMS BOUGHT -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="add-to-cart-btn btn btn-sm product-add-button" data-dismiss="modal">
+                        <i class="fa fa-times"></i> Close
+                    </button>
+                </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+
+
+
+
+
+{% endblock content %}
+
+{% block customJS %}
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+</script>
+{% endblock customJS %}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class='col-12'>
+
+
+    <div class='card mb-5'>
+        <div class='card-header'>
+            <div class='mb-3'>
+                <a href="{% url 'order-list' %}"  onclick='event.preventDefault();window.history.back()' class='text-muted font-weight-bold fx fx-link'>
+                    <i class="fas fa-angle-left text-muted"></i>
+                    Back
+                </a>
+            </div>
+
+            <h3 class="mb-0 mt-1 font-weight-bold">Select Customer</h3>
+        </div>
+
+        <div class='card-body'> 
+            {% comment %} <form onsubmit="processCustomerSearch(select_customer_endpoint, this)" class='w-100 mt-3' data-target-field='#customerSearch'> {% endcomment %}
+            <form style='width:590px' id='customer_search_form' onsubmit='preventDefaultEvent(event, select_customer_endpoint, this)' class=' mt-3' data-target-field='#customerSearch'>
+                <div class='input-group'>
+                    <input id='customerSearch' type='text' class='form-control border-top border-left rounded-left' placeholder='Search customer by name OR email OR phone...'>
+                    <div class='input-group-append '>
+                        <!-- <button id='myButton' class='btn btn-primary btn-sm' type='submit' onclick='fullRequest(select_customer_endpoint, customer_dummy_data)'>
+                            <i class="fas fa-search"></i>
+                        </button> -->
+                        <span id='reset_button' onclick='resetAndSubmitForm(this)' class="bg-transparent input-group-text text-white clickable px-3" data-target-form='#customer_search_form'>
+                            <i class="fas fa-times-circle text-dark"></i>
+                        </span>
+                        <span id='search_button' class="input-group-text bg-primary text-white clickable px-5" onclick="processCustomerSearch(select_customer_endpoint, this)" data-target-field='#customerSearch'>
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </div>
+                </div>
+            </form>
+
+            <p class='mb-2 mt-3'><span id='no-results-found'>0</span> results were found.</p>
+
+            <a href="{% url 'customer-create' %}?next={% url 'order-create' %}" class='btn btn-success'>
+                <i class='fas fa-plus-circle'></i> New Customer
+            </a>
+
+            <table id='search-results-table' class='d-none table table-striped'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                    </tr>
+                </thead>
+                <tbody id='customer-table-body'>
+                    
+                </tbody>
+            </table>
+
+            <!-- domain.com/orders/create/userID -->
+
+        </div>
+
+        <!-- HIDDEN TEMPLATE ELEMENT!!! -->
+        <table>
+            <tr id='customer-item-TEMPLATE' class='d-none fx clickable' onclick='customerSelected(this)' data-customer-id=''>
+                <td class='customer-name' >
+                    TESTING EMPTY
+                </td>
+                <td class='customer-email'>
+                    TESTING@EMPTY.com
+                </td>
+                <td class='customer-phone'>
+                    +65 999999999
+                </td>
+            </tr>
+        </table>
+        <!-- ...///HIDDEN TEMPLATE ELEMENT!!! -->
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}
+
+{% block customJS %}
+<script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-transition.min.js" %}"></script>
+<script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-dropdown.min.js" %}"></script>
+
+<script type="text/javascript" src="{% static "mdbootstrap/js/custom/utilities.js" %}"></script>
+
+<script>
+    $( document ).ready(function() {
+        $('#search_button').trigger('click');
+    });
+</script>
+{% endblock customJS %}

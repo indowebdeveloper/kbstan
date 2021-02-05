@@ -1,0 +1,159 @@
+{% extends "customer-base.html" %}
+{% load static %}
+
+{% block content %}
+ 
+<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+                    <div class='col-12'>
+                        <h2>
+                            Our <span class='brand-text'>Stores</span>
+                        </h2>
+                        <p class='text-muted'>
+                            Our KIOSBAN stores across the country are great to serve your interest and many more lorem ipsums which are sed dolor amet across the country and which greatly help you to improve the service with your great and amazing service car automative parts.
+                        </p>
+                    </div>
+
+
+                    {% for store in stores.all %}
+                    <!-- Store Section -->
+                        <div class='pr-4 col-sm-6 col-lg-4 mb-4'> <!-- This additional wrapping div is needed to get a 'margin'-effect, but while maintaining the same size -->
+                            <div class=' content-box'>
+								{% if store.image %}
+									<div class='bg-image-cover w-100' style='height:200px; background-image:url("/media/{{store.image}}")'></div>
+								{% else %}
+									<div class='bg-light w-100 d-flex align-items-center' style="border:0;height: 200px;">
+										<h1 class='text-center w-100'>
+											<i class="fas fa-store"></i>
+										</h1>
+									</div>
+								{% endif %}
+                                <div class='p-3'>
+
+                                    <h4 class='font-weight-light my-0 brand-text'>
+                                        {{store.name}}
+                                    </h4>
+
+                                    <p style='height:120px' class='text-muted font-weight-light m-0 mb-3'>
+                                        <small>
+                                            <span class='d-block m-0 p-0'>
+                                                {{store.address}}
+                                            </span>
+                                            <span class='d-block m-0 p-0'>
+                                                {{store.city}} ({{store.zipCode}})
+                                            </span>
+                                            <span class='d-block m-0 p-0'>
+                                                {{store.state}}
+                                            </span>
+                                        </small>
+                                    </p>
+
+									<hr> 
+
+
+                                    <div class='text-justify'>
+                                        <b>Opening Hours:</b>
+                                        <br>
+										<div style='min-height:65px' class=''>
+											{% if store.opening_hours %}
+												{{store.opening_hours|linebreaks}}
+											{% else %}
+											<p class='invisible'>
+												.
+											</p>
+											{% endif %}
+										</div>
+                                    </div>
+                                </div>
+
+                                {% comment %} <iframe class='w-100' frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5900.418937831133!2d-73.99050581681574!3d40.74755485936736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9aeb1c6b5%3A0x35b1cfbc89a6097f!2sEmpire%20State%20Building%2C%20New%20York%2C%20NY%2010001%2C%20USA!5e0!3m2!1sen!2ssg!4v1597558791087!5m2!1sen!2ssg" ></iframe> {% endcomment %}
+								{% if store.map_embedding_code %}
+									<iframe src="{{store.map_embedding_code}}" class='w-100' frameborder="0" style="border:0;height: 150px;margin-bottom: -7px;" allowfullscreen="" aria-hidden="false" tabindex="0" ></iframe>
+								{% else %}
+									<div class='bg-light w-100 d-flex align-items-center' style="border:0;height: 150px;">
+										<h1 class='text-center w-100'>
+											<i class="fas fa-globe-asia"></i>
+										</h1>
+									</div>
+								{% endif %}
+                            </div>
+                        </div>
+                        <!-- ./Store Section -->
+                    {% endfor %}
+
+
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+
+
+		<!-- DIRECTORY -->
+            {% comment %} HIDDEN {% endcomment %}
+
+			{% comment %} {% include 'sub/directory.html' %} {% endcomment %}
+		<!-- /DIRECTORY -->
+
+
+
+<!-- Quickview Modal REMOVE -->
+<div class="modal fade" id="quickviewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-transparent shadow-none">
+      <div class="modal-body">
+	  		<div class="product">
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;X</span>
+        </button>
+				<div class="product-body">
+					{% comment %}  {% endcomment %}
+						{% comment %} HIDDEN TEMPLATE {% endcomment %}
+						<div id='qv-image-template' class="carousel-item w-100 bg-image-contain d-none" style='height:120px; background-image:url()' >
+						</div>
+						{% comment %} ./HIDDEN TEMPLATE {% endcomment %}
+					<div id="product-qv-slider" class="carousel slide" data-interval="false">
+							<!-- The slideshow -->
+							<div class="carousel-inner">
+								
+							</div>
+						  
+							<!-- Left and right controls -->
+							<a class="carousel-control-prev" href="#product-qv-slider" data-slide="prev">
+								<span class="carousel-control-prev-icon"><i class="fas fa-chevron-circle-left text-muted"></i></span>
+							</a>
+							<a class="carousel-control-next" href="#product-qv-slider" data-slide="next">
+								<span class="carousel-control-next-icon"><i class="fas fa-chevron-circle-right text-muted"></i></span>
+							</a>
+						</div>
+					{% comment %}  {% endcomment %}
+					<h2 class="qv-product-name text-uppercase"><a href="">Test</a></h2>
+					<h4 class="product-price">
+						{% include "sub/currency.html" %}<span class='qv-price'>999</span>
+					</h4>
+					<p class='qv-product-description text-justify overflow-y-scroll px-2' style='max-height:160px;'>
+						Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+					</p>
+					<hr>
+					<div class="product-btns">
+						{% comment %} <button class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button> {% endcomment %}
+					</div>
+				</div>
+				<div class="add-to-cart p-1">
+					<button class="add-to-cart-btn btn btn-sm"><i class="fa fa-shopping-cart"></i> add to cart</button>
+				</div>
+			</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

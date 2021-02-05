@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load humanize %}
+
+
+{% block content %}
+
+<div class='col-12'>
+
+
+<div class='card mb-5'>
+        <div class='card-header pb-0'>
+            <div class='row'>
+                <div class='col-12'>
+                    <h3 class='card-title font-weight-bold'>Orders List</h3>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-12'>
+                    <form action="" method="get" class='m-0'>
+                        <div class="form-group m-0">
+                            
+                            <label class='w-100'>
+                                Search terms:
+                                <input type="text" class="form-control border-bottom-0" id="search" name="q" placeholder="Search by customer, order channel, date, store or status...">
+                            </label>
+                        
+                            
+                            <label class=''>
+                                From: <input style='width:200px' type="date" class="form-control border-bottom-0" id="from_date" name="from" placeholder="From...">
+                            </label>
+                            
+                            <label>
+                                Until: <input style='width:200px' type="date" class="form-control border-bottom-0" id="until_date" name="until" placeholder="Until...">
+                            </label>
+
+                            <br>
+
+                            <label>
+                                Sort By:
+                                <select  id='sort_by' name='sort_by' class='form-control w-auto'>
+                                    <option value='date_asc'>
+                                        Date: Earlier > Later
+                                    </option>
+                                    <option value='date_desc'>
+                                        Date: Later > Earlier
+                                    </option>
+                                    <option value='cart_total_asc'>
+                                        Price: Low > High
+                                    </option>
+                                    <option value='cart_total_desc'>
+                                        Price: High > Low
+                                    </option>
+                                    <option value='status_asc'>
+                                        Status: A-Z
+                                    </option>
+                                    <option value='status_desc'>
+                                        Status: Z-A
+                                    </option>
+                                </select>
+                            </label>
+
+                            <br>
+
+                            
+                            <button type="submit" class="btn btn-primary px-5 py-2 m-0 mt-2 mb-0">
+                                <i class='fa fa-search text-white'></i> Filter
+                            </button>
+                        </div>
+
+                    </form>
+                    <form action="" method="get" class='m-0'>
+                        <button type="submit" class="btn btn-grey px-2 py-1 m-0 mt-2 mb-3">
+                            <i class="fas fa-times-circle"></i> Reset Filters
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class='card-body p-0'>
+
+            <div class='row m-0'>
+                <!-- PAGINATION -->
+                <div class='col-12'>
+                    <div class='mt-3 mb-3'>
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1">First</a>
+                                <a href="?page={{ page_obj.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                                    <i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+                                </a>
+                            {% endif %}
+
+                            <span class="current">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}" class='mr-3 ml-2'>
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                                <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <!-- ./PAGINATION -->
+
+                <div class='col-12 p-0'>
+                    <a href="{% url 'order-create' %}" class='w-50 btn btn-success btn-large mt-0 mb-3 ml-3'>
+                        <i class="fas fa-plus-circle"></i> Add Order
+                    </a>
+                </div>
+            </div>
+
+            <table class="table table-striped mb-0 table-hover table-borderless table-sm">
+                <thead class="grey white-text">
+                    <tr>
+                        <th class='align-baseline p-0 pl-1' scope="col"></th>
+                        <th class='align-baseline p-0 pl-1' scope="col">Invoice #</th>
+                        <th class='align-baseline' scope="col">Customer</th>
+                        <th class='align-baseline p-0' scope="col">Order Channel</th>
+                        <th class='align-baseline' scope="col">Order Date</th>
+                        <th class='align-baseline' scope="col">Store</th>
+                        <th class='align-baseline p-0' scope="col">Status</th>
+                        <th class='align-baseline p-0' scope="col">Price</th>
+                        <th class='align-baseline' scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if not orders %}
+                        <tr>
+                            <td colspan='8'>
+                                <h6 class='text-center'>No orders found.</h6>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% for order in orders.all %}
+                        <tr>
+
+
+                            <td>
+                                <a href="{% url 'order-edit' order.pk %}" class=' d-inline-block clickable clickable-large  text-muted font-weight-bold'>
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <br />
+                                <a class=' d-inline-block clickable clickable-large text-nowrap text-primary font-weight-bold mb-0 p-0 m-0' href="{% url 'order-details' order.pk %}">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </td>
+
+                            <!-- ======================== -->
+
+
+                            <th scope="row">
+                                {{order.pk}}
+                            </th>
+
+                            <!-- ======================== -->
+
+
+                            <td>
+                                <a href="{% url 'order-details' order.pk %}">{{order.customer.user.first_name}} {{order.customer.user.last_name}}</a>
+                            </td>
+
+                            <!-- ======================== -->
+
+
+                            <td class=''>
+                                {{order.orderChannel}}
+                            </td>
+
+                            <!-- ======================== -->
+
+
+                            <td class=''>
+                                {{order.dateCreated}}
+                            </td>
+
+                            <!-- ======================== -->
+
+
+                            <td class=''>
+                                {{order.store}}
+                            </td>
+
+                            <!-- ======================== -->
+
+
+                            <td class='p-0 pt-1'>
+                                {% if order.status == 'Delivered' or order.status == 'Refunded' %}
+                                    <h5><span class='badge badge-lg badge-success'>{{order.status}}</span></h5>
+                                
+                                {% elif order.status == 'Pending' or order.status == 'Reserved' %}
+                                    <h5><span class='badge badge-lg badge-info'>{{order.status}}</span></h5>
+                                
+                                {% elif order.status == 'Paid on website' or order.status == 'Paid in store' %}
+                                    <h5><span class='badge badge-lg badge-primary'>{{order.status}}</span></h5>
+
+                                {% elif order.status == 'Shipped' or order.status == 'Refund in process' %}
+                                    <h5><span class='badge badge-lg badge-warning'>{{order.status}}</span></h5>
+
+                                {% elif order.status == 'Cancelled' %}
+                                    <h5><span class='badge badge-lg badge-danger'>{{order.status}}</span></5>
+
+                                {% else %}
+                                    <h5><span class='badge badge-lg badge-secondary'>{{order.status}}</span></h5>
+                                {% endif %}
+                            </td>
+
+                            <!-- ======================== -->
+
+
+                            <td>
+                                {% if order.get_cart_total %}
+                                    {% include "sub/currency.html" %} {{order.get_cart_total|intcomma}}
+                                {% else %}
+                                    N.A.
+                                {% endif %}
+                            </td>
+
+                            <!-- ======================== -->
+
+
+                            <td>
+                                <a class=' d-inline-block clickable clickable-large text-nowrap text-muted font-weight-bold' href="{% url 'order-details' order.pk %}">
+                                    <i class="fas fa-info-circle"></i> Details
+                                </a>
+                            </td>
+
+                            <!-- ======================== -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- PAGINATION -->
+                <div class='col-12'>
+                    <div class='mt-3 mb-3'>
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1">First</a>
+                                <a href="?page={{ page_obj.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                                    <i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+                                </a>
+                            {% endif %}
+
+                            <span class="current">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}" class='mr-3 ml-2'>
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                                <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <!-- ./PAGINATION -->
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+
+
+{% block customJS %}
+
+    <script type="text/javascript" src="{% static "mdbootstrap/js/custom/backoffice/orders-list-filter.js" %}"></script>
+
+{% endblock customJS %}

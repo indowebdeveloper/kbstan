@@ -1,0 +1,38 @@
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class='col-12'>
+    <!-- content-card -->
+    <div class='card mb-5'>
+        <div class='card-header'>
+            
+            {% comment %} BACKBUTTON {% endcomment %}
+            <div class='mb-3'>
+                <a href="{% url 'customer-list' %}" onclick='event.preventDefault();window.history.back()'  class='text-muted font-weight-bold fx fx-link'>
+                    <i class="fas fa-angle-left text-muted"></i>
+                    Back
+                </a>
+            </div>
+            {% comment %} BACKBUTTON {% endcomment %}
+
+            <h3 class='card-title font-weight-bold'>Delete customer car</h3>
+        </div>
+
+        <div class='card-body'>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form|crispy}}
+                
+                <p class='font-weight-bold'>Are you sure you want to delete <span class='text-danger'>{{customerCar.carBrand}} {{customerCar.carModel}}</span> with license plate <span class='text-danger'>{{customerCar.licensePlate}}</span>?</p>
+                <button class='w-100 btn btn-danger mx-0' id='delete' type="submit" value="Delete">
+                    Delete
+                </button>
+            </form>
+        </div>
+    <!-- ./content-card -->
+    </div> 
+</div>
+
+{% endblock content %}

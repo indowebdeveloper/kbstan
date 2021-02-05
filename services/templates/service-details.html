@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class='col-12'>
+
+    <div class="row ml-2 mb-5">
+        <div class='col-12 bg-transparent'>
+                <div class='card'>
+                    <div class='card-header'>
+
+                        {% include "sub/back-button.html" %}
+
+                        <h3 class="font-weight-bold mb-0 card-title">Service Details</h3>
+                    </div>
+                    <div class='card-body'>
+                        <!--Section: Content-->
+                        <section class="text-center">
+                    
+                        <!-- Section heading -->
+                        
+                        <div class="row">
+                    
+                            <div class="col-lg-6 col-xl-4">
+                                <!--Carousel Wrapper-->
+                                <div id="product-main-slider" class="carousel slide" data-interval="false">
+
+                                <!-- The slideshow -->
+
+
+                                <div class="carousel-inner">
+                                      <div class="carousel-item active w-100 bg-image-contain" style='min-height: 250px; max-height:350px; background-image:url("{{product.featured_image.url}}")' >
+                                      </div>
+                                      
+                                  {% for image in product.productimage_set.all %}
+                                      <div class="carousel-item w-100 bg-image-contain" style='min-height: 250px; max-height:350px; background-image:url("{{image.image.url}}")' >
+                                      </div>
+                                  {% endfor %}
+                                </div>
+                                
+                                <!-- Left and right controls -->
+                                <a class="carousel-control-prev" href="#product-main-slider" data-slide="prev">
+                                  <span class="carousel-control-prev-icon"></span>
+                                </a>
+                                <a class="carousel-control-next" href="#product-main-slider" data-slide="next">
+                                  <span class="carousel-control-next-icon"></span>
+                                </a>
+                                
+                              </div>
+                              <!-- Indicators, they have to be wrapped in another .carousel-div so that the Bootstrap classes will recognise them correctly -->
+                              <div class='carousel'> 
+                                <ul class="carousel-indicators row">
+                                  <li data-target="#product-main-slider" data-slide-to="0" class="active col-6 col-md-4 col-lg-3 col-xl-2">
+                                    <div class='bg-image-contain' style='background-image:url("{{product.featured_image.url}}"); height:50px; width:50px;'></div>
+                                  </li>
+                                  {% for image in product.productimage_set.all %}
+                                      <li class='col-6 col-md-4 col-lg-3 col-xl-2' data-target="#product-main-slider" data-slide-to="{{forloop.counter}}">
+                                        <div class='bg-image-contain' style='background-image:url("{{image.image.url}}"); height:50px; width:50px;'></div>
+                                      </li>
+                                  {% endfor %}
+                                </ul>
+                              </div>
+                            <!--/.Carousel Wrapper-->
+                    
+                            </div>
+                    
+                            <div class="col-lg-6 col-xl-8 text-center text-md-left">
+                    
+                                    <h2 class="h2-responsive text-center text-md-left product-name font-weight-bold dark-grey-text mb-1">
+                                        <strong>{{product.name}}</strong>
+                                    </h2>
+                                    
+                                    <div class='interactions mt-0 mb-5 fx'>
+                                        <a href="{% url 'product-edit' product.slug %}" class='card-link text-muted'>
+                                            <i class="fas fa-pencil-alt"></i> Edit
+                                        </a>
+                                        <a href="{% url 'product-adjust-stock' product.slug %}" class='card-link text-muted'>
+                                            <i class="fas fa-cubes"></i> Adjust Stock
+                                        </a>
+                                        <a href="{% url 'product-delete' product.slug %}" class='card-link text-danger'>
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </a>
+                                    </div>
+                                    
+                                    <div class='row m-0 p-0 mt-4'>
+                                        <div class='col-6 m-0 p-0'>
+                                            <p class='text-muted font-weight-bold m-0'>Attributes</p>
+                                            <table class='table table-striped p-0 m-0'>
+                                              <a style='' class='clickable clickable-large badge badge-pill badge-success text-white text-nowrap font-weight-bold z-index-on-top px-2 py-1 ml-0 mb-1' href="{% url 'product-attribute-create' product.pk %}">
+                                                  <i class="fas fa-plus"></i> Add Attribute
+                                              </a>
+                                              <br>
+                                                {% for attr in product.productattribute_set.all %}
+                                                    {% comment %} <span class="badge badge-primary product mr-1 font-weight-light">{{attribute.attribute}}: <strong>{{attribute.values}}</strong></span> {% endcomment %}
+                                                    <li class='list-unstyled'>
+                                                        <a href="{% url 'product-attribute-edit' attr.id %}?next={% url 'product-edit' product.slug %}" class='d-inline-block clickable clickable-large text-muted'>
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </a>
+                                                        <a href="{% url 'product-attribute-delete' attr.id %}" class='d-inline-block clickable clickable-large text-danger'>
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
+                                                        <b>{{attr.attribute}}:</b> {{attr.values}}
+                                                    </li>
+                                                {% endfor %}
+                                            </table>
+                                        </div>
+                                        <div class='col-6'>
+                                            <p class='text-muted font-weight-bold m-0'>Categories</p>
+                                            {% for cat in product.categories.all %}
+                                                <span class="badge badge-secondary product mb-0">{{cat.name}}</span>
+                                                <br>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    
+                                    <hr>
+
+                                    <h3 class="h3-responsive text-center text-md-left mb-3">
+                                        <span class="text-success font-weight-bold">
+                                            <strong>
+                                                {% include "sub/currency.html" %}{{product.price|intcomma}}
+                                            </strong>
+                                        </span>
+                                        <br />
+                                        <span class="text-muted">
+                                        <small>
+                                            Quantity: <strong>{{product.quantity}}</strong>
+                                        </small>
+                                        </span>
+                                    </h3>
+                                
+                                    <table class="table table-striped text-left">
+                                        <!-- <thead class="black white-text">
+                                          <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">First</th>
+                                            <th scope="col">Last</th>
+                                            <th scope="col">Handle</th>
+                                          </tr>
+                                        </thead> -->
+                                        <tbody>
+                                          <tr>
+                                            <th scope="row">SKU</th>
+                                            <td>{{product.sku}}</td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">Bottom Price</th>
+                                            <td>{% include "sub/currency.html" %}{{product.bottomPrice|intcomma}}</td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">Purchase Price (latest)</th>
+                                            <td>{% include "sub/currency.html" %}{{product.purchasePrice|intcomma}}</td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">Stock Threshold</th>
+                                            <td>{{product.stockThreshold}}</td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">Cogs</th>
+                                            <td>{{product.cogs}}</td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">Visible?</th>
+                                            <td>
+                                                {% if product.isVisible %}
+                                                    Yes
+                                                {% else %}
+                                                    No
+                                                {% endif %}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">Related Car Models</th>
+                                            <td>
+                                                {% for car in product.relatedCarBrand.all %}
+                                                {{car.carBrand}},
+                                                {% endfor %}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">SEO Meta Tags</th>
+                                            <td>
+                                                {{product.seoMetaTags}}
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+
+                                </div>
+
+                            </div>
+                    
+                            <div class='row'>
+                                <div class='col-12 text-left mt-2'>
+                                    <div class='card'>
+                                        <div class='card-header'>
+                                            <h4 class='card-title font-weight-bold mb-0'>Description</h4>
+                                        </div>
+                                        <div class='card-body'>
+                                            {{product.description}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='col-12 text-left mt-4'>
+                                    <div class='card'>
+                                        <div class='card-header'>
+                                            <h4 class='card-title font-weight-bold mb-0'>
+                                                History
+                                                <span class='text-right'>
+                                                    <a class="text-muted text-right font-weight-bold" data-toggle="collapse" href="#collapseHistory" role="button" aria-expanded="false" aria-controls="collapseHistory">
+                                                        <i class="fas fa-angle-up"></i>
+                                                    </a>
+                                                </span>
+                                            </h4>
+                                        </div>
+                                        <div class='collapse' id='collapseHistory'>
+                                            <div class='card-body p-0 overflow-x-scroll'>
+                                                <table class="table table-striped">
+                                                    <thead class="black white-text">
+                                                    <tr>
+                                                        <th class="align-text-top" scope="col">Timestamp</th>
+                                                        <th class="align-baseline" scope="col">Adjustment Type</th>
+                                                        <th class="align-baseline" scope="col">Amount</th>
+                                                        <th class="align-baseline" scope="col">New Quantity</th>
+
+                                                        <th class="align-baseline" scope="col">Purchase Price</th>
+                                                        <th class="align-baseline" scope="col">Total Purchase Price</th>
+
+                                                        <th class="align-baseline" scope="col">Sold Price</th>
+
+                                                        <th class="align-baseline" scope="col">Customer</th>
+                                                        <th class="align-text-top" scope="col">Order ID</th>
+                                                        <th class="align-baseline" scope="col">Comment</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for listing in product.history.all reversed %}
+                                                            <tr>
+                                                                <th scope="row">{{listing.timestamp}}</th>
+                                                                <td >{{listing.adjustmentType}}</td>
+                                                                <td >{{listing.quantity}}</td>
+                                                                <td>{{listing.newQuantity}}</td>
+
+                                                                <td>{{listing.purchasePrice|intcomma}}</td>
+                                                                <td>{{listing.purchasePriceTotal|intcomma}}</td>
+
+                                                                <td>{{listing.sellingPrice|intcomma}}</td>
+                                                                
+                                                                <td>
+                                                                    <a class='text-underline clickable d-block' href="{% url 'customer-details' listing.user.customer.pk %}">
+                                                                        {{listing.user.first_name}} {{listing.user.last_name}}
+                                                                    </a>
+                                                                </td>
+                                                                <td >
+                                                                    <a class='text-underline clickable d-block' href="{% url 'order-details' listing.order.pk %}">
+                                                                        {{listing.order.id}}
+                                                                    </a>
+                                                                </td>
+                                                                <td>{{listing.comment}}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                        </section>
+                        <!--Section: Content-->
+            </div>
+            </div>
+        </div>
+      </div>
+
+    <!-- XXXXXXXXXXXX --><!-- XXXXXXXXXXXX --><!-- XXXXXXXXXXXX -->
+    <!-- XXXXXXXXXXXX --><!-- XXXXXXXXXXXX --><!-- XXXXXXXXXXXX -->
+
+
+</div>
+{% endblock content %}

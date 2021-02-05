@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class='col-12'>
+
+    <div class='card mb-5'>
+        <div class='card-header pb-0'>
+            <div class='row'>
+                <div class='col-12'>
+                    <h3 class='card-title font-weight-bold'>Promotions List</h3>
+                </div>
+            </div>
+
+            <div class='col-12 col-md-6 pl-0'>
+                <a href="{% url 'promotion-create' %}" class='clickable btn btn-success btn-large m-0 mb-3 px-3'>
+                    <i class="fas fa-plus-circle"></i> New Promotion
+                </a>
+            </div>
+
+            <!-- ====================== -->
+            <!-- ====================== -->
+            <div class='form-group m-0'>
+                <div class='d-inline mr-3'>
+                    <input onclick='checkboxChangesSearchParams(this)' data-link-if-checked='include=expired' data-link-if-unchecked='null'     class='clickable' type="checkbox" id="include_expired" name="include">
+                    <label class='clickable' for="include_expired">Include expired promotions</label>
+                </div>
+            </div>
+            <!-- ====================== -->
+            <!-- ====================== -->
+
+        </div>
+        <div class='card-body p-0'>
+
+            <!-- PAGINATION -->
+                <div class='my-2 ml-2'>
+                    <span class="step-links">
+                        {% if promotions.has_previous %}
+                            <a href="?page=1">First</a>
+                            <a href="?page={{ promotions.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                                <i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+                            </a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ promotions.number }} of {{ promotions.paginator.num_pages }}
+                        </span>
+
+                        {% if promotions.has_next %}
+                            <a href="?page={{ promotions.next_page_number }}" class='mr-3 ml-2'>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                            <a href="?page={{ promotions.paginator.num_pages }}">Last</a>
+                        {% endif %}
+                    </span>
+                </div>
+            <!-- ./PAGINATION -->
+
+            <table class="table table-striped table-sm table-hover mb-0">
+                <thead class="grey white-text">
+                <tr>
+                    <th class='align-baseline pl-2' scope="col" style='width:35px'></th>
+                    <th class='align-baseline pl-3' scope="col">Promotion Name</th>
+                    <th class='align-baseline' scope="col" style='width:55px'>Discount</th>
+                    <th class='align-baseline pl-3' scope="col">Active Date</th>
+                    <th class='align-baseline pl-3' scope="col">Applies to</th>
+                    <th class='align-baseline pl-3' scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for promotion in promotions %}
+                        <tr>
+                            {% comment %} ================= {% endcomment %}
+                            <td class='pl-3 align-middle'>
+                                <b>
+                                    <a href="{% url 'promotion-edit' promotion.pk %}" class='text-muted d-inline-block clickable clickable-large'><i class="fas fa-pencil-alt"></i></a>   <a href="{% url 'promotion-delete' promotion.pk %}" class='text-danger d-inline-block clickable clickable-large'><i class="fas fa-trash-alt"></i></a>
+                                </b>
+                            </td>
+
+
+                            {% comment %} ================= {% endcomment %}
+                            
+                            
+                            <td class='pl-3 align-middle'>
+                                {% if promotion.isActive %}
+                                    {% if promotion.isFeatured %}
+                                        <div class="d-inline clickable" data-toggle="tooltip" data-placement="top" title="Featured">
+                                            <i class='fas fa-star text-warning'></i>
+                                        </div>
+                                    {% endif %}
+
+
+
+
+                                    {% now "Y-m-d" as todays_date %}
+                                    {% if promotion.dateEnd %} {% comment %} If the coupon has no enddate, it would be displayed as "EXPIRED" if we do not have this check in place {% endcomment %}
+                                        {% if todays_date > promotion.dateEnd|date:"Y-m-d" %} {% comment %} THIS CHECKS WHETHER THE COUPON HAS ALREADY EXPIRED {% endcomment %}
+                                                <span class='text-danger'>
+                                                    {{promotion.name}}
+                                                    <br>
+                                                    <small>(Expired)</small>
+                                                </span>
+                                            {% else %}
+                                                <b class='font-weight-bold'>
+                                                    <b>{{promotion.name}}</b>
+                                                </b>
+                                        {% endif %}
+
+                                        {% else %}
+                                            <b class='font-weight-bold'>
+                                                <b>{{promotion.name}}</b>
+                                            </b>
+                                    {% endif %}
+
+
+                                {% else %}
+
+                                
+                                    {% now "Y-m-d" as todays_date %}
+                                        {% if todays_date > promotion.dateEnd|date:"Y-m-d" %} {% comment %} THIS CHECKS WHETHER THE COUPON HAS ALREADY EXPIRED {% endcomment %}
+                                                <span class='text-danger'>
+                                                    (Inactive) {{promotion.name}}
+                                                    <br>
+                                                    <small>(Expired)</small>
+                                                </span>
+                                            {% else %}
+                                                <b class='font-weight-bold'>
+                                                   (Inactive) <b>{{promotion.name}}</b>
+                                                </b>
+                                        {% endif %}
+                                
+                                
+                                {% endif %}
+                            </td>
+
+
+                            {% comment %} ================= {% endcomment %}
+                            
+                            
+                            <td class='pl-3 align-middle'>
+                                {{promotion.discount}}%
+                            </td>
+
+                            <!-- ================================== -->
+                            <!-- ================================== -->
+
+                            <td class='pl-3'>
+                                <table class='table-borderless p-0 table-sm'>
+                                    <tbody>
+                                        <tr class=' bg-transparent p-0'>
+                                            <td class='p-1'>
+                                                Start Date:
+                                            </td>
+                                            <td class='p-1 text-right font-weight-bold'>
+                                                {{promotion.dateStart}}
+                                            </td>
+                                        <tr>
+                                        <!-- ============== -->
+                                        <tr class=' bg-transparent border-top '>
+                                            <td class='p-1'>
+                                                End End: 
+                                            </td>
+                                            <td class='p-1 text-right font-weight-bold'>
+                                                {% now "Y-m-d" as todays_date %}
+                                                {% if promotion.dateEnd %}
+                                                    {% if todays_date > promotion.dateEnd|date:"Y-m-d" %} {% comment %} THIS CHECKS WHETHER THE COUPON HAS ALREADY EXPIRED {% endcomment %}
+                                                            <span class='text-danger'>
+                                                                {{promotion.dateEnd}} 
+                                                                <br>
+                                                                <small>(Expired)</small>
+                                                            </span>
+                                                        {% else %}
+                                                            {{promotion.dateEnd}}
+                                                    {% endif %}
+                                                {% endif %}
+                                            </td>
+                                        <tr>
+                                    <tbody>
+                                </table>
+
+                            </td>
+
+                            <!-- ================================== -->
+                            <!-- ================================== -->
+
+
+
+
+                            {% comment %} ================= {% endcomment %}
+                            <td class='pl-3 align-middle'>
+                                <h6 class=' p-0 m-0'>
+                                    Products
+                                </h6>
+                                <div class='border overflow-y-scroll' style='height:70px'>
+                                    {% for product in promotion.products.all %}
+                                        <p class='p-0 m-0'>
+                                            {{product}}
+                                        </p>
+                                    {% endfor %}
+                                </div>
+                            </td>
+
+
+
+                            {% comment %} ================= {% endcomment %}
+                            
+                            
+                            
+                            <td class='pl-3 align-middle'>
+                                <h6 class=' p-0 m-0'>
+                                    Categories
+                                </h6>
+                                <div class='border overflow-y-scroll' style='height:70px'>
+                                    {% for cat in promotion.categories.all %} 
+                                        <p class='p-0 m-0'>
+                                            {{cat}}
+                                        </p>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            {% comment %} ================= {% endcomment %}
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- PAGINATION -->
+                <div class='my-2 ml-2'>
+                    <span class="step-links">
+                        {% if promotions.has_previous %}
+                            <a href="?page=1">First</a>
+                            <a href="?page={{ promotions.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                                <i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+                            </a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ promotions.number }} of {{ promotions.paginator.num_pages }}
+                        </span>
+
+                        {% if promotions.has_next %}
+                            <a href="?page={{ promotions.next_page_number }}" class='mr-3 ml-2'>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                            <a href="?page={{ promotions.paginator.num_pages }}">Last</a>
+                        {% endif %}
+                    </span>
+                </div>
+            <!-- ./PAGINATION -->
+
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block customJS %}
+
+    <script type="text/javascript" src="{% static "mdbootstrap/js/custom/utilities.js" %}"></script>
+
+    <script>
+        $(document).ready(function(){
+            restoreFilterValues();
+        });
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+{% endblock customJS %}

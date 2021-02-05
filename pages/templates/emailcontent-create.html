@@ -1,0 +1,41 @@
+
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class='col-12'>
+
+    <div class='card mb-5'>
+        <div class='card-header'>
+            <a href="{% url 'productbrand-list' %}"  onclick='event.preventDefault();window.history.back()' class='text-muted font-weight-bold fx fx-link'>
+                <i class="fas fa-angle-left text-muted"></i>
+                Back
+            </a>
+
+            <h3 class="mb-0 mt-1 font-weight-bold">Create Email Content</h3>
+        </div>
+        <div class='card-body'>
+            <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form|crispy}}
+
+            <!-- ================ -->
+            <hr>
+            <button class='w-100 btn btn-success px-0 m-0' type="submit" value="Save">
+                Save
+            </button>
+            </form>
+        </div>
+</div>
+
+</div>
+
+{% endblock content %}
+
+
+{% block customJS %}
+
+    <script type="text/javascript" src="{% static "mdbootstrap/js/custom/backoffice/product-create.js" %}"></script>
+
+{% endblock customJS %}

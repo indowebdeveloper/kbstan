@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class='col-12'>
+
+    
+    <!-- Card --><div class='card mb-3'>
+        <!-- CardHeader --><div class='card-header pb-0'>
+            <div class='row'>
+                <div class='col-12'>
+                    <h3 class='card-title font-weight-bold'>Edit & View Attributes</h3>
+                </div>
+            </div>
+            {% include "sub/search_filter.html" %}
+
+        <!-- ./CardHeader --></div>
+
+        
+        <!-- CardBody --><div class='card-body p-0 overflow-y-scroll'>
+            <table class='table table-striped overflow-x-hidden mb-0'>
+                <thead>
+                    <tr>
+                        <th class='p-0 m-0 border border-0 position-sticky top-0'>
+                            <form action='' class='w-100' id='newAttribute'>
+                                <div class='input-group'>
+                                    <input type='text' class='d-none form-control fx' data-typing-action-target='#submitNewAttr' oninput='typingAction(this, "disableWhenEmpty")' name='attributeName' id='attributeName'>
+                                    <div class='w-100 input-group-append-LARGE fx'>
+                                        <button id='submitNewAttr' data-api-endpoint="{% url 'products-attributes-create' %}" data-item-id-name='attributeID' data-item-template='#tr-attr-template' type='submit' onclick='addNewItem(window.event,this)' class='fx btn btn-success m-0 rounded-0 py-2 w-100 show-details'>
+                                            <i class="fas fa-plus-circle"></i> &nbsp;Add&nbsp;<span class='hidden-details'>Attribute</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class='tr-attr-template-parent'>
+                    {% for attribute in attributes %}
+                        <tr data-item-id='{{attribute.id}}' data-item-id-name='attributeID'>
+                            <td class='px-5'>
+                                <div class="row justify-content-between">
+                                    <div class='displayMode'>
+                                        <span class='attributeName' data-fn='holds-dynamic-data'>{{attribute.name}}</span>
+                                        <form class='form w-100' action=''>
+                                            <input type='text' class='form-control w-100' name='attributeName' value='{{attribute.name}}'>
+                                            <div class='btn-group w-100 p-0'>
+                                                <button type='reset' class='btn btn-grey btn-sm m-0 mt-2' onclick='editItemUI(window.event, this)'>Cancel</button>
+                                                <button type='submit' data-api-endpoint="{% url 'products-attributes-edit' %}" data-item-id-name='attributeID' class='btn btn-primary btn-sm m-0 mt-2' onclick='editItemUI(window.event, this)'>Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class='alterButtons'>
+                                        <small class='text-muted  d-inline-block clickable clickable-large ' onclick='editItemUI(window.event, this)'>
+                                            <i class="fas fa-pencil-alt"></i> Edit
+                                        </small>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <small class='text-danger  d-inline-block clickable clickable-large ' data-api-endpoint="{% url 'products-attributes-delete' %}" onclick='alterItem(this, "delete")'>
+                                            <i class="fas fa-trash"></i> Delete
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <!-- TR-TEMPLATE  --><tr data-item-id='' id='tr-attr-template' class='d-none' data-item-id-name='attributeID'>
+                        <td class='px-5'>
+                            <div class="row justify-content-between">
+                                <div class='displayMode'>
+                                    <span class='attributeName' data-fn='holds-dynamic-data'></span>
+                                    <form class='form w-100' action=''>
+                                        <input type='text' class='form-control w-100 attributeName' name='attributeName' value=''>
+                                        <div class='btn-group w-100 p-0'>
+                                            <button type='reset' class='btn btn-grey btn-sm m-0 mt-2' onclick='editItemUI(window.event, this)'>Cancel</button>
+                                            <button type='submit' data-api-endpoint="{% url 'products-attributes-edit' %}" data-item-id-name='attributeID' class='btn btn-primary btn-sm m-0 mt-2' onclick='editItemUI(window.event, this)'>Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class='alterButtons'>
+                                    <small class='text-muted clickable' onclick='editItemUI(window.event, this)'>
+                                        <i class="fas fa-pencil-alt"></i> Edit
+                                    </small>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <small class='text-danger clickable' data-api-endpoint="{% url 'products-attributes-delete' %}" onclick='alterItem(this, "delete")'>
+                                        <i class="fas fa-trash"></i> Delete
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+
+                    <!-- ./TR-TEMPLATE  --></tr>
+                </tbody>
+            </table>
+        <!-- ./CardBody --></div>
+        
+    <!-- ./Card --></div> 
+    
+    <!-- PAGINATION -->
+        <div class='my-2 ml-2'>
+            <span class="step-links">
+                {% if attributes.has_previous %}
+                    <a href="?page=1">First</a>
+                    <a href="?page={{ attributes.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                        <i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+                    </a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ attributes.number }} of {{ attributes.paginator.num_pages }}
+                </span>
+
+                {% if attributes.has_next %}
+                    <a href="?page={{ attributes.next_page_number }}" class='mr-3 ml-2'>
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                    <a href="?page={{ attributes.paginator.num_pages }}">Last</a>
+                {% endif %}
+            </span>
+        </div>
+    <!-- ./PAGINATION -->
+
+</div>
+
+
+{% endblock content %}

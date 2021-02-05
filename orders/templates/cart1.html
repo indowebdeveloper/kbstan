@@ -1,0 +1,197 @@
+{% extends "customer-base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<!-- Cart -->
+<div class='row mb-5'>
+    <div class='col-12 mt-4 mb-0 ml-3'>
+        <h1>Cart</h1>
+    </div>
+
+    <div class='col-12 mb-5'>
+
+        <div class=" p-1" aria-labelledby="">
+            <div class="cart-dropdown cart-site">
+                <div class="cart-listttt">
+
+                    {% if orderItems|length == 0 %}
+                        <p>
+                            There is nothing in your cart yet.
+                            <br>
+                            Go back to the <a class='text-underline' href='{% url 'products' %}'>shop</a> to add more products.
+                        </p>
+                    {% endif %}
+                    {% for item in orderItems %}
+                        <!-- LIST ITEM -->
+                        <div class='CART-LIST-ITEM d-flex flex-row flex-nowrap align-content-around border-bottom mb-3 pb-3' data-product-id='{{item.product.id}}'>
+                            <!-- IMG Container -->
+                            <div class='mr-3'>
+                                <div class="product-img">
+                                    <div style="background-image:url('{{item.product.featured_image.url}}'); height:100px;width:100px;" class='bg-image-cover img-thumbnail'></div>
+                                </div>
+                            </div>
+                            <!-- /IMG Container -->
+
+
+                            <!-- Product Container -->
+                            <div class='align-self-center'>
+                                <div class="product-body">
+                                    <h4 class="text-uppercase font-weight-bold">
+                                        <a href="{% url 'product' item.product.slug %}">
+                                            {{item.product.name}}
+                                        </a>
+                                    </h4>
+                                    
+                                    <!-- INTERACTIONS -->
+                                    <div class=''>
+
+                                        <!-- FIELD INCREMENT -->
+                                        <div class='d-inline-block border-right'>
+                                            <div class="input-group quantity-field">
+                                                <div class="input-group-prepend custom-bg-primary px-3 clickable" data-user-id='{{user.id}}' data-target-field='#fieldFor{{item.product.id}}' data-id='{{item.product.id}}' data-action='removeCF' onclick='sendRequest(alter_cart_endpoint, this)' data-price-per-product='{{item.product.price}}' data-product-total-target='#product-total-{{item.product.id}}' data-cart-total-target='#cart_total_number'>
+                                                    <span class="user-select-none input-group-text bg-transparent font-weight-bold text-white border-0 px-1">–</span>
+                                                </div>
+
+                                                <input readonly type="text" class="form-control" value={{item.quantity}} aria-label="" id='fieldFor{{item.product.id}}' data-quantity-field-for-id="{{item.product.id}}">
+                                                
+                                                <div class="input-group-append custom-bg-primary px-3 clickable" data-user-id='{{user.id}}' data-target-field='#fieldFor{{item.product.id}}' data-id='{{item.product.id}}' data-action='addCF' onclick='sendRequest(alter_cart_endpoint, this)' data-product-total-target='#product-total-{{item.product.id}}' data-cart-total-target='#cart_total_number'>
+                                                    <span class="user-select-none input-group-text bg-transparent font-weight-bold text-white border-0 px-1">+</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /FIELD INCREMENT -->
+
+                                        <a data-user-id='{{user.id}}' data-target-field='#fieldFor{{item.product.id}}' data-id='{{item.product.id}}' data-action='deleteCF' onclick='sendRequest(alter_cart_endpoint, this)' data-price-per-product='{{item.product.price}}' data-product-total-target='#product-total-{{item.product.id}}' data-cart-total-target='#cart_total_number' class='mb-0 text-danger font-weight-bold ml-3'>
+                                            <small>
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                            </small>
+                                        </a>
+                                    </div>
+                                    <!-- /INTERACTIONS -->
+                                </div>
+                            </div>
+                            <!-- /Product Container -->
+
+                            <div class='font-weight-bold align-self-center text-right' style='margin-left:auto'>
+                                <h6 class="mb-0 text-success">
+                                    {% include "sub/currency.html" %}<span class='product-total-price' id='product-total-{{item.product.id}}' data-price={{item.get_total}}>{{item.get_total|intcomma}}</span>
+                                </h6>
+                                <p class='font-weight-normal'>
+                                    <small>Price Per Item:
+                                    <b>{% include "sub/currency.html" %}</b>
+                                    {% if item.discountedPrice or item.discountedPrice == 0 %}
+                                        <b class='price-per-item' data-price={{item.discountedPrice}}>
+                                            {{item.discountedPrice|intcomma}}
+                                        </b>
+                                        <i class='text-danger'>
+                                            (Old Price: <strike>{{item.product.price|intcomma}}</strike>)
+                                        </i>
+                                    {% elif item.product.discount_amount > 0 %}
+                                        <b class='price-per-item' data-price={{item.discountedPrice}}>{{item.discountedPrice|intcomma}}</b>
+                                        <i class='text-danger'>
+                                            (Old Price: <strike>{{item.product.price|intcomma}}</strike>)
+                                        </i>
+                                    {% else %}
+                                        <b class='price-per-item' data-price={{item.product.price}}>{{item.product.price|intcomma}}</b>
+                                    {% endif %}
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- /LIST ITEM -->
+                    {% endfor %}
+
+
+
+                </div>
+
+                <div class='col-12'>
+
+                    <div class="cart-summary text-right">
+                        <h5>
+                            CART TOTAL: {% include "sub/currency.html" %} <span id='cart_total_number'>{{cart_total|intcomma}}</span>
+                        </h5>
+                    </div>
+                    
+                    <div class="cart-btns d-flex justify-content-end mb-4">
+                        <div class='justify-self-end'>
+                            <p class='m-0 p-0 text-right'>
+                        {% if couponMessage %}
+                            {{couponMessage}}
+                        {% endif %}
+                    </p>
+                        </div>
+                    </div>
+
+                    <div class="cart-btns d-flex justify-content-end">
+                        
+                        <div class=''>
+                            <form action="" method="GET" class=''>
+                                <div class='d-block p-0 mb-3'>
+                                    <div class='input-group w-auto'>
+                                        <input type='text' id='promocode' class='pl-2' name='promocode' placeholder='Promo Code'>
+                                        <div class='input-group-append cart-btns'>
+                                            <a onclick="this.closest('form').submit();return false;" class='w-auto custom-bg-primary px-2 mx-0 mr-3 clickable'>Add  
+                                                <!-- <i class="fa fa-arrow-circle-right"></i> -->
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h1>
+                                </h1>
+
+                                {% if orderItems|length > 0 %}
+                                    <div class='d-block w-100'>
+                                        <div class='cart-btns m-0'>
+                                            <a href="{% url 'checkout' %}{{request.get_full_path|cut:request.path}}" class='mx-0 w-100 custom-bg-primary clickable '>Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                
+            </div>
+        </div>
+        <!-- /Cart -->
+
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+{% block customJS %}
+<script type="text/javascript" src="{% static "mdbootstrap/js/custom/backoffice/backoffice-order-edit.js" %}"></script>
+
+
+{% comment %} <script type="text/javascript" src="{% static 'mdbootstrap/js/cart.js' %}"></script> {% endcomment %}
+<script>
+    var user = "{{request.user}}"
+
+    function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+</script>
+{% endblock customJS %}

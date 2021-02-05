@@ -1,0 +1,76 @@
+{% extends "customer-base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %} 
+
+<div class='container'>
+    <div class='section customer-signup'>
+        <div class='row'>
+
+            <!-- ASIDE -->
+            <div id="aside" class="pt-3 col-lg-3">
+                <!-- aside Widget -->
+                <h6 class='text-uppercase position-relative'>Manage My Account</h6>
+                <hr>
+                <div class="aside">
+                    <h6 class="text-capitalize mb-3">
+                        <a href="{% url 'customer-profile' %}">
+                            View My Account
+                        </a>
+                    </h6>
+                    <h6 class="text-capitalize mb-3">
+                        <a href="{% url 'customer-profile-edit' %}" class='active-link'>
+                            Edit My Acount
+                        </a>
+                    </h6>
+                </div>
+                <!-- /aside Widget -->
+
+                <!-- aside Widget -->
+                <h6 class='text-uppercase position-relative mt-5'>My Orders</h6>
+                <hr>
+                <div class="aside">
+                    <h6 class="text-capitalize mb-3">
+                        <a href="{% url 'customer-orders' %}">
+                            My Orders
+                        </a>
+                    </h6>
+                </div>
+                <!-- /aside Widget -->
+            </div>
+            <!-- /ASIDE -->
+
+            <div class='text-left col-12 col-lg-8'>
+
+                {% comment %} <div class='text-left col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2'> {% endcomment %}
+                <div class='product bg-white p-4 text-left'>
+                    <h3 class='brand-text text-uppercase'>Delete Car</h3>
+                    <hr>
+                    <p>
+                        Are you sure you want to delete this car?
+                    </p>
+                    <form action="" method="post" class='customer-edit-form'>
+                        {% csrf_token %}
+                        {{form|crispy}}
+                        {% comment %} {{address_form|crispy}}
+                        {{car_form|crispy}} {% endcomment %}
+                        <button class="brand-btn w-100" type="submit"><i class="fa fa-trash-alt"></i> Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block customJS %}
+<script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-transition.min.js" %}"></script>
+<script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-dropdown.min.js" %}"></script>
+
+<script>
+    $('.customer-edit-form select').addClass('search');
+    $('.customer-edit-form select').dropdown();
+</script>
+{% endblock customJS %}

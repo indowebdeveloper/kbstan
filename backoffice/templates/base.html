@@ -1,0 +1,112 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>KIOSBAN - Backoffice</title>
+
+<!-- START --><!-- START --><!-- START --><!-- START -->
+<!-- MDB icon -->
+{% comment %} <link rel="icon" href="{% static "mdb-favicon.ico" %}" type="image/x-icon"> {% endcomment %}
+
+<link rel="apple-touch-icon" sizes="180x180" href="{% static "mdbootstrap/img/favicons/apple-touch-icon.png" %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static "mdbootstrap/img/favicons/favicon-32x32.png" %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static "mdbootstrap/img/favicons/favicon-16x16.png" %}">
+<link rel="manifest" href="{% static "mdbootstrap/img/favicons/site.webmanifest" %}">
+<link rel="mask-icon" href="{% static "mdbootstrap/img/favicons/safari-pinned-tab.svg" %}" color="#f5374a">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+<!-- Google Fonts Roboto -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="{% static "mdbootstrap/css/bootstrap.min.css" %}">
+<!-- Material Design Bootstrap -->
+{% comment %} <link rel="stylesheet" href="{% static "mdbootstrap/css/mdb.min.css" %}"> {% endcomment %}
+
+
+<!-- Your custom styles (optional) -->
+<link rel="stylesheet" href="{% static "mdbootstrap/css/style.css" %}">
+
+<!-- All Semantic UI CSS -->
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/icon.min.css" %}">
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/input.min.css" %}">
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/item.min.css" %}">
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/label.min.css" %}">
+
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/semantic-ui-transition.min.css" %}">
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/semantic-ui-dropdown.min.css" %}">
+<link rel="stylesheet" href="{% static "mdbootstrap/css/addons/semantic-ui-calendar.min.css" %}">
+<!-- END --><!-- END --><!-- END --><!-- END --><!-- END -->
+
+</head>
+<body class=''>
+
+    {% include "sub/header.html" %}
+
+    <main class='container-fluid'>
+        <div class='row min-vh-100'>
+            {% include "sub/sidebar.html" with pageContents=pageContents %}
+            <div class='content pt-4'>
+                
+                    {% block content %}
+                    Content missing   
+                    {% endblock content %}
+                
+            </div>
+        </div>
+
+    {% include "sub/alert-small.html" %}
+
+    </main> 
+
+      <!-- jQuery -->
+  <script type="text/javascript" src="{% static "mdbootstrap/js/jquery.min.js" %}"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{% static "mdbootstrap/js/popper.min.js" %}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="{% static "mdbootstrap/js/bootstrap.min.js" %}"></script>
+  <!-- MDB core JavaScript -->
+
+
+
+  {% comment %} <script type="text/javascript" src="{% static "mdbootstrap/js/mdb.min.js" %}"></script> {% endcomment %}
+
+
+
+  <!-- Cookies library needed to enable CSRF -->
+  {% csrf_token %}
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <!-- Your custom scripts (optional) -->
+
+
+
+  <script type="text/javascript" src="{% static "mdbootstrap/js/custom/1global-variables.js" %}"></script>
+  <script type="text/javascript" src="{% static "mdbootstrap/js/custom/2event-dispatcher.js" %}"></script>
+  <script type="text/javascript" src="{% static "mdbootstrap/js/custom/3ui-interactions.js" %}"></script>
+  <script type="text/javascript" src="{% static "mdbootstrap/js/custom/4server-interactions.js" %}"></script>
+  <script type="text/javascript" src="{% static "mdbootstrap/js/custom/5attr-global-variables.js" %}"></script>
+  <script type="text/javascript" src="{% static "mdbootstrap/js/custom/6attr-event-dispatcher.js" %}"></script>
+  <script type="text/javascript" src="{% static "mdbootstrap/js/custom/7attr-ui-interactions.js" %}"></script>
+  <script type="text/javascript" src="{% static "mdbootstrap/js/custom/8attr-server-interactions.js" %}"></script>
+  <script type="text/javascript" src="{% static "mdbootstrap/js/custom/backoffice/backoffice-order-edit.js" %}"></script>
+  
+  <script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-transition.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-dropdown.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "mdbootstrap/js/custom/my-semantic.js" %}"></script>
+
+
+
+  {% block customJS %}
+    
+  {% endblock customJS %}
+
+
+</body>
+</html>

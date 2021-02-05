@@ -1,0 +1,7 @@
+Hello from Kiosban! - confirmation_signup_message.html
+
+You're receiving this e-mail to confirm your account signup at https://www.kiosban.com.
+To confirm this is correct, click on:
+{{ activate_url }}
+
+Should you encounter any issue, please contact us at sales@kiosban.com.

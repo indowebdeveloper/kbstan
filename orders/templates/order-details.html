@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+
+{% block content %}
+
+<div class='col-12'>
+
+
+    <div class='card mb-5 pb-0'>
+        <div class='card-header'>
+
+            <div class='mb-3'>
+                <div class='mb-3'>
+                    <a href="{% url 'order-list' %}"  class='text-muted font-weight-bold fx fx-link'>
+                        <i class="fas fa-angle-left text-muted"></i>
+                        Back
+                    </a>
+                </div>
+            </div>
+
+            <h3 class=" mb-0 card-title">
+                Order Details for #{{order.pk}}
+                
+                {% if order.status == "Delivered" or order.status == "Cancelled" or order.status == "Refunded" %}
+                    <br>
+                    <small class='font-weight-bold text-muted d-inline-block h6 font-weight-bold'>
+                        <i class="fas fa-exclamation-triangle"></i> The order cannot be modified anymore
+                    </small>
+
+                    {% else %}
+                        <a href="{% url 'order-edit' order.pk %}" class=' d-inline-block clickable clickable-large h6 font-weight-bold'>
+                            <small class='font-weight-bold text-muted'>
+                                <i class="fas fa-pencil-alt"></i> Edit Order
+                            </small>
+                        </a>
+                {% endif %}
+
+                <!-- =================================== -->
+
+                {% if order.status == 'Delivered' or order.status == 'Refunded' %}
+                    <h6><span class='badge badge-lg badge-success'>{{order.status}}</span></h6>
+                
+                {% elif order.status == 'Pending' or order.status == 'Reserved' %}
+                    <h6><span class='badge badge-lg badge-info'>{{order.status}}</span></h6>
+                
+                {% elif order.status == 'Paid on website' or order.status == 'Paid in store' %}
+                    <h6><span class='badge badge-lg badge-primary'>{{order.status}}</span></h6>
+
+                {% elif order.status == 'Shipped' or order.status == 'Refund in process' %}
+                <h6><span class='badge badge-lg badge-warning'>{{order.status}}</span></h6>
+
+                {% elif order.status == 'Cancelled' %}
+                <h6><span class='badge badge-lg badge-danger'>{{order.status}}</span></h6>
+
+                {% else %}
+                    <h6><span class='badge badge-lg badge-secondary'>{{order.status}}</span></h6>
+                {% endif %}
+
+                <a class='btn btn-sm btn-primary ml-0 d-inline-block clickable' href='?print=true'>
+                    <i class="fas fa-print"></i> Print Order
+                </a>
+
+            </h3>
+        </div>
+
+
+        <div class='card-body p-0'>
+
+            <div class='row'>
+                <div class='col-12 px-4 py-2'>
+
+                    <p class='text-muted mb-0'>
+                        <span class='font-weight-bold'>Date Created:</span> {{order.dateCreated}}
+                    </p>
+                    <p class='text-muted mb-0'>
+                        <span class='font-weight-bold'>Date Edited:</span> {{order.dateEdited}}
+                    </p>
+
+                </div>
+
+                <div class='col-12 col-md-6 px-4 py-2'>
+
+                    <!-- ================= -->
+                    <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                        Customer
+                    </h6>
+                    <p class='p-0 m-0 mb-3'>
+                        <a class='text-dark' href="{% url 'customer-details' order.customer.user.pk %}">
+                            <u>
+                                {% comment %} <i class="fas fa-info-circle"></i> {% endcomment %}
+                                {{order.customer.user.first_name}} {{order.customer.user.last_name}}
+                            </u>
+                        </a>
+                        <br>
+                        {{order.customer.user.email}}
+                    </p>
+
+                    <!-- ================= -->
+                    <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                        Order Owner
+                    </h6>
+                    <p class='p-0 m-0 mb-3'>
+                        {{order.staff.first_name}} {{order.staff.last_name}}
+                    </p>
+
+                    <!-- ================= -->
+                    <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                        Shipping Address
+                    </h6>
+                    <p class='p-0 m-0 mb-3'>
+                        {% if order.shippingAddress %}
+                            <p class='p-0 mb-0 position-relative'>
+                                {{order.shippingAddress.houseNumber}} {{order.shippingAddress.street}}
+                            </p>
+                            <p class='p-0 mb-0'>
+                                {{order.shippingAddress.zipCode}}, {{order.shippingAddress.city}}
+                            </p>
+                            <p class='p-0 mb-0'>
+                                {{order.shippingAddress.state}}
+                            </p>
+                        {% else %}
+                            None
+                        {% endif %}
+                    </p>
+
+                    <!-- ================= -->
+                    <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                        Coupon Code Used
+                    </h6>
+                    <p class='p-0 m-0 mb-3'>
+                        {{order.coupon.code}}
+                    </p>
+
+                    <!-- ================= -->
+                    <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                        Order Notes
+                    </h6>
+                    <p class='p-0 m-0 mb-3'>
+                        {{order.notes}}
+                    </p>
+
+                </div>
+
+                <div class='col-12 col-md-6 px-4 py-2'>
+
+                    <!-- ================= -->
+                    <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                        Order Channel
+                    </h6>
+                    <p class='p-0 m-0 mb-3'>
+                        {{order.orderChannel}}
+                    </p>
+
+                    <!-- ================= -->
+                    <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                        Store
+                    </h6>
+                    <p class='p-0 m-0 mb-3'>
+                        {% if order.store %}
+                            {{order.store}}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </p>
+
+                    <!-- ================= -->
+                    <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                        Payment Option
+                    </h6>
+                    <p class='p-0 m-0 mb-3'>
+                        {{order.paymentOption}}
+                    </p>
+
+                    <!-- ================= -->
+                    <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                        Installment Period
+                    </h6>
+                    <p class='p-0 m-0 mb-3'>
+                        {% if order.installmentPeriod %}
+                            {{order.installmentPeriod}}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </p>
+
+                    <!-- ================= -->
+                    <h6 class='mb-0 text-muted font-weight-bold text-underline'>
+                        Shipping Cost
+                    </h6>
+                    <p class='p-0 m-0 mb-3'>
+                        {% if order.shippingCost %}
+                            {% include "sub/currency.html" %}{{order.shippingCost}}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </p>
+
+                </div>
+
+                <hr>
+
+                <div class='col-12 pl-3'>
+
+                    <table class='table table-striped w-100'>
+                        <thead>
+                            <tr>
+                                <th class='align-baseline' scope="col"></th>
+                                <th class='align-baseline' scope="col">Quantity</th>
+                                <th class='align-baseline' scope="col">Product</th>
+                                <th class='align-baseline' scope="col">Item Price</th>
+                                <th class='align-baseline' scope="col">Item Total Price</th>
+                                <th class='align-baseline' scope="col">Item Profit</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.orderitem_set.all %}
+                                <tr>
+                                    <td>
+                                        {% if item.product.slug %}
+                                            <a class='' href="{% url 'product-details' item.product.slug %}">
+                                                <div style="background-image:url('{{item.product.featured_image.url}}'); height:30px;width:30px;" class='clickable clickable-large display-inline bg-image-cover img-thumbnail'></div>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{item.quantity}}
+                                    </td>
+                                    <td>
+                                        {% if item.product.slug %} 
+                                            <a class='' href="{% url 'product-details' item.product.slug %}">
+                                                {{item.product.name}}
+                                            </a>
+                                        {% else %}
+                                            <span class='text-danger'>
+                                                Deleted Product
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if item.discountedPrice > 0 %}
+                                                {% include "sub/currency.html" %}{{item.discountedPrice|intcomma}}
+                                                <br>
+                                                (Full Price: {% include "sub/currency.html" %}{{item.price|intcomma}})
+                                        {% else %}
+                                                {% include "sub/currency.html" %}{{item.price|intcomma}}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{item.get_total}}
+                                    </td>
+                                    <td>
+                                        {{item.profit}}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'orderitem-edit' item.pk %}?next={% url 'order-details' order.pk %}" class='text-muted font-weight-bold  d-inline-block clickable clickable-large '>
+                                            <i class="fas fa-pencil-alt"></i> Edit Item
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

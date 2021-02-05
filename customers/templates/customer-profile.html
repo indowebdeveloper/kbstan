@@ -1,0 +1,192 @@
+{% extends "customer-base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %} 
+
+<div class='container'>
+    <div class='section customer-signup'>
+
+        <div class='row'>
+
+            <!-- ASIDE -->
+            <div id="aside" class="pt-3 col-lg-3">
+                <!-- aside Widget -->
+                <h6 class='text-uppercase position-relative'>Manage My Account</h6>
+                <hr>
+                <div class="aside">
+                    <h6 class="text-capitalize mb-3">
+                        <a href="{% url 'customer-profile' %}" class='active-link'>
+                            View My Account
+                        </a>
+                    </h6>
+                    <h6 class="text-capitalize mb-3">
+                        <a href="{% url 'customer-profile-edit' %}">
+                            Edit My Acount
+                        </a>
+                    </h6>
+                </div>
+                <!-- /aside Widget -->
+
+                <!-- aside Widget -->
+                <h6 class='text-uppercase position-relative mt-5'>My Orders</h6>
+                <hr>
+                <div class="aside">
+                    <h6 class="text-capitalize mb-3">
+                        <a href="{% url 'customer-orders' %}">
+                            My Orders
+                        </a>
+                    </h6>
+                </div>
+                <!-- /aside Widget -->
+            </div>
+            <!-- /ASIDE -->
+
+            <div class='text-left col-12 col-lg-8'>
+                <div class='product product-red-border bg-white p-4 text-left'>
+                    <h3 class='d-inline brand-text text-uppercase'>{{user.first_name}} {{user.last_name}}
+                        <h5 class='d-inline'>
+                            <a id='test' class='btn-sm badge badge-light badge-pill text-nowrap text-muted font-weight-bold' href="{% url 'customer-profile-edit' %}" data-toggle="tooltip" data-html='true' data-placement="right" title="<b>Edit</b>">
+                                <small class='font-weight-bold'><i class="fas fa-pencil-alt"></i> Edit</small>
+                            </a>
+                        </h5>
+                    </h3>
+                    <hr>
+
+
+
+
+
+                    {% comment %} ///////////////// {% endcomment %}
+                    {% comment %} ///////////////// {% endcomment %}
+                    {% comment %} ///////////////// {% endcomment %}
+                    {% comment %} ///////////////// {% endcomment %}
+                    {% comment %} ///////////////// {% endcomment %}
+                    {% comment %} ///////////////// {% endcomment %}
+                    {% comment %} ///////////////// {% endcomment %}
+                    {% comment %} ///////////////// {% endcomment %}
+                    {% comment %} ///////////////// {% endcomment %}
+                    {% comment %} ///////////////// {% endcomment %}
+
+
+
+
+
+                    <div class='row'>
+                        <div class='col-9 col-md-7 col-lg-5'>
+                            <p class='text-muted mb-0 font-weight-medium'>Email:</p>
+                            <p class='text-muted'>{{user.email}}</p>
+                        </div>
+                    </div>
+
+                    <!-- ============================= -->
+
+                    <div class='row mt-0 text-muted mb-3'>
+                        <div class='col-9 col-md-7 col-lg-5'>
+                            <p class='mb-0 mt-0 font-weight-medium'>Phone numbers:</p>
+                            <ul class='pl-0 list-unstyled'>
+                                &nbsp;<i class="fas fa-mobile-alt text-primary"></i> &nbsp;{{user.mobileNumber}}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- ============================= -->
+
+                    <div class='row'>
+                        <div class='col-12'>
+
+                            <table class='table-striped table w-100 m-0 p-0'>
+                                <thead>
+                                    <td>
+                                        <span class='font-weight-bold'>Address</span>
+                                    </td>
+                                    <td>
+                                        <span class='font-weight-bold'>Postal Code</span>
+                                    </td>
+                                    <td>
+                                        <span class='font-weight-bold'>Actions</span>
+                                    </td>
+                                </thead>
+                                <tbody>
+                                    {% for address in user.customer.address_set.all %}
+                                        <tr>
+                                            <td>
+                                                {{address.houseNumber}} {{address.street}}
+                                            </td>
+                                            <td>
+                                                {{address.zipCode}} - {{address.city}} ({{address.state}})
+                                            </td>
+                                            <td>
+                                                <p class='mb-0'>
+                                                    <a href="{% url 'customer-facing-address-edit' address.pk %}" class='text-muted'>
+                                                        EDIT
+                                                    </a>
+                                                </p>
+                                                <p class='mb-0'>
+                                                    <a href="{% url 'customer-facing-address-delete' address.pk %}" class='text-danger'>
+                                                        DELETE
+                                                    </a>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <a href="{% url 'customer-facing-address-create' user.pk %}" class='m-0 p-0'>
+                                <button class="brand-btn btn-sm mt-2" type="submit"><i class="fa fa-plus"></i> Add Address</button>
+                            </a>
+
+                        </div>
+                    </div>
+
+                    <!-- ============================= -->
+
+                    <div class='row mt-3 text-muted'>
+                        <div class='col-12'>
+                            <p class='mb-0 mt-2 font-weight-medium'>Cars:</p>
+                            <ul class='pl-0 list-unstyled mb-3'>
+
+                                {% for car in user.customer.customercar_set.all %}
+                                    <li class='py-2 border-top border-bottom'>
+                                        {{car.carBrand}} {{car.carModel}} ({{car}})
+                                        <p class='mb-0 ml-3 d-inline'>
+                                            <a href="{% url 'customer-facing-car-edit' car.pk %}" class='clickable badge badge-pill badge-light'>
+                                                <i class="fa fa-pencil-alt"></i> EDIT
+                                            </a>
+                                        </p>
+                                        <p class='mb-0 d-inline'>
+                                            <a href="{% url 'customer-facing-car-delete' car.pk %}" class='ml-2 clickable badge badge-pill badge-danger'>
+                                                <i class="fa fa-trash-alt"></i> DELETE
+                                            </a>
+                                        </p>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                            <a href="{% url 'customer-facing-car-create' user.pk %}" class='m-0 p-0'>
+                                <button class="brand-btn btn-sm" type="submit"><i class="fa fa-plus"></i> Add Car</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- ============================= -->
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}
+
+{% block customJS %}
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+</script>
+{% endblock customJS %}

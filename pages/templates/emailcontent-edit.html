@@ -1,0 +1,35 @@
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}  
+{% load static %}
+
+{% block content %} 
+<div class='col-12'>
+
+
+<div class='card mb-5'>
+    <div class='card-header'>
+
+        <a href="{% url 'productbrand-list' %}"  onclick='event.preventDefault();window.history.back()' class='text-muted font-weight-bold fx fx-link'>
+            <i class="fas fa-angle-left text-muted"></i>
+            Back
+        </a>
+
+        <h3 class="font-weight-bold mb-0 card-title">Edit Email Content</h3>
+    </div>
+    <div class='card-body'>
+        <!-- this form MUST stay inside -->
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form|crispy}}
+
+            <button class='w-100 btn btn-success mx-0' id='edit' type="submit" value="Save">
+                <i class="fas fa-check"></i> Save
+            </button>
+        </form>
+        <!-- this form MUST stay inside -->
+    </div>
+</div>
+
+
+</div>
+{% endblock content %}

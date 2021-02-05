@@ -1,0 +1,184 @@
+{% extends "customer-base.html" %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+
+		{% comment %} <!-- BREADCRUMB -->
+		<div id="breadcrumb" class="section">
+			<!-- container --> 
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="breadcrumb-header">Checkout</h3>
+						<ul class="breadcrumb-tree">
+							<li><a href="#">Home</a></li>
+							<li class="active">Checkout</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /BREADCRUMB --> {% endcomment %}
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class='row border-bottom'>
+					<h3 class=' pb-2 mt-2'>
+						Send enquiry about <i class='brand-text'>{{product}}</i>
+					</h3>
+				</div>
+
+				<div class="row">
+
+					<div class="col-12 col-md-6 py-3 border-right">
+						<!-- Billing Details -->
+						{% comment %} {{message}} <br> {% endcomment %}
+						<div class='row'>
+							<div class='col-3'>
+								<div class='bg-image-contain' style='background-image:url("{{product.featured_image.url}}"); height:150px;'></div>
+							</div>
+							<div class='col-9'>
+								<h5 class='brand-text'>
+									{% if product.discount_amount > 0 %}
+											{% comment %} this IF is needed to strike through the old price only when there actually is a discount {% endcomment %}
+											{% include "sub/currency.html" %}{{ product.discount_price|intcomma}}
+											<small>
+												<del class="product-old-price text-muted mt-1">
+													{% include "sub/currency.html" %}{{ product.price|intcomma }}
+												</del>
+											</small>
+
+									{% else %}
+										{% include "sub/currency.html" %}{{product.price|intcomma}}
+									{% endif %}
+								</h5>
+								<p>
+									<span class='font-weight-bold border-bottom'>Description:</span>
+									<br>
+									{{product.description}}
+								</p>
+							</div>
+						</div>
+
+					</div>
+					<!-- /col-6 -->
+
+					<div class='col-12 col-md-6 py-3'>
+							{{message}}
+							<br>
+							<br>
+							{% if enquirySubmittedSuccessfully %}
+								<button class="add-to-cart-btn product-add-button">
+									<i class="fa fa-shopping-cart"></i> Continue Shopping
+									<a href="{% url 'home' %}" class="stretched-link"></a>
+								</button>
+							{% endif %}
+
+							{% if not enquirySubmittedSuccessfully %}
+								<form id='enquiry-submit-form' action="/orders/customer-enquiry/{{product.slug}}/" method="post">
+									<div class='form-group'>
+										{% csrf_token %}
+										{{quantityForm}}
+									
+										{% if not request.user.is_authenticated %}
+											<p class='mt-3 w-100 border-top'>Please <b>register</b> or <a class='text-underline font-weight-bold' href="/accounts/login/?next=/orders/customer-enquiry/{{product.slug}}">login</a> to submit the enquiry:</p>
+											<div class='register-form'>
+												{{customerCreateForm}}
+											</div>
+										{% endif %}
+
+										<button class='btn primary-btn ml-0 w-100' type="submit">
+											Submit
+										</button>
+									</div>
+								</form>
+							{% endif %}
+						</div>
+
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL -->
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="signInModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signInModalLabel">Sign In</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+			<form action="" method="post">
+				{% csrf_token %}
+				{{form|crispy}}
+			</form>
+      </div>
+      <div class="modal-footer">
+        <button class="brand-btn w-100" type="submit"><i class="fa fa-sign-in-alt"></i> Sign in</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<!-- MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL -->
+
+
+
+
+
+
+
+{% endblock content %}

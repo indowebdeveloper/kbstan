@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class='col-12'>
+
+    
+    <!-- Card --><div class='card mb-2'>
+        <!-- CardHeader --><div class='card-header pb-0'>
+            <div class='row'>
+                <div class='col-12'>
+                    <h3 class='card-title font-weight-bold'>Edit & View Categories</h3>
+                </div>
+            </div>
+            {% include "sub/search_filter.html" %}
+
+        <!-- ./CardHeader --></div>
+
+        
+        <!-- CardBody --><div class='card-body p-0  overflow-y-scroll max-height-400px'>
+            <table class='table table-striped overflow-x-hidden mb-0'>
+                <thead>
+                    <tr>
+                        <th class='p-0 m-0 border border-0 position-sticky top-0'>
+                            <form action='' class='w-100' id='newCategory'>
+                                <div class='input-group'>
+                                    <input type='text' class='d-none form-control fx' data-typing-action-target='#submitNewCat' oninput='typingAction(this, "disableWhenEmpty")' name='categoryName' id='categoryName'>
+                                    <div class='w-100 input-group-append-LARGE fx'>
+                                        <button id='submitNewCat' data-api-endpoint="{% url 'products-categories-create' %}" data-item-id-name='categoryID' data-item-template='#tr-cat-template' type='submit' onclick='addNewItem(window.event,this)' class='fx btn btn-success m-0 rounded-0 py-2 w-100 show-details'>
+                                            <i class="fas fa-plus-circle"></i> &nbsp;Add&nbsp;<span class='hidden-details'>Category</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class='tr-cat-template-parent'>
+                    {% for category in categories %}
+                        <tr data-item-id='{{category.id}}' data-item-id-name='categoryID'>
+                            <td class='px-5'>
+                                <div class="row justify-content-between">
+                                    <div class='displayMode'>
+                                        <span class='categoryName' data-fn='holds-dynamic-data'>{{category.name}}</span>
+                                        <form class='form w-100' action=''>
+                                            <input type='text' class='form-control w-100' name='categoryName' value='{{category.name}}'>
+                                            <div class='btn-group w-100 p-0'>
+                                                <button type='reset' class='btn btn-grey btn-sm m-0 mt-2' onclick='editItemUI(window.event, this)'>Cancel</button>
+                                                <button type='submit' data-api-endpoint="{% url 'products-categories-edit' %}" data-item-id-name='categoryID' class='btn btn-primary btn-sm m-0 mt-2' onclick='editItemUI(window.event, this)'>Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class='alterButtons'>
+                                        <small class='text-muted  d-inline-block clickable clickable-large ' onclick='editItemUI(window.event, this)'>
+                                            <i class="fas fa-pencil-alt"></i> Edit
+                                        </small>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <small class='text-danger  d-inline-block clickable clickable-large ' data-api-endpoint="{% url 'products-categories-delete' %}" onclick='alterItem(this, "delete")'>
+                                            <i class="fas fa-trash"></i> Delete
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <!-- TR-TEMPLATE  --><tr data-item-id='' id='tr-cat-template' class='d-none' data-item-id-name='categoryID'>
+                        <td class='px-5'>
+                            <div class="row justify-content-between">
+                                <div class='displayMode'>
+                                    <span class='categoryName' data-fn='holds-dynamic-data'></span>
+                                    <form class='form w-100' action=''>
+                                        <input type='text' class='form-control w-100 categoryName' name='categoryName' value=''>
+                                        <div class='btn-group w-100 p-0'>
+                                            <button type='reset' class='btn btn-grey btn-sm m-0 mt-2' onclick='editItemUI(window.event, this)'>Cancel</button>
+                                            <button type='submit' data-api-endpoint="{% url 'products-categories-edit' %}" data-item-id-name='categoryID' class='btn btn-primary btn-sm m-0 mt-2' onclick='editItemUI(window.event, this)'>Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class='alterButtons'>
+                                    <small class='text-muted clickable' onclick='editItemUI(window.event, this)'>
+                                        <i class="fas fa-pencil-alt"></i> Edit
+                                    </small>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <small class='text-danger clickable' data-api-endpoint="{% url 'products-categories-delete' %}" onclick='alterItem(this, "delete")'>
+                                        <i class="fas fa-trash"></i> Delete
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+
+                    <!-- ./TR-TEMPLATE  --></tr>
+                </tbody>
+            </table>
+        <!-- ./CardBody --></div>
+        
+    <!-- ./Card --></div> 
+
+    <!-- PAGINATION -->
+        <div class='my-2 ml-2'>
+            <span class="step-links">
+                {% if categories.has_previous %}
+                    <a href="?page=1">First</a>
+                    <a href="?page={{ categories.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+                        <i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+                    </a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ categories.number }} of {{ categories.paginator.num_pages }}
+                </span>
+
+                {% if categories.has_next %}
+                    <a href="?page={{ categories.next_page_number }}" class='mr-3 ml-2'>
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                    <a href="?page={{ categories.paginator.num_pages }}">Last</a>
+                {% endif %}
+            </span>
+        </div>
+    <!-- ./PAGINATION -->
+
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}  
+
+{% block content %} 
+<div class='col-12 col-lg-10'>
+
+
+<div class='card mb-5'>
+    <div class='card-header'>
+
+        <div class='mb-3'>
+            <a href="{% url 'staff-list' %}"  onclick='event.preventDefault();window.history.back()' class='text-muted font-weight-bold fx fx-link'>
+                <i class="fas fa-angle-left text-muted"></i>
+                Back
+            </a>
+        </div>
+
+        <h3 class="mb-0 card-title">Edit Access</h3>
+    </div>
+    <div class='card-body'>
+        <!-- this form MUST stay inside -->
+        <form action="" method="post">
+            {% csrf_token %}
+            {{staffPermissionsForm|crispy}}
+            
+            <button class='w-100 btn btn-success mx-0' id='edit' type="submit" value="Save">
+                <i class="fas fa-check"></i> Save
+            </button>
+        </form>
+        <!-- this form MUST stay inside -->
+    </div>
+</div>
+ 
+
+</div>
+{% endblock content %}

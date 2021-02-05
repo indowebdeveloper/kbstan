@@ -1,0 +1,67 @@
+
+{
+    "transactionDetails": {
+      "merchantOrderId": "9998887771",
+      "amount": 4500000,
+      "items": [
+        {
+          "id": "123123",
+          "name": "iPhone 6S",
+          "price": 4500000,
+          "url": "http://merchant.com/phone/iphone-6s",
+          "imageUrl": "http://merchant.com/phone/iphone-6s/cover.jpg",
+          "type": "Mobile Phone",
+          "quantity": 1,
+          "parentType": "SELLER",
+          "parentId": "555666"
+        }
+      ]
+    },
+    "customerDetails": {
+      "firstName": "First",
+      "lastName": "Last",
+      "email": "first.last@gmail.com",
+      "phone": "081212345678"
+    },
+    "sellers": [
+      {
+        "id": "555666",
+        "name": "Penjual iPhone",
+        "url": "https://merchant.com/shop",
+        "sellerIdNumber": "666777",
+        "email": "seller@merchant.com",
+        "address": {
+          "firstName": "Merchant",
+          "lastName": "Seller",
+          "address": "Kelapa Gading",
+          "city": "Jakarta Utara",
+          "postalCode": "11240",
+          "phone": "081812345678",
+          "countryCode": "ID"
+        }
+      }
+    ],
+    "billingAddress": {
+      "firstName": "First",
+      "lastName": "Last",
+      "address": "Tomang",
+      "city": "Jakarta Barat",
+      "postalCode": "11430",
+      "phone": "081987654321",
+      "countryCode": "ID"
+    },
+    "shippingAddress": {
+      "firstName": "First",
+      "lastName": "Last",
+      "address": "Tomang",
+      "city": "Jakarta Barat",
+      "postalCode": "11430",
+      "phone": "081987654321",
+      "countryCode": "ID"
+    },
+    "paymentType": "3_months",
+    "approvedNotificationUrl": "https://payment-notification.merchant.com/transaction-confirmation-handler",
+    "cancellationRedirectUrl": "http://merchant.com/phone/iphone-6s",
+    "backToStoreUrl": "http://merchant.com/phone/iphone-6s",
+    "expirationAt": "2019-12-31T18:00:00+07:00"
+}

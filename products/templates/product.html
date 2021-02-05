@@ -1,0 +1,415 @@
+{% extends "customer-base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- ============================= -->
+					<!-- ============================= -->
+					<!-- ============================= -->
+					<!-- ============================= -->
+					<!-- ============================= -->
+					<!-- ============================= -->
+					<!-- Product main img -->
+					<div class="col-md-5">
+
+						<div id="product-main-slider" class="carousel slide" data-interval="false">
+
+							<!-- The slideshow -->
+							<div class="carousel-inner">
+
+								<div class="carousel-item active w-100 bg-image-contain" style='min-height: 250px; max-height:350px; background-image:url("{{product.featured_image.url}}")' >
+								</div>
+
+								{% for image in product.productimage_set.all %}
+									<div class="carousel-item w-100 bg-image-contain" style='min-height: 250px; max-height:350px; background-image:url("{{image.image.url}}")' >
+									</div>
+								{% endfor %}
+							</div>
+						  
+							<!-- Left and right controls -->
+							<a class="carousel-control-prev" href="#product-main-slider" data-slide="prev">
+								<span class="carousel-control-prev-icon"></span>
+							</a>
+							<a class="carousel-control-next" href="#product-main-slider" data-slide="next">
+								<span class="carousel-control-next-icon"></span>
+							</a>
+						  
+						</div>
+						<!-- Indicators, they have to be wrapped in another .carousel-div so that the Bootstrap classes will recognise them correctly -->
+						<div class='carousel'> 
+							<ul class="carousel-indicators row">
+
+								<li data-target="#product-main-slider" data-slide-to="0" class="active col-6 col-md-4 col-lg-3 col-xl-2">
+									<div class='bg-image-contain' style='background-image:url("{{product.featured_image.url}}"); height:50px; width:50px;'></div>
+								</li>
+
+								{% for image in product.productimage_set.all %}
+
+									<li class='col-6 col-md-4 col-lg-3 col-xl-2' data-target="#product-main-slider" data-slide-to="{{forloop.counter}}">
+										<div class='bg-image-contain' style='background-image:url("{{image.image.url}}"); height:50px; width:50px;'></div>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+
+					<!-- /Product main img -->
+					<!-- ============================= -->
+					<!-- ============================= -->
+					<!-- ============================= -->
+					<!-- Product details -->
+					<div class="col-md-7 pl-md-0">
+						<div class="product-details">
+							<h2 class="product-name">{{product.name}}</h2>
+							
+							<!-- ################################## -->
+
+							<div>
+								{% if product.discount_amount > 0 %}
+									<h3 class="product-price my-0 py-0">
+										{% comment %} this IF is needed to strike through the old price only when there actually is a discount {% endcomment %}
+										{% include "sub/currency.html" %}{{ product.discount_price|intcomma}}
+										<small>
+											<del class="product-old-price text-muted mt-1">
+												{% include "sub/currency.html" %}{{ product.price|intcomma }}
+											</del>
+										</small>
+									</h3>	
+								{% else %}
+									<h3 class="product-price">
+										{% include "sub/currency.html" %}{{product.price|intcomma}}
+									</h3>
+								{% endif %}
+
+								<!-- ################################## -->
+
+								{% if product.quantity > 9 %}
+									<h4 class="product-available text-muted">In Stock</h4>
+								{% elif product.quantity > 0 %}
+									<h4 class="product-available">Low in Stock</h4>
+								{% else %}
+									<h4 class="product-available">Out of Stock</h4>
+								{% endif %}
+							</div>
+
+
+
+							<div class="add-to-cart row mb-3 pl-3">
+
+								
+								{% if product.purchaseOnlyViaEnquiry %}
+											<div class=' col-8 col-md-12 col-lg-8 py-0 px-2 px-md-0 px-lg-2 mx-0 align-self-center'>
+												<a href="{% url 'customer-enquiry' product.slug %}">
+													<button class="add-to-cart-btn w-100 btn">
+															<i class="fa fa-envelope"></i> Send Enquiry
+													</button>
+												</a>
+											</div>
+								{% else %}
+												<!-- ADD TO CART -->
+												<div class="qty-label col-4 col-md-12 col-lg-4 mx-0 py-0 px-0 mt-2 align-self-center">
+
+													<div class="input-number w-100">
+
+
+
+
+														{% comment %} {% for item in user.customer.order_set.last.orderitem_set.all %}
+															{% if item.product.id == product.id %}
+																<input id='popupFieldFor{{product.id}}' type='number' min=1 value={{item.quantity}} class='user-selectable-none form-control py-1 text-center popup-quantity-field'>
+															{% endif %}
+														{% endfor %} {% endcomment %}
+
+														<input id='popupFieldFor{{product.id}}' type='number' min=1 value=1
+														class='user-selectable-none form-control py-1 text-center popup-quantity-field'>
+
+
+														<span class="qty-up" onclick="adjustQuantityField(this)" data-target-field='#popupFieldFor{{product.id}}' data-action='INCREASE'>+</span>
+														<span class="qty-down" onclick="adjustQuantityField(this)" data-target-field='#popupFieldFor{{product.id}}' data-action='DECREASE'>-</span>
+													</div>
+
+												</div>
+												<div class=' col-8 col-md-12 col-lg-8 py-0 px-2 px-md-0 px-lg-2 mx-0 align-self-center'>
+													<button class="add-to-cart-btn w-100 product-add-button" data-target-field='#popupFieldFor{{product.id}}' data-user-id='{{user.id}}' data-id='{{product.id}}' data-action='addToCartCF' onclick='sendRequest(alter_cart_endpoint, this)'>
+														<i class="fa fa-shopping-cart"></i> add to cart
+													</button>
+												</div>
+
+												{% comment %} <p class='mt-2'>
+													{% for item in user.customer.order_set.last.orderitem_set.all %}
+														{% if item.product.id == product.id %}
+															<b>
+																{{item.quantity}}
+															</b>
+														{% endif %}
+													{% endfor %}
+													of this item already in cart.
+												</p> {% endcomment %}
+
+												
+												<!-- ./ADD TO CART -->
+
+												
+								{% endif %}
+
+							</div>
+
+							<div class="input-group col-lg-6 p-0 pr-lg-4 mb-3 mt-2 pt-2">
+								<ul class='list-unstyled'>
+									{% for attr in product.productattribute_set.all %}
+										{% comment %} <span class="badge badge-primary product mr-1 font-weight-light">{{attribute.attribute}}: <strong>{{attribute.values}}</strong></span> {% endcomment %}
+										<li class='list-unstyled'>
+											<b>{{attr.attribute}}:</b> {{attr.values}}
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+
+							<p class='mb-0 p-0 pt-3 border-top'>
+								{{product.description|linebreaks}}
+							</p>
+
+							
+
+							<div class='container'>
+								<div class=" row">
+
+							</div>
+
+							
+
+							{% comment %} <ul class="product-btns row mt-5"> {% endcomment %}
+								{% comment %} <li><a href="#"><i class="fa fa-heart"></i> add to wishlist</a></li> {% endcomment %}
+							{% comment %} </ul> {% endcomment %}
+
+							<ul class="product-links row mt-5">
+								<li>Category:</li>
+								{% for cat in product.categories.all %}
+									<li>
+										<a href='/products/?categories={{cat}}'>{{cat}}</a>
+									</li>
+								{% endfor %}
+							</ul>
+
+						</div>
+					</div>
+					<!-- /Product details -->
+					<!-- ============================= -->
+					<!-- ============================= -->
+					<!-- ============================= -->
+
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+		<!-- Section -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- FEATURED PRODUCTS row --> 
+					<div class='row mt-0' id='featured-products'>
+
+						{% if featuredProducts|length > 0 %}
+							<div class='col-12'>
+								<h4 class='m-0 mt-3 p-0 border-bottom'>
+									<span class='text-muted'>Check out our other products</span> 
+								</h4>
+							</div>
+						{% endif %}
+
+						<!-- featured products flex container -->
+						<div class='col-12 d-flex flex-row flex-nowrap overflow-x-scroll overflow-y-visible pb-0'>
+						{% for feat in featuredProducts %}
+							
+							<div class="promo-item mx-1">
+								<div class="product" data-product-pk='{{feat.id}}'>
+									<div class="product-img">
+										{% comment %} <img src="./img/product01.png" alt=""> {% endcomment %}
+										<div onclick="location.href = '{% url 'product' feat.slug %}';" style="background-image:url('{{feat.featured_image.url}}'); height:200px;" class='cursor-pointer bg-image-cover'></div>
+										
+										<div class="product-label">
+											{% if feat.discount_amount > 0 %}
+												<span class="sale">-{{feat.discount_amount}}%</span>
+											{% endif %}
+										</div>
+									</div>
+
+									<!-- product-body -->
+									<div class="product-body">
+										<h3 class="product-name text-break m-0 border-bottom mb-3">
+											<a href="{% url 'product' feat.slug %}">
+												{{feat.name}}
+											</a>
+										</h3>
+										<h4 class="product-price m-0 mb-2">
+											{% if feat.discount_amount > 0 %}
+												{% comment %} this IF is needed to strike through the old price only when there actually is a discount {% endcomment %}
+												<del class="product-old-price">
+													{% include "sub/currency.html" %}{{feat.price|intcomma}}
+												</del>
+												
+												{% include "sub/currency.html" %}{{feat.discount_price|intcomma}}
+
+											{% else %}
+												{% include "sub/currency.html" %}{{feat.price|intcomma}}
+											{% endif %}
+										</h4>
+
+									</div>
+									<!-- ./product-body -->
+
+									<div class="add-to-cart p-1">
+										<!-- hidden field contains the value to be added --><input id='popupFieldFor{{feat.id}}' type='number' min=1 value=1 class='d-none'>
+										
+										{% if feat.purchaseOnlyViaEnquiry %}
+											<a href="{% url 'customer-enquiry' feat.slug %}">
+												<button class='add-to-cart-btn btn btn-sm product-add-button'>
+													<!-- <i class="fa fa-envelope"></i> -->
+													send enquiry
+												</button>
+											</a>
+										{% else %}
+											<button class='add-to-cart-btn btn btn-sm product-add-button' data-target-field='#popupFieldFor{{feat.id}}' data-user-id='{{request.user.id}}' data-id='{{feat.id}}' data-action='addToCartCF' onclick='sendRequest(alter_cart_endpoint, this)'>
+												<!--<i class="fa fa-shopping-cart"></i>--> add to cart
+											</button>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+
+						{% endfor %}
+					</div>
+					<!-- ./featured products flex container -->
+
+				<!-- RELATED PRODUCT row -->
+				{% comment %} <div class="row">
+
+					<div class="col-md-12">
+						<div class="section-title text-center">
+							<h3 class="title">Related Products</h3>
+						</div>
+					</div>
+
+					<!-- product -->
+					<div class="col-6 col-md-3">
+						<div class="product">
+							<div class="product-img">
+								<img src="{{product.productimage_set.first.image.url}}" alt="">
+							</div>
+							<div class="product-body">
+								<p class="product-category">Category</p>
+								<h3 class="product-name"><a href="#">{{product.name}}</a></h3>
+								<h4 class="product-price">{% include 'sub/currency.html' %}{{product.price}}</h4>
+								<div class="product-rating">
+								</div>
+								<div class="product-btns">
+									<button class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+									<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+								</div>
+							</div>
+							<div class="add-to-cart">
+								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+							</div>
+						</div>
+					</div>
+					<!-- /product -->
+
+				</div> {% endcomment %}
+				<!-- ./RELATED PRODUCT row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /Section -->
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- MODAL -->
+<!-- MODAL -->
+<!-- MODAL -->
+
+<div class="modal fade" id="enquiryModal" tabindex="-1" role="dialog" aria-labelledby="enquiryModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Send Enquiry</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+			DJANGO FORM FOR ENQUIRY GOES HERE
+		</p>
+      </div>
+      {% comment %} <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div> {% endcomment %}
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+{% block customJS %}
+	<script type="text/javascript" src="{% static "mdbootstrap/js/custom/backoffice/backoffice-order-edit.js" %}"></script>
+	<script type="text/javascript" src="{% static "mdbootstrap/js/customer_facing/handle_cart.js" %}"></script>
+{% endblock customJS %}

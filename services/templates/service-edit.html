@@ -1,0 +1,30 @@
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}  
+{% load static %}
+
+{% block content %} 
+<div class='col-12 col-lg-10 col-xl-7'>
+
+
+<div class='card mb-5'>
+    <div class='card-header'>
+
+        {% include "sub/back-button.html" %}
+
+        <h3 class="font-weight-bold mb-0 card-title">Edit service</h3>
+    </div>
+    <div class='card-body'>
+        <!-- this form MUST stay inside -->
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form|crispy}}
+
+            <input type="submit" value="Edit">
+        </form>
+        <!-- this form MUST stay inside -->
+    </div>
+</div>
+
+
+</div>
+{% endblock content %}

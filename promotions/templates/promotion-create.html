@@ -1,0 +1,44 @@
+
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class='col-12 col-lg-10 col-xl-7'>
+
+
+    <div class='card mb-5'>
+        <div class='card-header'>
+            <div class='mb-3'>
+                <a href="{% url 'promotion-list' %}"  onclick='event.preventDefault();window.history.back()' class='text-muted font-weight-bold fx fx-link'>
+                    <i class="fas fa-angle-left text-muted"></i>
+                    Back
+                </a>
+            </div>
+
+            <h3 class="mb-0 mt-1 font-weight-bold">Create new promotion</h3>
+        </div>
+        <div class='card-body'>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{promotion_form|crispy}}
+
+                <button class='w-100 btn btn-success mx-0' type="submit" value="Save">
+                    Save
+                </button>
+            </form>
+        </div>
+</div>
+
+</div>
+
+{% endblock content %}
+
+
+{% block customJS %}
+    <script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-transition.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "mdbootstrap/js/addons/semantic-ui-dropdown.min.js" %}"></script>
+
+
+    <script type="text/javascript" src="{% static "mdbootstrap/js/custom/backoffice/apply-semanticUI.js" %}"></script>
+{% endblock customJS %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %} 
+<div class='col-12'>
+
+
+    <div class='card'>
+        <div class='card-header'>
+
+            {% include "sub/back-button.html" %}
+
+            <h3 class="font-weight-bold mb-0 card-title">Adjust Product Stock</h3>
+        </div>
+        <div class='card-body'>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form|crispy}}
+                
+                <button class='w-100 btn btn-success mx-0' id='edit' type="submit" value="Save">
+                    <i class="fas fa-check"></i> Adjust
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+{% endblock content %}
+
+{% block customJS %}
+    <script type="text/javascript">
+        function toggleAddSubtractField(showOrHide) { // the add/subtract field should only be shown if the "Adjustment Type" selected in the previous field is "Manual Adjustment" - else, it should be hidden
+            if(showOrHide=='hide') {
+                $('#div_id_addSubtract').addClass('d-none');
+            }
+            else {
+                $('#div_id_addSubtract').removeClass('d-none');
+            }
+        }
+
+        $(document).ready(() => {
+            toggleAddSubtractField('hide'); // this ensures that the field is hidden by default
+
+            $('#div_id_adjustmentType .dropdown').dropdown({
+                onChange: function(value) {
+                    if(value == 'manual') {
+                        toggleAddSubtractField('show');
+                    }
+                    else {
+                        toggleAddSubtractField('hide');
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock customJS %}

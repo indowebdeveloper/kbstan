@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class='col-12 mb-0'>
+
+    <div class=''>
+
+        <h3 class=" mb-2 ml-1">
+            <a href="{% url 'customer-list' %}" class='text-muted font-weight-bold fx fx-link'>
+                <i class="fas fa-arrow-alt-circle-left text-dark"></i>
+            </a>
+            <span class='font-weight-bold text-uppercase'>{{customer.first_name}} {{customer.last_name}}</span> 
+            <span class='h5'>
+                <a class=' d-inline-block clickable clickable-large text-nowrap text-muted font-weight-bold' href="{% url 'customer-edit' customer.pk %}">
+                    <small class='font-weight-bold'><i class="fas fa-pencil-alt"></i> Edit Customer</small>
+                </a>
+            </span>
+        </h3>
+    </div>
+
+    <div class='card mb-5 pb-0'>
+        <!-- <div class='card-header'>
+
+            {% comment %} BACKBUTTON {% endcomment %}
+            <div class='mb-2'>
+                <a href="{% url 'customer-list' %}" class='text-muted font-weight-bold fx fx-link'>
+                    <i class="fas fa-angle-left text-muted"></i>
+                    
+                </a>
+            </div>
+            {% comment %} BACKBUTTON {% endcomment %}
+
+            <h3 class=" mb-0 card-title">
+                <span class='font-weight-bold'>{{customer.first_name}} {{customer.last_name}}</span> 
+                    <a class='text-nowrap text-dark font-weight-bold' href="{% url 'customer-edit' customer.pk %}" data-toggle="tooltip" data-placement="left" data-html="true" title="<b>Edit</b> {{customer.first_name}}">
+                    <small><i class="fas fa-pencil-alt"></i></small>
+                </a>
+            </h3>
+        </div> -->
+        <div class='card-body p-0'>
+            <div class='container'>
+                <div class='row'>
+                    <div class='col-12 py-3 px-4'>
+
+
+
+
+                        <div class='row'>
+                            <!-- XXXXXXXXXXXXXXXXXXXXXXXX -->
+                            <!-- XXXXXXXXXXXXXXXXXXXXXXXX -->
+                            <!-- XXXXXXXXXXXXXXXXXXXXXXXX -->
+                            <!-- XXXXXXXXXXXXXXXXXXXXXXXX -->
+                            <div class='col col-md-6'>
+                                <h6>
+                                    <strong class='text-uppercase'>Email:</strong>
+                                    <br>
+                                    {{customer.email}}
+                                </h6>
+
+                                <hr class='my-1'>
+                                <!-- =============================== -->
+
+                                <h6>
+                                    <strong class='text-uppercase'>PHONE(S)</strong>
+                                </h6>
+                                <ul class='list-unstyled p-0 mb-0'>
+                                    <li class='pl-4 mb-1 clickable d-table'>
+                                        <h6 class='position-relative'>
+                                            &nbsp;<i class="fas fa-mobile-alt position-absolute text-muted" style='left: -15px;top: 2px;'></i>{{customer.mobileNumber}}
+                                        </h6>
+                                    </li>
+                                </ul>
+
+                                <hr class='my-1'>
+                                <!-- ========================== -->
+
+                                <h6><strong class='text-uppercase'>CAR(S)</strong></h6>
+                                <ul class='p-0 text-nowrap list-unstyled mb-0'>
+                                    <li class='border-bottom'>
+                                        <a style='' class='clickable clickable-large badge badge-pill badge-success text-white text-nowrap font-weight-bold z-index-on-top px-2 py-1 ml-0 mb-1' href="{% url 'customer-car-create' customer.pk %}">
+                                            <i class="fas fa-plus"></i> Add Car
+                                        </a>
+                                    </li>
+                                    {% for car in customer.customer.customercar_set.all %}
+                                        <li class='border-bottom'>
+                                            <div class='d-inline-block mr-2 mb-1 pr-2' style='max-width:70px'>
+                                                <a class='d-inline-block clickable clickable-large text-muted text-nowrap font-weight-bold z-index-on-top m-0 p-0' href="{% url 'customer-car-edit' car.pk %}">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </a>
+                                                <a style='' class='d-inline-block clickable clickable-large text-danger text-nowrap font-weight-bold z-index-on-top m-0 p-0 mt-1' href="{% url 'customer-car-delete' car.pk %}">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                            <div class='d-inline-block text-middle'>
+                                                <p class='m-0 p-0'>
+                                                    {{car.carBrand}} {{car.carModel}} <span class='position-relative badge badge-dark ml-2 mb-1 mt-0 px-2 py-1' style='top:-3px'>{{car.licensePlate}}</span>
+                                                </p>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                        </div>
+
+                        <!-- ========================== -->
+
+                        <div class='col col-md-6'>
+                            <h6><strong class='text-uppercase'>ADDRESS(ES)</strong></h6>
+
+                            <ul class='p-0 list-unstyled pl-0 mb-0'>
+                                {% for address in customer.customer.address_set.all %}
+                                    <li class='border-bottom p-0 pl-4 mb-0 mt-2 d-table'>
+                                        <h6 class='mb-0'>
+                                            <a class='text-dark' href="{% url 'customer-address-edit' address.pk %}">
+                                                <p class='p-0 mb-0 position-relative'>
+                                                {% if  address.type == "home" %}
+                                                    <i class="fas fa-home position-absolute text-muted" style='left: -22px;top: 2px;'></i>
+                                                {% elif  address.type == "work" %}
+                                                    <i class="fas fa-building position-absolute text-muted" style='left: -22px;top: 2px;'></i>
+                                                {% else %}
+                                                    <i class="fas fa-map-marker-alt position-absolute text-muted" style='left: -22px;top: 2px;'></i>
+                                                {% endif %}
+                                                    {{address.houseNumber}} {{address.street}}
+                                                </p>
+                                                <p class='p-0 mb-0'>
+                                                    {{address.zipCode}}, {{address.city}}
+                                                </p>
+                                                <p class='p-0 mb-0'>
+                                                    {{address.state}}
+                                                </p>
+
+                                                <p class='p-0 mb-0 mt-2'>
+                                                    <span class='font-weight-bold text-underline'>
+                                                        Shipping Cost:
+                                                    </span>
+                                                    
+                                                    <br>
+                                                    
+                                                    {% include 'sub/currency.html' %} {{address.shippingCost}}
+                                                </p>
+                                            </a>
+                                        </h6>
+
+                                        <!-- ================== -->
+                                        <!-- ================== -->
+                                        <div class='d-inline-block mt-0'>
+                                            <a class='d-inline-block clickable clickable-large text-muted text-nowrap font-weight-bold z-index-on-top m-0 p-0' href="{% url 'customer-address-edit' address.pk %}"  data-toggle="tooltip" data-placement="top" data-html="true" title='Edit Address'>
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                            <a class='d-inline-block clickable clickable-large text-danger text-nowrap font-weight-bold z-index-on-top m-0 p-0' href="{% url 'customer-address-delete' address.pk %}"   data-toggle="tooltip" data-placement="top" data-html="true" title='Delete Address'>
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                        <!-- ================== -->
+                                        <!-- ================== -->
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+
+                <!-- XXXXXXXXXXXXXXXXXXXXXXXX -->
+                <!-- XXXXXXXXXXXXXXXXXXXXXXXX -->
+                <!-- XXXXXXXXXXXXXXXXXXXXXXXX -->
+                <!-- XXXXXXXXXXXXXXXXXXXXXXXX -->
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='col-12'>
+
+    <h3 class="mt-0 mb-2 ml-1">
+        <span class='font-weight-bold text-uppercase'>Customer Orders</span>
+    </h3>
+    <div class='row'>
+        <div class='col-12'>
+
+            {% if orders.count == 0 %}
+                    <p class='pl-2 font-weight-bold'>
+                        No orders yet.
+                    </p>
+                {% else %}
+                    <table class='table table-striped'>
+                        <thead class='thead-dark'>
+                            <th style='width:150px'>
+                                Order Status
+                            </th>
+                            <th>
+                                Items Bought
+                            </th>
+                            <th class='text-right'>
+                                Total Order Price
+                            </th>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td class='align-middle'>
+                                        <b>
+                                            <span class='font-weight-bold text-uppercase'>{{order.status}}</span>
+                                        </b>
+                                        <br>
+                                        <small>
+                                            <a href="{% url 'order-details' order.pk %}" class='text-underline text-primary'>
+                                                See order details
+                                            </a>
+                                        </small>
+                                    </td>
+                                    <td class='p-0 py-2'>
+                                        <div class='order-items-table-wrapper overflow-scroll'>
+                                            <table class='table m-0 p-0 table-bordered table-sm'>
+                                                <thead class='thead-dark'>
+                                                    <th style='width:40px'>
+                                                        {% comment %} Quantity {% endcomment %}
+                                                    </th>
+                                                    <th>
+                                                        Product Name
+                                                    </th>
+                                                    <th>
+                                                        Item Price
+                                                    </th>
+                                                </thead>
+                                                <tbody>
+                                                    {% for item in order.orderitem_set.all %}
+                                                        <tr>
+                                                            <td>
+                                                                <span class='font-weight-bold'>{{item.quantity}}x</span> 
+                                                            </td>
+                                                            <td>
+                                                                {% if item.product.name %}
+                                                                        {{item.product.name}}
+                                                                    {% else %}
+                                                                        <span class='text-danger'>Deleted Product</span>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if item.discountedPrice > 0 %}
+                                                                    {% include "sub/currency.html" %}{{item.discountedPrice|intcomma}}
+                                                                    <br>
+                                                                    <strike>
+                                                                        {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                                                    </strike>
+                                                                {% else %}
+                                                                    {% include "sub/currency.html" %}{{item.product.price|intcomma}}
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+
+                                            <!-- ================== -->
+                                            {% if order.coupon %}
+                                                <a href="{% url 'coupon-edit' order.coupon.pk %}" class='mt-2 btn btn-sm btn-primary' data-toggle="modallllllllllllllll" data-target="#couponModal">
+                                                    Coupon Used: {{order.coupon.code}}
+                                                </a>
+                                            {% endif %}
+
+
+                                        </div>
+                                    </td>
+                                    <td class='align-middle text-right'>
+                                        {% include "sub/currency.html" %}{{order.get_cart_total|intcomma}}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        <tbody>
+                    </table>
+            {% endif %}
+        </div>
+    </div>
+</div>                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- CouponModal -->
+<div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">DUMMY Coupon Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                All the details for the respective coupon...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./CouponModal -->
+
+
+
+
+{% endblock content %}
+
+{% block customJS %}
+    <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    </script>
+{% endblock customJS %}

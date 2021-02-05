@@ -1,0 +1,485 @@
+{% extends "customer-base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+ 
+<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- ASIDE -->
+					<div id="aside" class="pt-3 col-lg-3 pr-4">
+						<!-- aside Widget -->
+						<h6 class='text-uppercase clickable position-relative' id='filters-btn' data-toggle="collapse" href="#filters">Filters</h6>
+						<hr>
+
+
+						<!-- FILTERS -->
+						<div class="collapse showwww user-select-none" id="filters">
+							<form class='' action='' method="get" id='filters_form'>
+								<div class="aside">
+									<h3 class="aside-title mb-2">Categories</h3>
+									<div class="checkbox-filter">
+
+										{% for cat in categories %}
+											<div class="input-checkbox">
+												<input type="checkbox" id="{{cat}}" name='categories' value="{{cat}}">
+												<label for="{{cat}}">
+													<span></span>
+													{{cat}}
+													<small class='d-none'>(120)</small>
+												</label>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+								
+								{% comment %} 
+								<div class="aside">
+									<h3 class="aside-title mb-2">Attributes</h3>
+									<div class="checkbox-filter">
+
+										{% for attr in attributes %}
+											<div class="input-checkbox">
+												<input type="checkbox" id="{{attr}}" name='attributes' value="{{attr}}">
+												<label for="{{attr}}">
+													<span></span>
+													{{attr}}
+													<small class='d-none'>(120)</small>
+												</label>
+											</div>
+										{% endfor %}
+									</div>
+								</div> {% endcomment %}
+
+								<!-- /aside Widget -->
+
+								<!-- aside Widget -->
+								<div class="aside">
+									<h3 class="aside-title mb-2">Brand</h3>
+									<div class="checkbox-filter">
+										{% for brand in carBrands %}
+											<div class="input-checkbox">
+												<input type="checkbox" id="{{brand}}" name='brands' value="{{brand}}">
+												<label for="{{brand}}">
+													<span></span>
+													{{brand}}
+													<small class='d-none'>(578)</small>
+												</label>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+								<!-- /aside Widget -->
+
+								<!-- aside Widget -->
+								<div class="aside">
+									<h3 class="aside-title mb-2">Tire Filters</h3>
+									<div class="checkbox-filter">
+										<div class="input-checkbox">
+											<label class='pl-0' for="tire_width">
+												<p class='p-0 m-0 font-weight-bold text-muted'>
+													Tire Width
+												</p>
+											</label>
+											<select id='tire_width' name='tire_width' class='w-100 form-control'>
+												<option value=''>
+													Select Width
+												</option>
+												{% for attr in product_attributes_width %}
+													<option value='{{attr}}'>
+														{{attr}}
+													</option>
+												{% endfor %}
+											</select>
+										</div>
+										<div class="input-checkbox">
+											<label class='pl-0' for="tire_height">
+												<p class='p-0 m-0 font-weight-bold text-muted'>
+													Tire Height
+												</p>
+											</label>
+											<select id='tire_height' name='tire_height' class='w-100 form-control'>
+												<option value=''>
+													Select Height 
+												</option>
+												{% for attr in product_attributes_height %}
+													<option value='{{attr}}'>
+														{{attr}}
+													</option>
+												{% endfor %}
+											</select>
+										</div>
+										<div class="input-checkbox">
+											<label class='pl-0' for="tire_radius">
+												<p class='p-0 m-0 font-weight-bold text-muted'>
+													Tire Radius
+												</p>
+											</label>
+											<select id="tire_diameter" name='tire_diameter' class='w-100 form-control'>
+												<option value=''>
+													Select Diameter
+												</option>
+												{% for attr in product_attributes_diameter %}
+													<option value='{{attr}}'>
+														{{attr}}
+													</option>
+												{% endfor %}
+											</select>
+										</div>
+									</div>
+								</div>
+								<!-- /aside Widget -->
+
+								<div class='d-none'>
+									<select  onchange="updateHiddenForm(this)" data-update-target='#sort_by' id='hidden_sort_by' name='sort_by' class='form-control d-inline w-auto'>
+										<!-- DOUBLE FORM - CHANGE THE OTHER ONE TOO -->
+										<!-- DOUBLE FORM - CHANGE THE OTHER ONE TOO -->
+										<!-- DOUBLE FORM - CHANGE THE OTHER ONE TOO -->
+										<option value='newest'>
+											Recently Added
+										</option>
+										<option value='price_low_high'>
+											Price: Low > High
+										</option>
+										<option value='price_high_low'>
+											Price: High > Low
+										</option>
+									</select>
+								</div>
+
+								<!-- aside Widget -->
+								<div class="aside">
+									<h3 class="aside-title mb-2">Price</h3>
+									<div class="price-filter">
+
+										{% comment %} <input type="text" class="js-range-slider" name="price-slider" value="" /> {% endcomment %}
+										
+										
+										{% comment %} <input type="text" class="js-range-slider" name="" value="" /> {% endcomment %}
+										<input type='number' step=10000 value={{priceMin}} id='filters_price_min' name='price_min' class='form-control w-45 m-0 p-0 d-inline'> <!-- this input holds no value of itself. The value of this input is update automatically when the IonRangeSlider is updated -->
+										-
+										<input type='number' step=10000 value={{priceMax}} id='filters_price_max' name='price_max' class='form-control w-45 m-0 p-0 d-inline'> <!-- this input holds no value of itself. The value of this input is update automatically when the IonRangeSlider is updated -->
+
+										{% comment %} <div id="price-slider"></div>
+										<div class="input-number price-min">
+											<input value={{priceMin}} id='filters_price_min' name='price_min' type="number">
+											<span class="qty-up">+</span>
+											<span class="qty-down">-</span>
+										</div>
+										<span>-</span>
+										<div class="input-number price-max">
+											<input value={{priceMax}} id='filters_price_max' name='price_max' type="number">
+											<span class="qty-up">+</span>
+											<span class="qty-down">-</span>
+										</div> {% endcomment %}
+
+
+									</div>
+								</div>
+
+
+								<!-- /aside Widget -->
+
+								<hr>
+								<button class="add-to-cart-btn btn btn-sm w-100 mx-0 mt-2 p-0" style='height:28px' type='submit' onclick='handle_filters(window.event, this)'>Apply Filters</button>
+							</form>
+
+							<!-- Empty form with the "Clear Filters" button, so that it submits empty values-->
+							<form class='' action='' method="get" id=''>
+								<button class="add-to-cart-btn btn btn-sm w-100 mx-0 mt-2 p-0" style='height:28px' > Clear Filters</button>
+							</form>
+						</div>
+						<!-- ./FILTERS -->
+
+					</div>
+					<!-- /ASIDE -->
+
+					<!-- STORE -->
+					<div id="store" class="col-lg-9">
+						<!-- store top filter -->
+						<div class="store-filter m-0 mt-2 clearfix">
+
+
+							{% comment %} <ul class="store-grid">
+								<li class="active"><i class="fa fa-th"></i></li>
+								<li><a href="#"><i class="fa fa-th-list"></i></a></li>
+							</ul> {% endcomment %}
+						</div>
+						<!-- /store top filter -->
+
+						<div class="row text-right">
+							<div class='col-12'>
+								<label class='d-inline mr-1'>
+									Sort By:
+								</label>
+
+
+
+								<select onchange="updateHiddenForm(this)" data-update-target='#hidden_sort_by' id='sort_by' name='sort_by' class='form-control d-inline w-auto'>
+									<!-- DOUBLE FORM - CHANGE THE OTHER ONE TOO -->
+									<!-- DOUBLE FORM - CHANGE THE OTHER ONE TOO -->
+									<!-- DOUBLE FORM - CHANGE THE OTHER ONE TOO -->
+									<option value='newest'>
+										Recently Added
+									</option>
+									<option value='price_low_high'>
+										Price: Low > High
+									</option>
+									<option value='price_high_low'>
+										Price: High > Low
+									</option>
+								</select>
+
+
+
+							</div>
+						</div>
+
+						<!-- store products -->
+						<div class="row">
+
+							{% if products|length == 0 %}
+								<div class="col-12 mt-4">
+									<p>
+										Sorry! No products matching your criteria were found.
+									</p>
+									<form class='' action='' method="get" id=''>
+										<button class="add-to-cart-btn btn btn-sm w-100 mx-0 mt-2" ><i class="fa fa-times"></i> Clear Filters</button>
+									</form>
+								</div>
+							{% endif %}
+
+                            {% for product in products %}
+                                <!-- product -->
+                                <div class=" col-6 col-lg-4">
+                                    <div class="product" data-product-pk='{{product.pk}}'>
+                                        <div class="product-img">
+                                            {% comment %} <img src="./img/product01.png" alt=""> {% endcomment %}
+                                            <div onclick="location.href = '{% url 'product' product.slug %}';" style="background-image:url('{{product.featured_image.url}}'); height:200px;" class='cursor-pointer bg-image-contain'></div>
+                                            
+                                            <div class="product-label">
+												{% if product.discount_amount > 0 %}
+													<span class="sale">-{{product.discount_amount}}%</span>
+													{% comment %} <span class="new d-none">NEW</span> {% endcomment %}
+												{% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="product-body">
+
+
+
+											<!-- PRODUCT CATEGORIES -->
+
+											<!--
+                                            <p class="product-category">
+												<span class='invisible d-inline'>. {% comment %}Just spacing text {% endcomment %} </span>
+                                                {% for cat in product.categories.all %}
+                                                    {% comment %} This IF is needed to add a comma in case a product has more than one category {% endcomment %}
+                                                    {% if cat != product.categories.all.0 %} 
+                                                        ,
+                                                    {% endif %}
+                                                    {{ cat.name }}
+                                                {% endfor %}
+                                            </p>
+											-->
+
+											<!-- ../PRODUCT CATEGORIES -->
+
+
+
+                                            <h3 class="product-name text-break">
+												<a href="{% url 'product' product.slug %}">
+													{{ product.name|truncatechars:50 }} 
+													{% comment %} the truncatechars is necessary to so that long product names don't break the UI {% endcomment %}
+												</a>
+											</h3>
+                                            <h4 class="product-price">
+                                                {% if product.discount_amount > 0 %}
+													{% comment %} this IF is needed to strike through the old price only when there actually is a discount {% endcomment %}
+													<del class="product-old-price">
+														{% include "sub/currency.html" %}{{product.price|intcomma}}
+													</del>
+													{% include "sub/currency.html" %}{{product.discount_price|intcomma}}
+												{% else %}
+													{% include "sub/currency.html" %}{{product.price|intcomma}}
+												{% endif %}
+                                            </h4>
+                                            
+
+
+                                            {% comment %} <div class="product-rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div> {% endcomment %}
+                                            <div class="product-btns">
+                                                {% comment %} <button class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button> {% endcomment %}
+                                                {% comment %} <button class="add-to-compare"><i class="fa fa-exchange-alt"></i><span class="tooltipp">add to compare</span></button> {% endcomment %}
+
+                                                <button class="quick-view d-none" onclick='showQuickview(this)' data-product-price='{{product.price}}' data-product-name='Rp {{product.name}}' data-product-link="{% url 'product' product.slug %}" data-product-categories="{% for cat in product.categories.all %}
+													{% comment %} This IF is needed to add a comma in case a product has more than one category {% endcomment %}
+													{% if cat != product.categories.all.0 %}, {% endif %}{{ cat.name }}{% endfor %}">
+													<i class="fa fa-eye"></i><span class="tooltipp">quick view</span>
+												</button>
+
+												<div class='hidden-description d-none'>
+													{% comment %} This description is not displayed an is only used for the quick view {% endcomment %}
+													{{product.description}}
+												</div>
+												<div class='hidden-qv-img d-none'>
+													{% for image in product.productimage_set.all %}
+														<p>{{image.image.url}}</p>
+													{% endfor %}
+												</div>
+                                            </div>
+                                        </div>
+                                        <div class="add-to-cart p-1">
+											<!-- hidden field contains the value to be added --><input id='popupFieldFor{{product.id}}' type='number' min=1 value=1 class='d-none'>
+
+											{% if product.purchaseOnlyViaEnquiry %}
+												<a href="{% url 'customer-enquiry' product.slug %}">
+													<button class='add-to-cart-btn btn btn-sm product-add-button'>
+														<i class="fa fa-envelope"></i> send enquiry
+													</button>
+												</a>
+											{% else %}
+												<button class='add-to-cart-btn btn btn-sm product-add-button' data-target-field='#popupFieldFor{{product.id}}' data-user-id='{{user.id}}' data-id='{{product.id}}' data-action='addToCartCF' onclick='sendRequest(alter_cart_endpoint, this)'><i class="fa fa-shopping-cart"></i> add to cart</button>
+											{% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /product -->
+
+
+                            {% endfor %}
+						</div>
+						<!-- /store products -->
+
+						<!-- store bottom filter -->
+						<div class="store-filter clearfix">
+
+						</div>
+						<!-- /store bottom filter -->
+					</div>
+					<!-- /STORE -->
+				</div>
+				<!-- /row -->
+
+				<!-- /row -->
+				<div class="row m-0 p-0">
+					<div class='col-12 m-0 p-0'>
+						<div class='text-right'>
+							<!-- PAGINATION -->
+								<div class='my-0 ml-2'>
+									<span class="step-links">
+										{% if products.has_previous %}
+											<a href="?page=1">First</a>
+											<a href="?page={{ products.previous_page_number }}" class='ml-3 mr-2 clickable clickable-large'>
+												<i class="fas fa-angle-left"  class='clickable clickable-large'></i>
+											</a>
+										{% endif %}
+
+										<span class="current">
+											Page {{ products.number }} of {{ products.paginator.num_pages }}
+										</span>
+
+										{% if products.has_next %}
+											<a href="?page={{ products.next_page_number }}" class='mr-3 ml-2'>
+												<i class="fas fa-angle-right"></i>
+											</a>
+											<a href="?page={{ products.paginator.num_pages }}">Last</a>
+										{% endif %}
+									</span>
+								</div>
+							<!-- ./PAGINATION -->
+						</div>
+					</div>
+				</div>
+				<!-- /row -->
+
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+
+
+		<!-- DIRECTORY -->
+			{% comment %} HIDDEN! {% endcomment %}
+
+			{% comment %} {% include 'sub/directory.html' %} {% endcomment %}
+		<!-- /DIRECTORY -->
+
+
+
+<!-- Quickview Modal REMOVE -->
+<div class="modal fade" id="quickviewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-transparent shadow-none">
+      <div class="modal-body">
+	  		<div class="product">
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;X</span>
+        </button>
+				<div class="product-body">
+					{% comment %}  {% endcomment %}
+						{% comment %} HIDDEN TEMPLATE {% endcomment %}
+						<div id='qv-image-template' class="carousel-item w-100 bg-image-contain d-none" style='height:120px; background-image:url()' >
+						</div>
+						{% comment %} ./HIDDEN TEMPLATE {% endcomment %}
+					<div id="product-qv-slider" class="carousel slide" data-interval="false">
+							<!-- The slideshow -->
+							<div class="carousel-inner">
+								
+							</div>
+						  
+							<!-- Left and right controls -->
+							<a class="carousel-control-prev" href="#product-qv-slider" data-slide="prev">
+								<span class="carousel-control-prev-icon"><i class="fas fa-chevron-circle-left text-muted"></i></span>
+							</a>
+							<a class="carousel-control-next" href="#product-qv-slider" data-slide="next">
+								<span class="carousel-control-next-icon"><i class="fas fa-chevron-circle-right text-muted"></i></span>
+							</a>
+						</div>
+					{% comment %}  {% endcomment %}
+					<h2 class="qv-product-name text-uppercase"><a href="">Test</a></h2>
+					<h4 class="product-price">
+						{% include "sub/currency.html" %}<span class='qv-price'>999</span>
+					</h4>
+					<p class='qv-product-description text-justify overflow-y-scroll px-2' style='max-height:160px;'>
+						Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+					</p>
+					<hr>
+					<div class="product-btns">
+						{% comment %} <button class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button> {% endcomment %}
+					</div>
+				</div>
+				<div class="add-to-cart p-1">
+					<button class="add-to-cart-btn btn btn-sm"><i class="fa fa-shopping-cart"></i> add to cart</button>
+				</div>
+			</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}
+
+{% block customJS %}
+	<script type="text/javascript" src="{% static "mdbootstrap/js/customer_facing/products_filter.js" %}"></script>
+	<script type="text/javascript" src="{% static "mdbootstrap/js/custom/backoffice/backoffice-order-edit.js" %}"></script>
+
+	<script type="text/javascript">
+		var isSmall = window.matchMedia ? window.matchMedia("screen and (max-width: 992px)") : screen.width<=480;
+		if(!isSmall.matches) { // if it doesn't match, then it means it's a large screen, meaning we need to expand the filters
+			$('#filters').collapse('show');
+		}
+	</script>
+{% endblock customJS %}

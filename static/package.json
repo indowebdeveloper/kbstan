@@ -1,0 +1,15 @@
+{
+  "name": "kiosban",
+  "version": "1.0.0",
+  "description": "E-Commerce Website for KIOSBAN",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile:css": "node-sass mdbootstrap/scss/_custom-styles.scss mdbootstrap/css/style.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-sass": "^4.13.1"
+  }
+}

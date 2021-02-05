@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                font-family: 'Montserrat', sans-serif;
+                font-weight: 400;
+                color: #333;
+            }
+
+            hr {
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+                border: 0;
+                border-top: 1px solid rgba(0,0,0,.1);
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                color: #2B2D42;
+                font-weight: 700;
+                margin: 0 0 10px;
+            }
+
+            a {
+                color: #2B2D42;
+                font-weight: 500;
+                -webkit-transition: 0.2s color;
+                transition: 0.2s color;
+            }
+
+            a:hover, a:focus {
+                color: #D10024;
+                text-decoration: none;
+                outline: none;
+            }
+
+            .product {
+                position: relative;
+                margin: 15px 0px;
+
+                background: #fff;
+
+                -webkit-box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
+                box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
+                -webkit-transition: 0.2s all;
+                transition: 0.2s all;
+            }
+
+            .product-red-border {
+                -webkit-box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
+                box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
+            }
+
+            .product:hover {
+                -webkit-box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
+                box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
+            }
+
+            .bg-white {
+                background-color: #fff!important;
+            }
+            .p-4 {
+                padding: 1.5rem!important;
+            }
+            mx-3 {
+                margin-left: 1rem!important;
+                margin-right: 1rem!important;
+            }
+            .text-left {
+                text-align: left!important;
+            }
+            .brand-text {
+                color: #ef233c;
+            }
+            .font-weight-bold {
+                font-weight: 700!important;
+            }
+        </style>
+    </head>
+
+    <body>
+
+
+        <div class='product bg-white p-4 text-left mx-3'>
+            <h2 class='brand-text'>
+                Hello from Kiosban! - confirmation_message.html CORRECT!
+            </h2>
+            <hr>
+
+            <p>
+                You're receiving this e-mail to confirm your account signup at <a class='brand-text' href='https://www.kiosban.com/ '><u>kiosban.com</u></a>.
+                <br />
+                <span class='font-weight-bold'>
+                    To confirm this is correct, click on <a class='brand-text' href='{{ activate_url }}'><u>this link</u></a>.
+                </span>
+                <br />
+                <br />
+                <small>
+                    If that doesn't work, please copy this link into your browser's address bar: <a class='brand-text' href='{{ activate_url }}'><u>{{ activate_url }}</u></a>
+                </small>
+                <hr>
+                Should you encounter any issue, please contact us at <a class='brand-text' href="mailto:sales@kiosban.com"></i>sales@kiosban.com</a>.
+            </p>
+
+        </div>
+
+
+
+
+
+
+
+    <body>
+</html>

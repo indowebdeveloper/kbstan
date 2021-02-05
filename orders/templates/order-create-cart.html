@@ -1,0 +1,687 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+{% block content %}
+<div class='col-12'> 
+
+    <div class='card mb-5'>
+        <div class='card-header'>
+            <div class='mb-3'>
+                <a href="{% url 'order-create' %}" onclick='event.preventDefault();window.history.back()' class='text-muted font-weight-bold fx fx-link'>
+                    <i class="fas fa-angle-left text-muted"></i>
+                    Back
+                </a>
+            </div>
+            
+            <h3 class="mb-0 mt-1 font-weight-bold">Cart for customer 
+            <b class=''>{{user.email}}</b>
+            <span type="button d-inline-block" class="clickable" data-toggle="modal" data-target="#customerInfoModal">
+                <i class="fas fa-info-circle"></i>
+            </span>
+            </h3>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class='card-body'>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success font-weight-bold px-2 ml-2 my-0 w-100" data-toggle="modal" data-target="#addProductsModal" >
+                <i class="fas fa-plus-circle"></i> Add Product
+            </button>
+
+            <form action="" method="GET" class='ml-2 w-50'>
+                <input type="text" name="promocode" class='mr-0'>
+                <button class='btn btn-sm btn-primary ml-0' type='submit'>
+                    Add Promo Code
+                </button>
+            </form>
+
+            {% comment %} USER ORDER: {{user.customer.order_set.last}} {% endcomment %}
+            <table id="cart-main-list" class='table table-striped'>
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Product Name</th>
+                        <th style='width: 190px;'>Product Quantity</th>
+                        <th>Bottom Price</th>
+                        <th>Product Price</th>
+                        <th>Discount Price</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>
+                <tbody id="main_list_template_parent">
+
+                    {% if couponMessage %}
+                        {{couponMessage}}
+                    {% endif %}
+
+                    {% for item in orderItems %}
+                        <tr data-product-id='{{item.product.id}}'>
+                            <td class='product-sku'>
+                                {{item.product.sku}}
+                            </td>
+                            <td class='product-name'>
+                                {{item.product.name}}
+                            </td>
+                            <td class='product-quantity'>
+                                <div class='input-group'>
+                                    <div class='input-group-append bg-primary p-0 rounded-left' style='margin-right: -3px;'>
+                                        <button class='{% if item.quantity == 1 %} disabled {% endif %} btn btn-sm btn-primary rounded-left font-weight-bold m-0 px-2 py-1' data-user-id='{{user.id}}' data-target-field='#fieldFor{{item.product.id}}' data-id='{{item.product.id}}' data-action='remove' onclick='sendRequest(alter_cart_endpoint, this)' >-1</button>
+                                    </div>
+                                    <input readonly type='text' id='fieldFor{{item.product.id}}' value="{{item.quantity}}" data-quantity-field-for-id="{{item.product.id}}" class='product-quantity-field user-selectable-none py-1 text-center' style='width:50px'>
+                                    </p>
+                                    <div class='input-group-append bg-primary p-0 rounded-right'  style='margin-left: -3px;'>
+                                        <button class='btn btn-sm btn-primary font-weight-bold px-2 py-1 m-0 rounded-right' data-user-id='{{user.id}}' data-target-field='#fieldFor{{item.product.id}}' data-id='{{item.product.id}}' data-action='add' onclick='sendRequest(alter_cart_endpoint, this)' >+1</button>
+                                    </div>
+                                    <button data-user-id='{{user.id}}' data-target-field='#fieldFor{{item.product.id}}' data-id='{{item.product.id}}' data-action='delete' onclick='sendRequest(alter_cart_endpoint, this)' class='btn btn-sm btn-danger px-3 py-2 m-0 ml-3 clickable clickable-large'>
+                                        <i class="fas fa-trash-alt text-white"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td>
+                                {% include "sub/currency.html" %}
+                                <span class='product-bottom-price'>
+                                    {{item.product.bottomPrice|intcomma}}
+                                </span>
+                            </td>
+                            <td>
+                                {% include "sub/currency.html" %}
+                                <span class='product-price'>{{item.product.price|intcomma}}</span>
+                            </td>
+                            <td class=''>
+                                {% if item.discountedPrice or item.discountedPrice == 0 %}
+                                    {% include "sub/currency.html" %}
+                                    <span class='discount-price'>
+                                        {{item.discountedPrice|intcomma}}
+                                    </span>
+                                {% elif item.product.discount_amount %}
+                                    {% include "sub/currency.html" %}
+                                    <span class='discount-price'>
+                                        {{item.discountedPrice|intcomma}}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% include "sub/currency.html" %}
+                                <span class='for-calculation-item-quantity d-none'>
+                                    {{item.quantity}}
+                                </span>
+                                <span class='for-calculation-item-price d-none'>
+                                    {{item.get_total|intcomma}}
+                                </span>
+                                <span class='product-full-price'>
+                                    {{item.get_total|intcomma}}
+                                </span>
+                            </td>
+                            <!-- ProductItem: {{item.product.name}} <br> -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <hr>
+            <div class='row'>
+                <div class='col-12 pt-1'>
+                    <div class='text-right'>
+                        <p class='font-weight-bold h5'>
+                            CART TOTAL: 
+                            <span class='text-success'>
+                                {% include "sub/currency.html" %}
+                                <span class='cart-total '>
+                                    XX_EMPTY__XX
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+            <!-- ================================ -->
+            <form class='p-3' method='POST'>
+                {% csrf_token %}
+
+                <div class='row'>
+                
+                    <div class='col-7'>
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <div class="section-title mt-0">
+                            <h4 class="title font-weight-bold">Shipping Method</h4>
+                        </div>
+
+                        <ul class="nav nav-tabs mt-0" id="myShippingTab" role="tablist">
+                            <li class="nav-item position-relative">
+                                <input checked onclick='selectShippingRadio(this)' data-click-target='#shipping_form_tab' data-make-required='#shipping_form' data-make-not-required='#store_pickup_form' class='clickable opacity-0 position-absolute w-100 h-100' type="radio" id="shipping" name="product_collection_choice" value="shipping">
+                                <a class="nav-link active" id="shipping_form_tab" data-toggle="tab" href="#shipping_form" role="tab" aria-controls="shipping_form" aria-selected="true">
+                                    Shipping Delivery
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item position-relative">
+                                <input onclick='selectShippingRadio(this)' data-click-target='#store_pickup_form_tab' data-make-required='#store_pickup_form' data-make-not-required='#shipping_form' class='clickable opacity-0 position-absolute w-100 h-100' type="radio" id="store-pickup" name="product_collection_choice" value="store-pickup">
+                                <a class="nav-link" id="store_pickup_form_tab" data-toggle="tab" href="#store_pickup_form" role="tab" aria-controls="store_pickup_form" aria-selected="false">
+                                    Pickup in Store
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content border py-2 pt-4 px-4" id="myShippingTabContent">
+                            <!-- ========================= -->
+                            <!-- ========================= -->
+                            <!-- ========================= -->
+                            <!-- SHIPPING TAB! -->
+                            <div class="tab-pane fade show active" id="shipping_form" role="tabpanel" aria-labelledby="shipping_form_tab">
+                                <p class='font-weight-bold m-0 mb-2 p-0'>
+                                    Select your shipping address
+                                </p>
+
+                                {% comment %} XXXXXXXX {% endcomment %}
+                                <div class="form-group">
+
+                                    {% if not request.user.is_authenticated %}
+                                        <h4 class='mt-4 mb-4 font-weight-normal w-100 border-bottom'>
+                                            Please register below or <a class='text-underline font-weight-bold' href="/accounts/login/?next={% url 'checkout' %}">login</a>
+                                        </h4>
+                                        <div class='register-form'>
+                                            {{CustomerSignUpForm|crispy}}
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                {% for address in user.customer.address_set.all %}
+                                <div class='custom-radio'>
+                                    
+                                    <label class='d-block font-weight-normal text-dark position-relative ml-5 mb-3 clickable clickable-no-scale' for='{{address.pk}}'>
+                                        <input onclick='showNewAddressForm(false)' type='radio' value='{{address.pk}}' name='addressSelected' id='{{address.pk}}' class='clickable position-absolute' style='left: -50px; top: 50%;'>	
+                                        
+                                        <p class='font-weight-bold m-0 p-0'>
+                                            {{address.type}}
+                                        </p>
+                                        {% if  address.type == "home" %}
+                                            <i class="fas fa-home position-absolute text-muted" style='left: -22px;top: 2px;'></i>
+                                        {% elif  address.type == "work" %}
+                                            <i class="fas fa-building position-absolute text-muted" style='left: -22px;top: 2px;'></i>
+                                        {% else %}
+                                            <i class="fas fa-map-marker-alt position-absolute text-muted" style='left: -22px;top: 2px;'></i>
+                                        {% endif %}
+                                        <p class='m-0 p-0'>
+                                            {{address.houseNumber}} {{address.street}}
+                                        </p>
+                                        <p class='p-0 mb-0'>
+                                            {{address.zipCode}}, {{address.city}}
+                                        </p>
+                                        <p class='p-0 mb-0'>
+                                            {{address.state}}
+                                        </p>
+                                        <p class='p-0 mb-0 border-top font-weight-bold'>
+                                            Shipping Cost: {% include "sub/currency.html" %}{{address.shippingCost}}
+                                        </p>
+                                    </label>
+                                </div>
+                                {% endfor %}
+
+
+                                {% comment %} IF THE USER IS LOGGED OUT, WE ONLY DISPLAY THE NEW ADDRESS FIELD {% endcomment %}
+                                {% comment %} ELSE, WE JUST DISPLAY THE NORMAL OPTIONS OF ADDING AN ADDRESS {% endcomment %}
+                                
+                                {% if not request.user.is_authenticated %}
+                                {% comment %} User logged OUT {% endcomment %}
+                                    <h4 class='border-bottom mt-5'>
+                                        Add Address
+                                    </h4>
+                                    <div id='newAddressForm'>
+                                        {{CustomerFaceAddressCreateForm|crispy}}
+                                    </div>
+                                {% else %}
+                                {% comment %} User logged IN {% endcomment %}
+                                    <div class='text-success' onclick='showNewAddressForm(true)'>
+                                        <div class='addAddress'>
+                                            <div class='custom-radio custom-radio-button'>
+                                                <label for="id_addressSelected_0">
+                                                    <input type="radio" name="addressSelected" value="-1" required id="id_addressSelected_0" {% if user.customer.address_set.all.count == 0 %} checked {% endif %}>
+                                                        Add new address
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id='newAddressForm'                 style='{% if user.customer.address_set.all.count > 0 %} display:none {% endif %}'>
+                                        {{CustomerFaceAddressCreateForm|crispy}}
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                            <!-- ========================= -->
+                            <!-- ========================= -->
+                            <!-- ========================= -->
+                            <!-- STORES TAB! -->
+                            <div class="tab-pane fade" id="store_pickup_form" role="tabpanel" aria-labelledby="store_pickup_form_tab">
+                                <div class='custom-radio custom-radio-backoffice'>
+                                    <p class='font-weight-bold m-0 mb-2 p-0'>
+                                        Select the store you want to pick up from:
+                                    </p>
+                                        
+                                    {{PaymentStoreSelectForm}}
+
+                                </div>
+                            </div>
+                            <!-- ./STORES TAB! -->
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+
+                    <div class='col-4'>
+
+                        <div class="payment-method m-0 font-weight-normal">
+                            <!-- this little stylesheet hides the Indodana-option on the backoffice -->
+                            <style>
+                                option[value='Indodana'] {
+                                    display: none;
+                                }
+                            </style>
+                            {{CheckoutPaymentMethodsForm|crispy}}
+                        </div>
+
+                        {% comment %} ================== {% endcomment %}
+
+                        {{StaffOrderCreateForm|crispy}}
+                    </div>
+
+                    <div class='w-100 text-right pr-5'>
+                        <button class='btn btn-success clickable'>
+                            Submit Order
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- ================================ -->
+
+</div>
+</div>
+
+</div>
+
+
+
+
+<!-- /////////////////  ADD PRODUCT MODAL -->
+<!-- Modal -->
+<div class="modal fade showwwwww overflow-y-scroll" style='display:blockkkkkkkk' id="addProductsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="mw-100 mx-4 modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-weight-bold" id="addProductsModalLabel">Add New Products</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body overflow-y-scroll">
+
+            <form id='product_search_form' onsubmit="processAddProductSearch(add_product_endpoint, this, event)" class='w-100 form-inlineeee'>
+                <!-- ///////////////////////// -->
+
+
+                <div class='d-flex'>
+                    <!-- INPUT FIELDS -->
+                    <label class='w-49 d-block pr-2'>
+                        Keywords:
+                        <input type='text' name='name' placeholder='Keywords...' class='d-block w-100 form-control border rounded mb-2'>
+                    </label>
+
+                    <!-- INPUT-GROUP -->
+                    <div class='input-group w-49 mr-2 mb-2 pr-4 pl-1 pt-4'>
+
+                        <select name='category' class=' form-control '>
+                            <option value=''>
+                                --- Select Category ---
+                            </option>
+                            {% for cat in categories %}
+                                <option value='{{cat}}'>
+                                    {{cat}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- ./INPUT-GROUP -->
+                </div>
+
+
+                <div class='d-flex'>
+
+
+
+                    <div class='input-group w-49 pr-1 mt-0 mb-0'>
+
+                        <select name='attribute' class='form-control d-inline-block w-autooooo align-middle'>
+                            <option value=''>
+                                --- Attribute ---
+                            </option>
+                            {% for attr in attributes %}
+                                <option value='{{attr}}'>
+                                    {{attr}}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <div class='input-group-append'>
+                            <input type='text' name='attributeValue' placeholder='Attribute Value' class='form-control border mr-2 rounded-right'>
+                        </div>
+                    
+                    </div>
+
+                    <div class='w-49 d-inline-block pl-1 pr-4'>
+                            <input type='text' name='brand' placeholder='Brands...' class='form-control mr-2 d-inline w-100 border rounded mr-2 mb-2'>
+                    </div>
+
+
+
+                </div>
+
+
+                <button type='submit' class='form-control w-auto btn btn-primary font-weight-bold clickable h-100 m-0 px-3 py-2'>
+                    <i class='fa fa-search text-white'></i> Apply Filters
+                </button>
+
+
+                <button data-target-form='#product_search_form' onclick='resetAndSubmitForm(this)' class=" btn btn-grey h-100 px-3 py-2 ml-2">
+                    <i class="fas fa-times-circle"></i> Reset Filters
+                </button>
+            </form>
+
+            <table class='table table-striped mt-2'>
+                <thead>
+                    <tr>
+                        <th>
+                            Product Name 
+                        </th>
+                        <th>
+                            Product Quantity
+                        </th>
+                        <th>
+                            Categories
+                        </th>
+                        <th>
+                            Bottom Price
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id='product-template-parent' class=''>
+
+                    
+                </tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr id='product-template-el' data-product-id='' class='d-none'>
+                        <td class='product-name'>
+                        </td>
+                        <td>
+                            <div class='input-group w-100'>
+                                <input id='popupFieldForX' type='number' min=1 value=1 class='user-selectable-none py-1 text-center popup-quantity-field' style='width:50px'>
+                                </p>
+                                <div class='input-group-append bg-primary p-0 rounded-right'  style='margin-left: -3px;'>
+                                    <button class='btn btn-sm btn-primary font-weight-bold px-2 py-1 m-0 rounded-right clickable product-add-button' data-target-field='#popupFieldForX' data-user-id='{{user.id}}' data-id='{{item.product.id}}' data-action='addToCart' onclick='sendRequest(alter_cart_endpoint, this)' >+ Add to Cart</button>
+                                </div>
+                            </div>
+                            <p class='font-weight-bold mt-2'>
+                                Stock Available: <span class='product-available-quantity' data-quantity=''>---</span>
+                            </p>
+                        </td>
+                        <td class='product-categories'>
+                            
+                        </td>
+                        <td>
+                            {% include "sub/currency.html" %} <span class="product-bottom-price" data-bottomPrice=''>---</span>
+                        </td>
+                        <td>
+                            {% include "sub/currency.html" %}
+                            <span class='product-price' data-purchasePrice=''>---</span>
+                        </td>
+                    </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          {% comment %} <button type="button" class="btn btn-success font-weight-bold">
+              <i class='fas fa-plus-circle'></i> Add <span class='no-new-products'>0</span> Items
+          </button> {% endcomment %}
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- /////////////////  ADD PRODUCT MODAL -->
+
+
+
+
+
+<!-- CUSTOMER INFO Modal -->
+<div class="modal fade" id="customerInfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Customer Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+                    {{user.first_name}} {{user.last_name}}<br>
+                        {{user.email}}<br>
+                        {{user.mobileNumber}}<br>
+                        {{user.address}}<br>
+                        <ul>
+                            {% for car in customer.customer.customercar_set.all %}
+                                <li>
+                                    {{car.carModel}}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <!-- =================================== -->
+                        <ul>
+                            {% for address in customer.customer.address_set.all %}
+                                <li>
+                                    {{address.houseNumber}} {{address.street}}
+                                </li>
+                                <li>
+                                    {{address.zipCode}}, {{address.city}}
+                                </li>
+                                <li>
+                                    {{address.state}}
+                                </li>
+                            {% endfor %}
+                        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ./CUSTOMER INFO Modal -->
+
+
+
+
+
+<!-- TEMPLATES -->
+<!-- TEMPLATES -->
+<!-- TEMPLATES -->
+<!-- TEMPLATES -->
+<!-- TEMPLATES -->
+<!-- TEMPLATES -->
+<!-- TEMPLATES -->
+<!-- TEMPLATES -->
+<!-- TEMPLATES -->
+<!-- TEMPLATES -->
+
+
+<table>
+    <tbody>
+        <tr id="template_main_product_list_el" class='d-none' data-product-id=''>
+            <td class='product-id'>
+                ---
+            </td>
+            <td class='product-name'>
+                ---
+            </td>
+            <td class='product-quantity'>
+                <div class='input-group'>
+                    <div class='input-group-append bg-primary p-0 rounded-left' style='margin-right: -3px;'>
+                        <button class='disabled IMP-main-list-qt-btn removeButton  btn btn-sm btn-primary rounded-left font-weight-bold m-0 px-2 py-1' data-user-id='{{user.id}}' data-target-field='#fieldFor{{item.product.id}}' data-id='{{item.product.id}}' data-action='remove' onclick='sendRequest(alter_cart_endpoint, this)' >-1</button>
+                    </div>
+                    <input readonly type='text' id='fieldFor{{item.product.id}}' value="{{item.quantity}}" data-quantity-field-for-id="{{item.product.id}}" class='product-quantity-field user-selectable-none py-1 text-center' style='width:50px'>
+                    </p>
+                    <div class='input-group-append bg-primary p-0 rounded-right'  style='margin-left: -3px;'>
+                        <button class='IMP-main-list-qt-btn   btn btn-sm btn-primary font-weight-bold px-2 py-1 m-0 rounded-right' data-user-id='{{user.id}}' data-target-field='#fieldFor{{item.product.id}}' data-id='{{item.product.id}}' data-action='add' onclick='sendRequest(alter_cart_endpoint, this)' >+1</button>
+                    </div>
+                    <button data-user-id='{{user.id}}' data-target-field='#fieldFor{{item.product.id}}' data-id='{{item.product.id}}' data-action='delete' onclick='sendRequest(alter_cart_endpoint, this)' class='IMP-main-list-qt-btn   btn btn-sm btn-danger px-3 py-2 m-0 ml-3 clickable clickable-large'>
+                        <i class="fas fa-trash-alt text-white"></i>
+                    </button>
+                </div>
+            </td>
+            {% comment %} <td class='product-sku'>
+                
+            </td> {% endcomment %}
+            <td>
+                {% include "sub/currency.html" %}
+                <span  class='product-bottom-price'>
+
+                </span>
+            </td>
+            <td>
+                {% include "sub/currency.html" %}
+                <span class='product-price'></span>
+            </td>
+            <td class=''>
+                {% include "sub/currency.html" %}
+                <span class='discount-price'></span>
+            </td>
+            <td>
+                {% include "sub/currency.html" %}
+                <span class='product-full-price'></span>
+            </td>
+            <!-- ProductItem: {{item.product.name}} <br> -->
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+
+
+//////////////////////////////////////////
+
+
+{% block customJS %}
+
+<script>
+    $( document ).ready(function() {
+        $('#product_search_form').trigger('submit');
+
+        updateTotalCartPrice(); // this calculates the total-cart-price based on the list of product-full-prices
+    });
+</script>
+
+<script type="text/javascript" src="{% static "mdbootstrap/js/custom/humanise_numbers.js" %}"></script>
+<script type="text/javascript" src="{% static "mdbootstrap/js/custom/utilities.js" %}"></script>
+<script type="text/javascript" src="{% static "mdbootstrap/js/customer_facing/checkout.js" %}"></script>
+
+{% endblock customJS %}
